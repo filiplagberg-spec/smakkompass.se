@@ -29,7 +29,6 @@
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; -webkit-font-smoothing: antialiased; }
 
-/* ── NAV (top on desktop, bottom on mobile) ── */
 nav {
   background: var(--white);
   border-bottom: 1px solid var(--border);
@@ -51,7 +50,54 @@ nav {
 .nav-tab:hover:not(.active) { background: var(--cream-dark); color: var(--text); }
 .saved-badge { background: var(--terracotta); color: white; font-size: 11px; font-weight: 500; border-radius: 10px; padding: 1px 6px; margin-left: 4px; display: none; }
 
-/* ── MOBILE NAV — fixed bottom bar ── */
+/* API KEY BANNER */
+.api-banner {
+  background: #fff8e8;
+  border-bottom: 1px solid #e8d5a0;
+  padding: 10px 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: #5a4000;
+  flex-wrap: wrap;
+}
+.api-banner input {
+  flex: 1;
+  min-width: 200px;
+  padding: 7px 12px;
+  border: 1px solid #d4b870;
+  border-radius: 8px;
+  font-size: 13px;
+  background: white;
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+}
+.api-banner input:focus { outline: none; border-color: var(--gold); }
+.api-banner button {
+  padding: 7px 14px;
+  background: var(--gold);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  touch-action: manipulation;
+}
+.api-banner button:hover { background: #a07d28; }
+.api-banner-ok {
+  background: #e8f5ee;
+  border-bottom: 1px solid #b0d8c0;
+  padding: 8px 1.5rem;
+  font-size: 12px;
+  color: var(--green);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
 @media (max-width: 600px) {
   nav { display: none; }
   .mobile-nav {
@@ -85,14 +131,13 @@ nav {
   .mobile-nav-btn.active { color: var(--terracotta); }
   .mobile-nav-btn .saved-badge { margin: 0; }
   main { padding: 1.5rem 1rem 100px; }
+  .api-banner { padding: 10px 1rem; }
 }
 .mobile-nav { display: none; }
-
 main { max-width: 740px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
 .panel { display: none; }
 .panel.active { display: block; }
 
-/* ── HERO ── */
 .hero { text-align: center; margin-bottom: 2rem; }
 .hero h1 { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 400; color: var(--warm-brown); line-height: 1.15; margin-bottom: 10px; }
 .hero h1 em { font-style: italic; color: var(--terracotta); }
@@ -103,7 +148,6 @@ main { max-width: 740px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
   .hero p { font-size: 14px; }
 }
 
-/* ── SEARCH CARD ── */
 .search-card {
   background: var(--white);
   border-radius: 20px;
@@ -113,19 +157,11 @@ main { max-width: 740px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
   box-shadow: var(--shadow-sm);
 }
 @media (min-width: 601px) { .search-card { padding: 1.75rem; } }
-.search-label {
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  display: block;
-  margin-bottom: 10px;
-}
+.search-label { font-size: 11px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 10px; }
 textarea {
   width: 100%;
   padding: 13px 14px;
-  font-size: 16px; /* 16px prevents iOS zoom */
+  font-size: 16px;
   border: 1.5px solid var(--cream-dark);
   border-radius: 12px;
   background: var(--cream);
@@ -138,82 +174,26 @@ textarea {
 }
 textarea:focus { outline: none; border-color: var(--terracotta); background: var(--white); }
 textarea::placeholder { color: var(--text-muted); opacity: 0.7; }
-
 .search-row { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; gap: 10px; flex-wrap: wrap; }
-
-/* ── CHIPS ── */
 .chips-wrap { display: flex; gap: 6px; flex-wrap: wrap; flex: 1; min-width: 0; }
-.chip {
-  padding: 6px 12px;
-  font-size: 12px;
-  color: var(--text-muted);
-  background: var(--cream);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  cursor: pointer;
-  transition: all 0.15s;
-  user-select: none;
-  touch-action: manipulation;
-  white-space: nowrap;
-}
+.chip { padding: 6px 12px; font-size: 12px; color: var(--text-muted); background: var(--cream); border: 1px solid var(--border); border-radius: 20px; cursor: pointer; transition: all 0.15s; user-select: none; touch-action: manipulation; white-space: nowrap; }
 .chip:hover, .chip:active { background: var(--terracotta-light); color: var(--terracotta); border-color: var(--terracotta); }
 @media (max-width: 600px) {
   .chips-wrap { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 2px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
   .chips-wrap::-webkit-scrollbar { display: none; }
   .search-row { flex-direction: column; align-items: stretch; }
 }
-
-/* ── DETAIL TOGGLE ── */
-.detail-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px solid var(--border);
-  flex-wrap: wrap;
-}
+.detail-row { display: flex; align-items: center; gap: 8px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); flex-wrap: wrap; }
 .detail-label { font-size: 12px; color: var(--text-muted); font-weight: 500; }
 .detail-btns { display: flex; gap: 4px; }
-.detail-btn {
-  padding: 6px 14px;
-  font-size: 12px;
-  font-weight: 500;
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  background: var(--cream);
-  color: var(--text-muted);
-  cursor: pointer;
-  transition: all 0.15s;
-  touch-action: manipulation;
-}
+.detail-btn { padding: 6px 14px; font-size: 12px; font-weight: 500; border: 1px solid var(--border); border-radius: 20px; background: var(--cream); color: var(--text-muted); cursor: pointer; transition: all 0.15s; touch-action: manipulation; }
 .detail-btn.active { background: var(--warm-brown); color: var(--white); border-color: var(--warm-brown); }
-
-.btn-search {
-  padding: 14px;
-  font-size: 15px;
-  font-weight: 500;
-  border: none;
-  border-radius: 12px;
-  background: var(--terracotta);
-  color: white;
-  cursor: pointer;
-  transition: all 0.18s;
-  white-space: nowrap;
-  letter-spacing: 0.01em;
-  touch-action: manipulation;
-  width: 100%;
-}
-@media (min-width: 601px) {
-  .btn-search { width: auto; padding: 12px 28px; font-size: 14px; }
-  .search-row { flex-wrap: nowrap; }
-  .chips-wrap { flex-wrap: wrap; }
-}
+.btn-search { padding: 14px; font-size: 15px; font-weight: 500; border: none; border-radius: 12px; background: var(--terracotta); color: white; cursor: pointer; transition: all 0.18s; white-space: nowrap; letter-spacing: 0.01em; touch-action: manipulation; width: 100%; }
+@media (min-width: 601px) { .btn-search { width: auto; padding: 12px 28px; font-size: 14px; } .search-row { flex-wrap: nowrap; } .chips-wrap { flex-wrap: wrap; } }
 .btn-search:hover { background: #a04d2e; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(184,92,58,0.3); }
 .btn-search:active { transform: scale(0.97) translateY(0); box-shadow: none; background: #a04d2e; }
 .btn-search:disabled { opacity: 0.55; cursor: not-allowed; transform: none; box-shadow: none; }
 
-/* STATUS */
 .status { text-align: center; padding: 3rem 0; color: var(--text-muted); font-size: 14px; }
 .status-icon { font-size: 36px; margin-bottom: 12px; }
 .status-spinner { display: inline-block; width: 32px; height: 32px; border: 2px solid var(--cream-dark); border-top-color: var(--terracotta); border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 12px; }
@@ -222,22 +202,9 @@ textarea::placeholder { color: var(--text-muted); opacity: 0.7; }
 .error-box { background: #fff0ee; border: 1px solid #f0c0b0; border-radius: 14px; padding: 16px 18px; font-size: 14px; color: #8b2500; line-height: 1.6; margin-top: 1rem; display: flex; align-items: flex-start; gap: 10px; }
 .error-box-icon { font-size: 18px; flex-shrink: 0; }
 
-/* RESULTS */
 .result-section { animation: fadeUp 0.4s ease; }
 @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
-
-.result-header {
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  padding: 1.25rem;
-  margin-bottom: 12px;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem;
-  box-shadow: var(--shadow-sm);
-}
+.result-header { background: var(--white); border: 1px solid var(--border); border-radius: 18px; padding: 1.25rem; margin-bottom: 12px; display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; box-shadow: var(--shadow-sm); }
 @media (min-width: 601px) { .result-header { padding: 1.4rem 1.6rem; } }
 @media (max-width: 600px) { .result-header { flex-direction: column; gap: 14px; } .btn-save { width: 100%; text-align: center; } }
 .result-dish { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--warm-brown); line-height: 1.2; margin-bottom: 6px; }
@@ -245,52 +212,17 @@ textarea::placeholder { color: var(--text-muted); opacity: 0.7; }
 .result-profile { font-size: 13.5px; color: var(--text-muted); line-height: 1.65; }
 .result-smaker { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
 .smaker-pill { padding: 3px 10px; font-size: 11px; font-weight: 500; border-radius: 20px; background: var(--cream-dark); color: var(--text-muted); }
-
-.btn-save {
-  padding: 10px 18px;
-  font-size: 13px;
-  font-weight: 500;
-  border: 1.5px solid var(--green);
-  border-radius: 10px;
-  background: transparent;
-  color: var(--green);
-  cursor: pointer;
-  transition: all 0.15s;
-  white-space: nowrap;
-  flex-shrink: 0;
-  touch-action: manipulation;
-}
+.btn-save { padding: 10px 18px; font-size: 13px; font-weight: 500; border: 1.5px solid var(--green); border-radius: 10px; background: transparent; color: var(--green); cursor: pointer; transition: all 0.15s; white-space: nowrap; flex-shrink: 0; touch-action: manipulation; }
 .btn-save:hover { background: var(--green); color: white; }
 .btn-save.saved { background: var(--green); color: white; pointer-events: none; }
 
-/* SOMMELIER TIPS */
-.sommelier-tip {
-  background: var(--warm-brown);
-  color: var(--cream);
-  border-radius: 16px;
-  padding: 1.1rem 1.4rem;
-  margin-bottom: 12px;
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  font-size: 13.5px;
-  line-height: 1.65;
-  box-shadow: var(--shadow-sm);
-}
+.sommelier-tip { background: var(--warm-brown); color: var(--cream); border-radius: 16px; padding: 1.1rem 1.4rem; margin-bottom: 12px; display: flex; align-items: flex-start; gap: 12px; font-size: 13.5px; line-height: 1.65; box-shadow: var(--shadow-sm); }
 .sommelier-tip-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
 .sommelier-tip-label { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.6; margin-bottom: 3px; }
 
-/* DRINK CARDS */
 .cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
 @media (max-width: 560px) { .cards-grid { grid-template-columns: 1fr; } }
-.drink-card {
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
-  transition: box-shadow 0.2s;
-}
+.drink-card { background: var(--white); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; box-shadow: var(--shadow-sm); transition: box-shadow 0.2s; }
 .drink-card:hover { box-shadow: var(--shadow-md); }
 .drink-card-top { padding: 1rem; }
 @media (min-width: 601px) { .drink-card-top { padding: 1.15rem; } }
@@ -306,7 +238,6 @@ textarea::placeholder { color: var(--text-muted); opacity: 0.7; }
 .drink-why { font-size: 13px; color: var(--text-muted); line-height: 1.65; }
 .drink-pris { display: inline-block; font-size: 11.5px; font-weight: 500; color: var(--gold); background: var(--gold-light); padding: 2px 9px; border-radius: 10px; margin-top: 8px; }
 
-/* VIN CARD */
 .vin-list { border-top: 1px solid var(--border); }
 .vin-item { padding: 14px 1.15rem 0; }
 .vin-item + .vin-item { border-top: 1px solid var(--border); }
@@ -318,51 +249,10 @@ textarea::placeholder { color: var(--text-muted); opacity: 0.7; }
 .vin-pris { font-size: 11.5px; font-weight: 500; color: var(--gold); background: var(--gold-light); padding: 2px 9px; border-radius: 10px; white-space: nowrap; margin-top: 4px; display: inline-block; }
 .vin-varfor { font-size: 13px; color: var(--text-muted); line-height: 1.65; padding-bottom: 12px; }
 
-/* DRINK FOOTER */
-.drink-card-footer {
-  padding: 10px 1.15rem;
-  border-top: 1px solid var(--border);
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  flex-wrap: wrap;
-  background: var(--cream);
-}
-.sb-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--terracotta);
-  text-decoration: none;
-  padding: 8px 14px;
-  background: var(--white);
-  border: 1px solid rgba(184,92,58,0.25);
-  border-radius: 10px;
-  transition: all 0.15s;
-  touch-action: manipulation;
-  min-height: 40px;
-}
+.drink-card-footer { padding: 10px 1.15rem; border-top: 1px solid var(--border); display: flex; gap: 8px; align-items: center; flex-wrap: wrap; background: var(--cream); }
+.sb-link { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 500; color: var(--terracotta); text-decoration: none; padding: 8px 14px; background: var(--white); border: 1px solid rgba(184,92,58,0.25); border-radius: 10px; transition: all 0.15s; touch-action: manipulation; min-height: 40px; }
 .sb-link:hover, .sb-link:active { background: var(--terracotta); color: white; border-color: var(--terracotta); }
-
-/* RECEPT */
-.btn-recept {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--green);
-  padding: 8px 14px;
-  background: var(--white);
-  border: 1px solid rgba(45,74,62,0.25);
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.15s;
-  touch-action: manipulation;
-  min-height: 40px;
-}
+.btn-recept { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 500; color: var(--green); padding: 8px 14px; background: var(--white); border: 1px solid rgba(45,74,62,0.25); border-radius: 10px; cursor: pointer; transition: all 0.15s; touch-action: manipulation; min-height: 40px; }
 .btn-recept:hover, .btn-recept:active { background: var(--green); color: white; border-color: var(--green); }
 .recept-body { display: none; padding: 14px 1.15rem 16px; border-top: 1px solid var(--border); background: var(--cream); }
 .recept-body.open { display: block; animation: fadeUp 0.25s ease; }
@@ -373,66 +263,15 @@ textarea::placeholder { color: var(--text-muted); opacity: 0.7; }
 .recept-ing li:last-child { border-bottom: none; }
 .recept-inst { font-size: 13px; color: var(--text-muted); line-height: 1.7; }
 
-/* ARTIKELNR CHIP */
-.sb-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.sb-nr {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 7px 12px;
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  font-size: 12.5px;
-  color: var(--text-muted);
-  min-height: 40px;
-}
-.sb-nr-label { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); opacity: 0.7; }
-.sb-nr-val { font-weight: 600; color: var(--text); font-size: 14px; letter-spacing: 0.03em; }
-.btn-copy {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 7px 13px;
-  font-size: 12.5px;
-  font-weight: 500;
-  border: 1px solid rgba(184,92,58,0.25);
-  border-radius: 10px;
-  background: var(--white);
-  color: var(--terracotta);
-  cursor: pointer;
-  transition: all 0.15s;
-  touch-action: manipulation;
-  min-height: 40px;
-}
+.btn-copy { display: inline-flex; align-items: center; gap: 5px; padding: 7px 13px; font-size: 12.5px; font-weight: 500; border: 1px solid rgba(184,92,58,0.25); border-radius: 10px; background: var(--white); color: var(--terracotta); cursor: pointer; transition: all 0.15s; touch-action: manipulation; min-height: 40px; }
 .btn-copy:hover, .btn-copy:active { background: var(--terracotta); color: white; border-color: var(--terracotta); }
 .btn-copy.copied { background: var(--green); color: white; border-color: var(--green); pointer-events: none; }
-.sb-hint {
-  font-size: 11px;
-  color: var(--text-muted);
-  opacity: 0.65;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin-top: 4px;
-}
 
-/* FULL WIDTH VARIANT */
 .card-full { background: var(--white); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; margin-bottom: 12px; box-shadow: var(--shadow-sm); }
 
-/* SAVED */
 .saved-empty { text-align: center; padding: 4rem 0; color: var(--text-muted); font-size: 14px; }
 .saved-grid { display: grid; gap: 12px; }
-.saved-card {
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 1.25rem 1.5rem;
-  box-shadow: var(--shadow-sm);
-  cursor: pointer;
-  transition: box-shadow 0.2s;
-}
-.saved-card:hover { box-shadow: var(--shadow-md); }
+.saved-card { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 1.25rem 1.5rem; box-shadow: var(--shadow-sm); }
 .saved-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 12px; }
 .saved-dish { font-family: 'Playfair Display', serif; font-size: 17px; color: var(--warm-brown); line-height: 1.3; }
 .saved-date { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
@@ -445,250 +284,71 @@ textarea::placeholder { color: var(--text-muted); opacity: 0.7; }
 .btn-del { background: none; border: none; font-size: 16px; cursor: pointer; color: var(--text-muted); padding: 3px 7px; border-radius: 7px; transition: all 0.15s; line-height: 1; }
 .btn-del:hover { background: #fff0ee; color: #c0392b; }
 
-/* ── CHATT ── */
-.chat-wrap {
-  display: flex;
-  flex-direction: column;
-  height: calc(100vh - 60px - 5rem);
-  min-height: 400px;
-  max-height: 780px;
-}
-@media (max-width: 600px) {
-  .chat-wrap { height: calc(100vh - 140px); max-height: none; }
-}
-
-.chat-header {
-  background: var(--warm-brown);
-  border-radius: 18px;
-  padding: 1rem 1.25rem;
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-shrink: 0;
-}
-.chat-avatar {
-  width: 44px; height: 44px;
-  background: rgba(255,255,255,0.12);
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 22px;
-  flex-shrink: 0;
-}
+.chat-wrap { display: flex; flex-direction: column; height: calc(100vh - 60px - 5rem); min-height: 400px; max-height: 780px; }
+@media (max-width: 600px) { .chat-wrap { height: calc(100vh - 140px); max-height: none; } }
+.chat-header { background: var(--warm-brown); border-radius: 18px; padding: 1rem 1.25rem; margin-bottom: 12px; display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+.chat-avatar { width: 44px; height: 44px; background: rgba(255,255,255,0.12); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
 .chat-header-info { flex: 1; min-width: 0; }
 .chat-header-name { font-family: 'Playfair Display', serif; font-size: 16px; color: var(--cream); font-weight: 400; }
 .chat-header-status { font-size: 11.5px; color: rgba(245,240,232,0.6); margin-top: 2px; }
-.chat-clear {
-  background: rgba(255,255,255,0.1);
-  border: none; border-radius: 10px;
-  color: rgba(245,240,232,0.7);
-  font-size: 12px; font-weight: 500;
-  padding: 7px 12px; cursor: pointer;
-  transition: all 0.15s; flex-shrink: 0;
-  touch-action: manipulation;
-}
+.chat-clear { background: rgba(255,255,255,0.1); border: none; border-radius: 10px; color: rgba(245,240,232,0.7); font-size: 12px; font-weight: 500; padding: 7px 12px; cursor: pointer; transition: all 0.15s; flex-shrink: 0; touch-action: manipulation; }
 .chat-clear:hover { background: rgba(255,255,255,0.18); color: var(--cream); }
-
-.chat-messages {
-  flex: 1;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 4px 2px 8px;
-  -webkit-overflow-scrolling: touch;
-  scroll-behavior: smooth;
-}
+.chat-messages { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding: 4px 2px 8px; -webkit-overflow-scrolling: touch; scroll-behavior: smooth; }
 .chat-messages::-webkit-scrollbar { width: 4px; }
 .chat-messages::-webkit-scrollbar-track { background: transparent; }
 .chat-messages::-webkit-scrollbar-thumb { background: var(--cream-dark); border-radius: 4px; }
-
-/* Bubbles */
 .msg { display: flex; gap: 8px; align-items: flex-end; max-width: 100%; }
 .msg.user { flex-direction: row-reverse; }
-.msg-bubble {
-  max-width: 82%;
-  padding: 11px 14px;
-  border-radius: 18px;
-  font-size: 14px;
-  line-height: 1.65;
-  word-break: break-word;
-}
-@media (min-width: 601px) { .msg-bubble { max-width: 75%; font-size: 14px; } }
-.msg.user .msg-bubble {
-  background: var(--terracotta);
-  color: white;
-  border-bottom-right-radius: 5px;
-}
-.msg.ai .msg-bubble {
-  background: var(--white);
-  color: var(--text);
-  border: 1px solid var(--border);
-  border-bottom-left-radius: 5px;
-  box-shadow: var(--shadow-sm);
-}
-.msg-icon {
-  width: 30px; height: 30px;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 15px;
-  flex-shrink: 0;
-  margin-bottom: 2px;
-}
+.msg-bubble { max-width: 82%; padding: 11px 14px; border-radius: 18px; font-size: 14px; line-height: 1.65; word-break: break-word; }
+@media (min-width: 601px) { .msg-bubble { max-width: 75%; } }
+.msg.user .msg-bubble { background: var(--terracotta); color: white; border-bottom-right-radius: 5px; }
+.msg.ai .msg-bubble { background: var(--white); color: var(--text); border: 1px solid var(--border); border-bottom-left-radius: 5px; box-shadow: var(--shadow-sm); }
+.msg-icon { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; margin-bottom: 2px; }
 .msg.ai .msg-icon { background: var(--warm-brown); }
 .msg.user .msg-icon { background: var(--terracotta-light); }
-
-/* Typing indicator */
 .typing-dots { display: flex; gap: 4px; align-items: center; padding: 4px 2px; }
-.typing-dots span {
-  width: 7px; height: 7px;
-  background: var(--text-muted);
-  border-radius: 50%;
-  animation: bounce 1.2s infinite;
-  opacity: 0.5;
-}
+.typing-dots span { width: 7px; height: 7px; background: var(--text-muted); border-radius: 50%; animation: bounce 1.2s infinite; opacity: 0.5; }
 .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
 .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
 @keyframes bounce { 0%,60%,100% { transform: translateY(0); opacity:0.5; } 30% { transform: translateY(-6px); opacity:1; } }
-
-/* AI message formatting */
 .msg.ai .msg-bubble strong { color: var(--warm-brown); font-weight: 600; }
 .msg.ai .msg-bubble em { font-style: italic; color: var(--text-muted); }
-.msg.ai .msg-bubble ul { padding-left: 18px; margin: 6px 0; }
-.msg.ai .msg-bubble li { margin-bottom: 4px; line-height: 1.6; }
-.msg.ai .msg-bubble .tip-inline {
-  display: block;
-  margin-top: 10px;
-  padding: 9px 12px;
-  background: var(--terracotta-light);
-  border-left: 3px solid var(--terracotta);
-  border-radius: 0 8px 8px 0;
-  font-size: 13px;
-  color: var(--text-muted);
-  line-height: 1.6;
-}
-
-/* Suggested questions */
-.chat-suggestions {
-  display: flex; gap: 7px; flex-wrap: wrap;
-  padding: 8px 0 4px;
-  flex-shrink: 0;
-}
-.sug-chip {
-  padding: 7px 12px;
-  font-size: 12.5px;
-  color: var(--terracotta);
-  background: var(--terracotta-light);
-  border: 1px solid rgba(184,92,58,0.2);
-  border-radius: 20px;
-  cursor: pointer;
-  transition: all 0.15s;
-  touch-action: manipulation;
-  line-height: 1.3;
-  text-align: left;
-}
+.chat-suggestions { display: flex; gap: 7px; flex-wrap: wrap; padding: 8px 0 4px; flex-shrink: 0; }
+.sug-chip { padding: 7px 12px; font-size: 12.5px; color: var(--terracotta); background: var(--terracotta-light); border: 1px solid rgba(184,92,58,0.2); border-radius: 20px; cursor: pointer; transition: all 0.15s; touch-action: manipulation; line-height: 1.3; text-align: left; }
 .sug-chip:hover, .sug-chip:active { background: var(--terracotta); color: white; }
 @media (max-width: 600px) {
   .chat-suggestions { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding-bottom: 6px; }
   .chat-suggestions::-webkit-scrollbar { display: none; }
   .sug-chip { white-space: nowrap; flex-shrink: 0; }
 }
-
-/* Input row */
-.chat-input-row {
-  display: flex;
-  gap: 8px;
-  align-items: flex-end;
-  padding-top: 10px;
-  border-top: 1px solid var(--border);
-  flex-shrink: 0;
-}
-.chat-input {
-  flex: 1;
-  padding: 12px 14px;
-  font-size: 16px;
-  font-family: 'DM Sans', sans-serif;
-  border: 1.5px solid var(--cream-dark);
-  border-radius: 14px;
-  background: var(--cream);
-  color: var(--text);
-  resize: none;
-  height: 48px;
-  max-height: 120px;
-  overflow-y: hidden;
-  line-height: 1.5;
-  transition: border-color 0.2s, background 0.2s, height 0.1s;
-}
+.chat-input-row { display: flex; gap: 8px; align-items: flex-end; padding-top: 10px; border-top: 1px solid var(--border); flex-shrink: 0; }
+.chat-input { flex: 1; padding: 12px 14px; font-size: 16px; font-family: 'DM Sans', sans-serif; border: 1.5px solid var(--cream-dark); border-radius: 14px; background: var(--cream); color: var(--text); resize: none; height: 48px; max-height: 120px; overflow-y: hidden; line-height: 1.5; transition: border-color 0.2s, background 0.2s; }
 .chat-input:focus { outline: none; border-color: var(--terracotta); background: var(--white); }
 .chat-input::placeholder { color: var(--text-muted); opacity: 0.6; }
-.btn-send {
-  width: 48px; height: 48px;
-  border-radius: 14px;
-  background: var(--terracotta);
-  border: none;
-  color: white;
-  font-size: 20px;
-  cursor: pointer;
-  transition: all 0.15s;
-  flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-  touch-action: manipulation;
-}
+.btn-send { width: 48px; height: 48px; border-radius: 14px; background: var(--terracotta); border: none; color: white; font-size: 20px; cursor: pointer; transition: all 0.15s; flex-shrink: 0; display: flex; align-items: center; justify-content: center; touch-action: manipulation; }
 .btn-send:hover { background: #a04d2e; transform: scale(1.05); }
 .btn-send:active { transform: scale(0.95); }
 .btn-send:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 
-.guide-hero {
-  background: var(--warm-brown);
-  color: var(--cream);
-  border-radius: 18px;
-  padding: 1.5rem 1.25rem;
-  margin-bottom: 1.25rem;
-  position: relative;
-  overflow: hidden;
-}
+.guide-hero { background: var(--warm-brown); color: var(--cream); border-radius: 18px; padding: 1.5rem 1.25rem; margin-bottom: 1.25rem; position: relative; overflow: hidden; }
 @media (min-width: 601px) { .guide-hero { padding: 2.25rem 2rem; border-radius: 20px; } }
 .guide-hero::before { content: '🍷'; position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); font-size: 64px; opacity: 0.07; pointer-events: none; }
 .guide-hero h2 { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 400; margin-bottom: 8px; line-height: 1.3; }
 @media (min-width: 601px) { .guide-hero h2 { font-size: 26px; } }
 .guide-hero p { font-size: 13px; opacity: 0.72; line-height: 1.7; }
-@media (min-width: 601px) { .guide-hero p { font-size: 14px; } }
 
-/* SNABBREFERENS */
 .guide-section-plain { margin-bottom: 1.5rem; }
 .guide-section-plain h3 { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 400; color: var(--warm-brown); margin-bottom: 5px; }
 .guide-section-plain .sec-summary { font-size: 13px; color: var(--text-muted); margin-bottom: 10px; line-height: 1.6; }
 .quick-table { background: var(--white); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow-sm); }
 .qt-item + .qt-item { border-top: 1px solid var(--border); }
-
-/* On mobile: stack label above val, hide val text to save space */
-.qt-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 14px 16px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background 0.12s;
-  user-select: none;
-  touch-action: manipulation;
-  min-height: 52px;
-}
+.qt-row { display: flex; align-items: center; gap: 8px; padding: 14px 16px; font-size: 14px; cursor: pointer; transition: background 0.12s; user-select: none; touch-action: manipulation; min-height: 52px; }
 .qt-row:hover, .qt-row:active { background: var(--cream); }
 .qt-label { font-weight: 500; color: var(--text); flex: 1; line-height: 1.4; }
-.qt-val { display: none; } /* hidden on mobile — detail text explains */
+.qt-val { display: none; }
 .qt-more { font-size: 13px; color: var(--terracotta); font-weight: 600; flex-shrink: 0; transition: transform 0.2s; padding: 4px 8px; background: var(--terracotta-light); border-radius: 8px; }
 .qt-item.open .qt-more { transform: rotate(90deg); }
-.qt-detail {
-  display: none;
-  padding: 14px 16px 18px;
-  font-size: 13.5px;
-  color: var(--text-muted);
-  line-height: 1.8;
-  border-top: 1px solid var(--border);
-  background: var(--cream);
-  animation: fadeUp 0.2s ease;
-}
+.qt-detail { display: none; padding: 14px 16px 18px; font-size: 13.5px; color: var(--text-muted); line-height: 1.8; border-top: 1px solid var(--border); background: var(--cream); animation: fadeUp 0.2s ease; }
 .qt-item.open .qt-detail { display: block; }
 .qt-item.open > .qt-row { background: var(--cream); }
 @media (min-width: 601px) {
@@ -698,60 +358,27 @@ textarea::placeholder { color: var(--text-muted); opacity: 0.7; }
   .qt-more { background: none; padding: 0; font-size: 12px; }
 }
 
-/* EXPANDABLE SECTIONS */
-.exp-section {
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  background: var(--white);
-  margin-bottom: 10px;
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
-}
-.exp-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px;
-  cursor: pointer;
-  user-select: none;
-  transition: background 0.15s;
-  gap: 12px;
-  touch-action: manipulation;
-  min-height: 60px;
-}
+.exp-section { border: 1px solid var(--border); border-radius: 14px; background: var(--white); margin-bottom: 10px; overflow: hidden; box-shadow: var(--shadow-sm); }
+.exp-header { display: flex; align-items: center; justify-content: space-between; padding: 16px; cursor: pointer; user-select: none; transition: background 0.15s; gap: 12px; touch-action: manipulation; min-height: 60px; }
 @media (min-width: 601px) { .exp-header { padding: 17px 22px; } }
 .exp-header:hover, .exp-header:active { background: var(--cream); }
 .exp-header-left { flex: 1; min-width: 0; }
 .exp-title { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 400; color: var(--warm-brown); margin-bottom: 2px; line-height: 1.3; }
 @media (min-width: 601px) { .exp-title { font-size: 17px; } }
 .exp-summary { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
-@media (min-width: 601px) { .exp-summary { font-size: 13px; } }
 .exp-arrow { font-size: 20px; color: var(--text-muted); flex-shrink: 0; transition: transform 0.25s; line-height: 1; width: 28px; text-align: center; }
 .exp-section.open .exp-arrow { transform: rotate(180deg); }
 .exp-body { display: none; padding: 0 16px 20px; border-top: 1px solid var(--border); }
 @media (min-width: 601px) { .exp-body { padding: 0 22px 24px; } }
 .exp-section.open .exp-body { display: block; }
 .exp-body p { font-size: 13.5px; color: var(--text-muted); line-height: 1.85; margin-top: 14px; }
-@media (min-width: 601px) { .exp-body p { font-size: 14px; } }
 .exp-body p + p { margin-top: 10px; }
 .exp-body strong { color: var(--text); font-weight: 500; }
 
-/* FLAVOR GRID — single column on mobile */
 .flavor-grid { display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 14px; }
 @media (min-width: 480px) { .flavor-grid { grid-template-columns: 1fr 1fr; } }
 .flavor-card { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
-.flavor-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 13px 14px;
-  cursor: pointer;
-  background: var(--cream);
-  transition: background 0.15s;
-  user-select: none;
-  touch-action: manipulation;
-  min-height: 52px;
-}
+.flavor-header { display: flex; align-items: center; justify-content: space-between; padding: 13px 14px; cursor: pointer; background: var(--cream); transition: background 0.15s; user-select: none; touch-action: manipulation; min-height: 52px; }
 .flavor-header:hover, .flavor-header:active { background: var(--cream-dark); }
 .flavor-name { font-size: 14px; font-weight: 500; color: var(--text); }
 .flavor-rule { font-size: 11.5px; color: var(--terracotta); font-weight: 500; margin-top: 2px; }
@@ -760,27 +387,15 @@ textarea::placeholder { color: var(--text-muted); opacity: 0.7; }
 .flavor-body { display: none; padding: 13px 14px; font-size: 13.5px; color: var(--text-muted); line-height: 1.7; border-top: 1px solid var(--border); background: var(--white); }
 .flavor-card.open .flavor-body { display: block; }
 
-/* AVOID TABLE */
 .avoid-table { margin-top: 14px; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
 .avoid-row { padding: 13px 14px; }
 .avoid-row + .avoid-row { border-top: 1px solid var(--border); }
 .avoid-combo { font-weight: 500; color: var(--text); margin-bottom: 5px; font-size: 14px; line-height: 1.3; }
 .avoid-why { font-size: 13px; color: var(--text-muted); line-height: 1.7; }
 
-/* TIP BOX */
-.tip {
-  border-left: 3px solid var(--terracotta);
-  padding: 12px 14px;
-  margin-top: 14px;
-  font-size: 13.5px;
-  color: var(--text-muted);
-  line-height: 1.7;
-  background: var(--terracotta-light);
-  border-radius: 0 10px 10px 0;
-}
+.tip { border-left: 3px solid var(--terracotta); padding: 12px 14px; margin-top: 14px; font-size: 13.5px; color: var(--text-muted); line-height: 1.7; background: var(--terracotta-light); border-radius: 0 10px 10px 0; }
 .tip strong { color: var(--text); font-weight: 500; }
 
-/* PRIORITY TABLE — always stacked on mobile */
 .prio-table { margin-top: 14px; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
 .prio-row { display: flex; flex-direction: column; gap: 3px; padding: 12px 14px; font-size: 13.5px; }
 .prio-row + .prio-row { border-top: 1px solid var(--border); }
@@ -796,6 +411,16 @@ textarea::placeholder { color: var(--text-muted); opacity: 0.7; }
 </head>
 <body>
 
+<!-- API KEY BANNER -->
+<div id="api-banner" class="api-banner">
+  <span>🔑 Ange din Anthropic API-nyckel för att aktivera AI-funktionerna:</span>
+  <input type="password" id="api-key-input" placeholder="sk-ant-..." autocomplete="off" />
+  <button onclick="saveApiKey()">Spara</button>
+</div>
+<div id="api-banner-ok" class="api-banner-ok" style="display:none">
+  ✅ API-nyckel sparad — AI-funktionerna är aktiva. <button onclick="clearApiKey()" style="margin-left:12px;background:none;border:none;color:var(--green);font-size:12px;cursor:pointer;text-decoration:underline;">Byt nyckel</button>
+</div>
+
 <nav>
   <div class="nav-logo">Smak<span>kompass</span></div>
   <div class="nav-tabs">
@@ -806,35 +431,23 @@ textarea::placeholder { color: var(--text-muted); opacity: 0.7; }
   </div>
 </nav>
 
-<!-- MOBILE BOTTOM NAV -->
 <div class="mobile-nav" id="mobile-nav">
-  <button class="mobile-nav-btn active" id="mnb-match" onclick="switchTabMobile('match')">
-    <span class="mni">🍽</span>Matcha
-  </button>
-  <button class="mobile-nav-btn" id="mnb-chat" onclick="switchTabMobile('chat')">
-    <span class="mni">🍷</span>Sommelier
-  </button>
-  <button class="mobile-nav-btn" id="mnb-saved" onclick="switchTabMobile('saved')">
-    <span class="mni">🔖</span>Sparade <span class="saved-badge" id="saved-count-m"></span>
-  </button>
-  <button class="mobile-nav-btn" id="mnb-guide" onclick="switchTabMobile('guide')">
-    <span class="mni">📖</span>Guide
-  </button>
+  <button class="mobile-nav-btn active" id="mnb-match" onclick="switchTabMobile('match')"><span class="mni">🍽</span>Matcha</button>
+  <button class="mobile-nav-btn" id="mnb-chat" onclick="switchTabMobile('chat')"><span class="mni">🍷</span>Sommelier</button>
+  <button class="mobile-nav-btn" id="mnb-saved" onclick="switchTabMobile('saved')"><span class="mni">🔖</span>Sparade <span class="saved-badge" id="saved-count-m"></span></button>
+  <button class="mobile-nav-btn" id="mnb-guide" onclick="switchTabMobile('guide')"><span class="mni">📖</span>Guide</button>
 </div>
 
 <main>
-
   <!-- MATCH -->
   <div id="panel-match" class="panel active">
     <div class="hero">
       <h1>Hitta rätt dryck<br>till din <em>rätt</em></h1>
       <p>Beskriv vad du lagar — få professionella matchningar<br>på vin, öl, drinkar och alkoholfritt</p>
     </div>
-
     <div class="search-card">
       <label class="search-label">Din rätt</label>
       <textarea id="mat-input" placeholder="Beskriv rätten... t.ex. grillad entrecôte med chimichurri och rostad potatis"></textarea>
-
       <div class="detail-row">
         <span class="detail-label">Detaljnivå:</span>
         <div class="detail-btns">
@@ -843,13 +456,11 @@ textarea::placeholder { color: var(--text-muted); opacity: 0.7; }
           <button class="detail-btn" data-val="detaljerad" onclick="setDetail(this)">Detaljerad</button>
         </div>
       </div>
-
       <div class="search-row">
         <div class="chips-wrap" id="chips-wrap"></div>
         <button class="btn-search" id="match-btn" onclick="matchaDryck()">Matcha →</button>
       </div>
     </div>
-
     <div id="result-area">
       <div class="status">
         <div class="status-icon">◌</div>
@@ -862,7 +473,6 @@ textarea::placeholder { color: var(--text-muted); opacity: 0.7; }
   <!-- CHAT -->
   <div id="panel-chat" class="panel">
     <div class="chat-wrap">
-
       <div class="chat-header">
         <div class="chat-avatar">🍷</div>
         <div class="chat-header-info">
@@ -871,11 +481,7 @@ textarea::placeholder { color: var(--text-muted); opacity: 0.7; }
         </div>
         <button class="chat-clear" onclick="clearChat()">Rensa</button>
       </div>
-
-      <div class="chat-messages" id="chat-messages">
-        <!-- Welcome message injected by JS -->
-      </div>
-
+      <div class="chat-messages" id="chat-messages"></div>
       <div class="chat-suggestions" id="chat-suggestions">
         <button class="sug-chip" onclick="sendSuggestion(this)">Vilket glas till rött vin?</button>
         <button class="sug-chip" onclick="sendSuggestion(this)">Jag ska äta sushi ikväll</button>
@@ -884,15 +490,12 @@ textarea::placeholder { color: var(--text-muted); opacity: 0.7; }
         <button class="sug-chip" onclick="sendSuggestion(this)">Vilket vin passar till oxfilé?</button>
         <button class="sug-chip" onclick="sendSuggestion(this)">Hur serverar man vin rätt temperatur?</button>
       </div>
-
       <div class="chat-input-row">
         <textarea class="chat-input" id="chat-input" placeholder="Fråga om vin, mat, glas, temperatur..." rows="1"></textarea>
         <button class="btn-send" id="chat-send" onclick="sendChat()">↑</button>
       </div>
-
     </div>
   </div>
-
 
   <!-- SAVED -->
   <div id="panel-saved" class="panel">
@@ -909,350 +512,130 @@ textarea::placeholder { color: var(--text-muted); opacity: 0.7; }
       <h2>Din guide till mat &amp; dryck</h2>
       <p>Här hittar du den kunskap som sommeliererna studerar i flera år — förklarad på ett sätt som faktiskt går att förstå och använda direkt i köket.</p>
     </div>
-
-    <!-- SNABBREFERENS -->
     <div class="guide-section-plain">
       <h3>Snabbreferens</h3>
       <p class="sec-summary">Slå upp vad som passar till din rätt. Klicka på en rad för att förstå varför.</p>
       <div class="quick-table">
-
-        <div class="qt-item" id="qt-salt">
-          <div class="qt-row" onclick="toggleQt('qt-salt')"><div class="qt-label">Salt mat</div><div class="qt-val">Passar med nästan vad som helst</div><div class="qt-more">→</div></div>
-          <div class="qt-detail">
-            Salt är dryckens bästa vän. Det beror på att salt kemiskt dämpar bitterhet och strävhet — vilket gör att tanniner och humlebeska i drycken upplevs mjukare och mer balanserade. Samtidigt lyfter salt fram fruktighet och sötma, vilket gör att vinet eller ölet smakar rikare och rundare än det egentligen är.
-            <br><br>Det klassiska exemplet är ostron och champagne. Ostronets sälta gör att champagnens syra och bitterhet tonas ned, och den naturliga fruktigheten träder fram. Samma princip gäller för hårt lagrad ost med rödvin — osten är salt nog att mjuka upp tanninerna som annars skulle kännas torra och sträva mot munnen.
-            <br><br>Praktiskt tips: Om du är osäker på vad som passar till en salt rätt — fokusera på de andra smakerna i rätten istället. Saltet sköter sig självt.
-          </div>
-        </div>
-
-        <div class="qt-item" id="qt-syra">
-          <div class="qt-row" onclick="toggleQt('qt-syra')"><div class="qt-label">Syrlig mat</div><div class="qt-val">Kräver minst lika syrlig dryck</div><div class="qt-more">→</div></div>
-          <div class="qt-detail">
-            Syra är den mest krävande smaken att matcha rätt, och den vanligaste källan till misslyckade kombinationer. Anledningen är enkel: om maten har mer syra än drycken upplevs drycken som platt, söt och livlös. Den struktur och fräschör som annars är vinets styrka försvinner helt.
-            <br><br>Tänk dig att du pressar citron över en stekt fisk och sedan dricker ett mjukt, smakrikt Chardonnay från Bourgogne. Vinet som kanske var elegant och balanserat utan maten smakar plötsligt som druvjuice. Citronen har "stulit" syran och lämnat bara sötman kvar.
-            <br><br>Lösningen: välj alltid en dryck med minst lika mycket syra som maten har. Till ceviche med limejuice: Albariño eller Vinho Verde. Till en vinägerdressing på sallad: Sauvignon Blanc eller Chablis. Till tomatsås: italienska viner som Chianti eller Barbera d'Asti, som naturligt har hög syra och vuxit upp bredvid tomaten i tusentals år.
-          </div>
-        </div>
-
-        <div class="qt-item" id="qt-umami">
-          <div class="qt-row" onclick="toggleQt('qt-umami')"><div class="qt-label">Umami-rik mat</div><div class="qt-val">Mjukt, fruktigt vin — hårda tanniner undviks</div><div class="qt-more">→</div></div>
-          <div class="qt-detail">
-            Umami är den femte grundsmaken — den djupa, musiga, nästan köttiga känslan som finns naturligt i långkok, lagrad ost (parmesan, Comté), svamp (särskilt torkad shiitake och porcini), soja, miso, sardiner, ansjovis och långlagrat kött. Ordet kommer från japanskan och betyder ungefär "välsmakande djup".
-            <br><br>Problemet med umami och tanniner är en av vinvärldens välbelagda smakkemiska reaktioner. Umami förstärker bitterheten hos tanniner markant — ett vin som på egen hand känns balanserat kan smaka metalliskt, torrt och nästan otrevligt när det kombineras med en umami-intensiv rätt. Det är därför ett kraftigt Barolo kan vara svårt till en biff med svampsås, trots att det låter som en klassiker.
-            <br><br>Vad fungerar i stället? Välj röda viner med mjuka, mogna tanniner och tydlig fruktighet: Pinot Noir (Bourgogne eller Nya Zeeland), Merlot, mjuk Malbec, eller Barbera. Alternativt: friska vita viner om rätten tillåter det. Till svamprisotto fungerar ett torrt, mineraliskt Chardonnay från Chablis utmärkt.
-          </div>
-        </div>
-
-        <div class="qt-item" id="qt-kryddigt">
-          <div class="qt-row" onclick="toggleQt('qt-kryddigt')"><div class="qt-label">Kryddig och het mat</div><div class="qt-val">Låg alkohol, sötma och kolsyra — undvik torrt rödvin</div><div class="qt-more">→</div></div>
-          <div class="qt-detail">
-            Hetta från chili, peppar och kryddor interagerar direkt med alkohol och tanniner i drycken och förstärker dem kraftigt. Det som är "lagom starkt" på tallriken kan bli nästan outhärdligt med ett kraftigt rödvin till. Alkoholen i sig upplevs som hetta i munnen, och tillsammans med chilistyrkan adderas de.
-            <br><br>Kolsyra däremot är faktiskt kylande — inte bara psykologiskt utan fysiologiskt. Bubblorna stimulerar kylreceptorer i munnen. Sötma motverkar hettans intensitet. Det är därför iskall lager fungerar så bra till het mat runt om i världen — det är inte en slump, det är smakkemi.
-            <br><br>Bästa alternativ till kryddig mat: halvtorrt Riesling (Alsace eller Tyskland) — sötman dämpar hettan, syran skär igenom fett i såser, och den låga alkoholen eskalerar inte styrkan. Prosecco eller Cava fungerar av samma skäl. Vill du ha rödvin: välj ett lättare, fruktrikt vin med låg alkohol och mjuka tanniner, till exempel en Beaujolais-Villages lätt kyld. Undvik: Amarone, Barolo, Zinfandel och andra kraftiga röda med hög alkohol.
-          </div>
-        </div>
-
-        <div class="qt-item" id="qt-sott">
-          <div class="qt-row" onclick="toggleQt('qt-sott')"><div class="qt-label">Söt mat och desserter</div><div class="qt-val">Drycken måste vara minst lika söt — aldrig torrare</div><div class="qt-more">→</div></div>
-          <div class="qt-detail">
-            Sötma är den smak som avslöjar snabbast om drycken inte hänger med. Mekanismen är enkel: när maten är sötare än drycken upplevs drycken som syrlig, bitter och livlös — all struktur och elegans försvinner och det enda som märks är torkheten.
-            <br><br>Det är precis därför sommelier-traditionen har hela kategorier av drycker dedikerade till söt mat: Sauternes till foie gras och äppelkaka, Tokaji Aszú till fruktdesserter, Vintage Port till mörk choklad, Moscato d'Asti till lätta bärdesserter. Dessa är inte godtyckliga traditioner — de är smakkemin formaliserad över hundratals år.
-            <br><br>Praktisk tumregel: Drycken ska alltid vara lika söt eller sötare än rätten. En halvtorr (demi-sec) champagne passar till en lätt mousse. En lätt Sauternes passar till en krämig pannacotta. Ett sött eiswein passar till en intensiv crème brûlée. Vill du ha ett torrt vin till dessert? Välj en mycket söt dessert och ett vin med tydlig fruktighet (inte sötma) — en mogen Viognier till en fruktsallad kan fungera.
-          </div>
-        </div>
-
-        <div class="qt-item" id="qt-fett">
-          <div class="qt-row" onclick="toggleQt('qt-fett')"><div class="qt-label">Fet och rik mat</div><div class="qt-val">Syra, kolsyra eller tanniner skär igenom</div><div class="qt-more">→</div></div>
-          <div class="qt-detail">
-            Fett belägger smaklökarna och den inre munhålan med en hinna som effektivt dämpar smakupplevelsen. Det är därför en riktigt fet rätt kan kännas "stum" i munnen efter ett tag — fettet blockerar receptorerna. Det är också det som gör rika rätter mättande: fettet signalerar till hjärnan att det finns gott om energi.
-            <br><br>Syra i drycken fungerar som ett biologiskt sköljmedel. Den bryter ned fetthinnan kemiskt och återställer smaklökarnas känslighet — precis som att pressa citron på en fet rätt gör. Det är därför en frisk Chablis till ostron, en syrlig Barbera till pasta med köttfärssås, eller ett friskt rosé till grillad fläsknacke alltid fungerar.
-            <br><br>Kolsyra gör ungefär samma sak mekaniskt — bubblorna "skrubbar" bort fetthinnna från tungan och munnen. Det är inte en slump att champagne traditionellt serveras till rika, feta rätter som hummer och foie gras. Tanniner i rödvin binder till proteiner i fettet och skapar ett liknande fenomen. Det är den egentliga anledningen till att tanninrikt rödvin passar till marmorerat kött — fettets proteiner mjukar upp tanninerna och tanninerna skär igenom fettet.
-          </div>
-        </div>
-
-        <div class="qt-item" id="qt-grillat">
-          <div class="qt-row" onclick="toggleQt('qt-grillat')"><div class="qt-label">Grillat och rökt</div><div class="qt-val">Fruktiga, tanninrika röda — rök och kol trivs med tanniner</div><div class="qt-more">→</div></div>
-          <div class="qt-detail">
-            Grillning och rökning skapar Maillard-reaktioner — de kemiska processer som ger det karaktäristiska "grillade" aromaterna av kolhydrater och proteiner som bryts ned i hög värme. Dessa aromer innehåller naturliga bittra och rökiga komponenter som faktiskt kompletterar tanninerna i rödvin på ett unikt sätt.
-            <br><br>Tanninernas bitterhet och den grillade ytans bitterhet "matchar" varandra och upplevs som harmoniska snarare än additiva. Det är det omvända mot vad som händer med umami — där förstärker umami tanninernas bitterhet negativt. Med grillat sker en positiv spegling.
-            <br><br>Till grillad entrecôte eller lamm: Cabernet Sauvignon från Bordeaux eller Napa Valley — tanninerna i dessa viner är kraftiga nog att möta köttet, och den svarta frukten (vinbär, plommon) speglar de rökiga tonerna. Till grillad fläskkotlett eller rökt kyckling: Syrah/Shiraz från Rhône eller Australien — dessa viner har ofta naturliga rökinslag av svartpeppar och olivkött som förstärks ytterligare av grillköttets aromer. Till grillad fisk: rosé med kropp, gärna från Provence.
-          </div>
-        </div>
-
-        <div class="qt-item" id="qt-fisk">
-          <div class="qt-row" onclick="toggleQt('qt-fisk')"><div class="qt-label">Fisk och skaldjur</div><div class="qt-val">Friska vita, mousserande eller lätt rosé</div><div class="qt-more">→</div></div>
-          <div class="qt-detail">
-            Regeln "vitt vin till fisk" är en av de äldsta i vinvärlden, och den är välgrundad — men det finns viktiga nyanser. Anledningen är inte bara tradition utan smakkemi: fisk och skaldjur innehåller naturliga jodföreningar och mineraler som reagerar med tanniner i rödvin och skapar en obehaglig metallisk bismak. Det är den verkliga anledningen, inte någon godtycklig regel.
-            <br><br>Men vilken typ av vitt vin? Det beror helt på hur fisken tillagas och vad den serveras med. Råa ostron och skaldjur: mineraliska, torra vita med hög syra — Muscadet sur lie från Loire, Chablis Premier Cru, eller Albariño. Ångkokt eller pocherad vit fisk: lätt och friskt, Pinot Grigio från Alsace eller Soave Classico. Grillad helfisk: mer kropp behövs — Grüner Veltliner, Vermentino, eller ett ungt Chardonnay utan fatlagring. Stekt fisk med smörsås: ett fetare, mer rikt Chardonnay från Bourgogne klarar sig bra tack vare smörsåsens krämighet.
-            <br><br>Undantag: lätta röda viner med låga tanniner kan fungera till fet fisk som tonfisk och lax — en lätt Pinot Noir från Alsace till laxfilé är faktiskt en klassisk kombination. Och champagne fungerar till nästan all fisk och skaldjur tack vare syran och kolsyran.
-          </div>
-        </div>
-
-        <div class="qt-item" id="qt-ost">
-          <div class="qt-row" onclick="toggleQt('qt-ost')"><div class="qt-label">Ost</div><div class="qt-val">Beror helt på osten — ingen enkel regel gäller</div><div class="qt-more">→</div></div>
-          <div class="qt-detail">
-            Ost och vin är kanske den kombination som omges av flest myter. Den populäraste är att rödvin alltid passar till ost — det stämmer faktiskt ganska dåligt. Hårda, lagrade ostar som Parmesan och lagrad Comté är fyllda med umami och salt. Umamin förstärker bitterheten i tanniner, vilket gör att ett kraftigt rödvin kan bli metalliskt och strävt. Salt dämpar visserligen tanninerna något, men umamin tar överhanden.
-            <br><br>Vad fungerar egentligen? Friska, mineralrika vita viner passar till de flesta ostar bättre än rött. Chablis till getost (klassisk kombination från Loire-dalen — de växer bildligen upp bredvid varandra). Sancerre till brie och camembert. Sauternes till roquefort — sötma och salt i kontrast är en av gastronomivärldens mest omtalade kombinationer.
-            <br><br>När rödvin funkar till ost: välj mjukare ostar med lägre syra och mildare umami. Brie med ett lätt Pinot Noir. Gruyère med ett mognat Burgundy. Manchego med Rioja Crianza. Den svenska regeln "ju starkare ost, desto sötare vin" stämmer faktiskt bra — starka, lagrade ostar matchas av portvin, sherry och söta vita.
-          </div>
-        </div>
-
-        <div class="qt-item" id="qt-ost">
-          <div class="qt-row" onclick="toggleQt('qt-ost')"><div class="qt-label">Ost</div><div class="qt-val">Beror helt på osten — ingen enkel regel gäller</div><div class="qt-more">→</div></div>
-          <div class="qt-detail">
-            Ost och vin är kanske den kombination som omges av flest myter. Den populäraste är att rödvin alltid passar — det stämmer faktiskt ganska dåligt. Hårda, lagrade ostar som Parmesan och lagrad Comté är fullpackade med umami och salt. Umamin förstärker bitterheten i tanniner kraftigt, vilket gör att ett tanninrikt rödvin kan bli metalliskt och strävt. Saltet dämpar visserligen tanninerna något, men umamin tar överhanden.
-            <br><br>Vad fungerar egentligen? Friska, mineralrika vita viner passar till de flesta ostar bättre än rött. Chablis till getost är en av vinvärldens mest välmotiverade klassiker — de odlas bokstavligen i samma region och Loire-dalen. Sancerre till brie och camembert. Sauternes till roquefort — sötma och salt i kontrast är en av gastronomivärldens mest omtalade kombinationer av god anledning.
-            <br><br>När rödvin faktiskt fungerar till ost: välj mjukare ostar med lägre umami. Brie med ett lätt Pinot Noir. Gruyère med ett moget Burgundy. Manchego med Rioja Crianza. Den enkla tumregeln som faktiskt håller: ju starkare och mer lagrad osten är, desto sötare och mer kraftfull bör drycken vara. Stark blåmögelost kräver portvin eller söt sherry — inte ett torrt rödvin.
-          </div>
-        </div>
-
-      </div>
-    </div>
-    <div class="exp-section" id="sec-harmoni">
-      <div class="exp-header" onclick="toggleSec('sec-harmoni')"><div class="exp-header-left"><div class="exp-title">Harmoni eller kontrast — de två strategierna</div><div class="exp-summary">Allt mat-och-dryckestänkande bygger på en av dessa två.</div></div><div class="exp-arrow">▾</div></div>
-      <div class="exp-body">
-        <p>All mat- och dryckesammansättning bygger på två grundstrategier, och du väljer medvetet eller omedvetet alltid en av dem. Att förstå skillnaden gör att du kan fatta rätt beslut snabbare och med mer säkerhet.</p>
-        <p><strong>Harmoni</strong> innebär att dryckens smaker speglar och förstärker matens egna smaker. Du letar efter likheter. En rik, smörig hummer bisque med ett fett, ekfatslagrat Chardonnay från Meursault — bådas krämighet förstärker varandra. En lätt, örtfräsch grillad branzino med ett mineraliskt Vermentino — bådas fräschör lyfter varandra. Principen är enkel: lika lockar lika.</p>
-        <p><strong>Kontrast</strong> innebär att dryckens smaker balanserar och kompletterar matens svagheter. Du letar efter skillnader som skapar helhet. Samma hummer bisque med ett friskt, syrligt Champagne Blanc de Blancs — syran och kolsyran skär igenom krämigheten och gör att du smakar hummerns naturliga sötma tydligare. En söt, karamelliserad lökgratin med ett torrt, friskt vin — torrheten balanserar sötman. Principen: motsatser kompletterar.</p>
-        <p>Ingen av strategierna är bättre. De ger bara olika upplevelser. Harmoni ger ofta en mjuk, rundad och bekväm matupplevelse. Kontrast ger ofta mer spänning, tydligare smaker och mer minnesvärda ögonblick. Börja med harmoni om du är osäker — det är svårare att misslyckas med. Prova kontrast när du vill experimentera.</p>
-        <div class="tip"><strong>Praktisk genväg:</strong> Tänk på rätten som en person. Vill du ha en dryck som är precis likadan — eller en som kompletterar och fyller ut det som saknas?</div>
+        <div class="qt-item" id="qt-salt"><div class="qt-row" onclick="toggleQt('qt-salt')"><div class="qt-label">Salt mat</div><div class="qt-val">Passar med nästan vad som helst</div><div class="qt-more">→</div></div><div class="qt-detail">Salt är dryckens bästa vän. Det dämpar bitterhet och strävhet — tanniner och humlebeska upplevs mjukare. Klassisk kombination: ostron och champagne. Praktiskt tips: fokusera på de andra smakerna i rätten — saltet sköter sig självt.</div></div>
+        <div class="qt-item" id="qt-syra"><div class="qt-row" onclick="toggleQt('qt-syra')"><div class="qt-label">Syrlig mat</div><div class="qt-val">Kräver minst lika syrlig dryck</div><div class="qt-more">→</div></div><div class="qt-detail">Om maten har mer syra än drycken upplevs drycken som platt och söt. Välj alltid en dryck med minst lika hög syra. Till ceviche: Albariño eller Vinho Verde. Till vinägerdressing: Sauvignon Blanc eller Chablis. Till tomatsås: Chianti eller Barbera d'Asti.</div></div>
+        <div class="qt-item" id="qt-umami"><div class="qt-row" onclick="toggleQt('qt-umami')"><div class="qt-label">Umami-rik mat</div><div class="qt-val">Mjukt, fruktigt vin — hårda tanniner undviks</div><div class="qt-more">→</div></div><div class="qt-detail">Umami förstärker bitterheten hos tanniner — vinet kan smaka metalliskt. Umami finns i: lagrad ost, svamp, soja, miso, ansjovis. Välj: Pinot Noir, mjuk Merlot, eller friska vita viner. Undvik: Barolo, Brunello, ung Cabernet Sauvignon.</div></div>
+        <div class="qt-item" id="qt-kryddigt"><div class="qt-row" onclick="toggleQt('qt-kryddigt')"><div class="qt-label">Kryddig och het mat</div><div class="qt-val">Låg alkohol, sötma och kolsyra — undvik torrt rödvin</div><div class="qt-more">→</div></div><div class="qt-detail">Hetta och alkohol adderas — kraftigt rödvin gör kryddig mat outhärdlig. Kolsyra är faktiskt kylande. Bäst: halvtorrt Riesling, Prosecco, Cava, eller iskall lager. Undvik: Amarone, Barolo, Zinfandel och kraftiga röda med hög alkohol.</div></div>
+        <div class="qt-item" id="qt-sott"><div class="qt-row" onclick="toggleQt('qt-sott')"><div class="qt-label">Söt mat och desserter</div><div class="qt-val">Drycken måste vara minst lika söt — aldrig torrare</div><div class="qt-more">→</div></div><div class="qt-detail">När maten är sötare än drycken upplevs drycken som syrlig och livlös. Drycken ska alltid vara lika söt eller sötare. Klassiker: Sauternes till crème brûlée, Vintage Port till mörk choklad, Moscato d'Asti till bärdesserter.</div></div>
+        <div class="qt-item" id="qt-fett"><div class="qt-row" onclick="toggleQt('qt-fett')"><div class="qt-label">Fet och rik mat</div><div class="qt-val">Syra, kolsyra eller tanniner skär igenom</div><div class="qt-more">→</div></div><div class="qt-detail">Fett belägger smaklökarna. Syra bryter ned fetthinnan kemiskt — som att pressa citron på stekt fisk. Kolsyra skrubbar bort fettet mekaniskt. Tanniner binder till proteiner i fettet. Välj: syrliga vita, Champagne, Cava, eller tanninrika röda till fett kött.</div></div>
+        <div class="qt-item" id="qt-grillat"><div class="qt-row" onclick="toggleQt('qt-grillat')"><div class="qt-label">Grillat och rökt</div><div class="qt-val">Fruktiga, tanninrika röda — rök trivs med tanniner</div><div class="qt-more">→</div></div><div class="qt-detail">Grillningens bittra och rökiga aromer kompletterar tanninerna. Till entrecôte/lamm: Cabernet Sauvignon. Till fläsk/rökt kyckling: Syrah/Shiraz. Till grillad fisk: rosé från Provence.</div></div>
+        <div class="qt-item" id="qt-fisk"><div class="qt-row" onclick="toggleQt('qt-fisk')"><div class="qt-label">Fisk och skaldjur</div><div class="qt-val">Friska vita, mousserande eller lätt rosé</div><div class="qt-more">→</div></div><div class="qt-detail">Fisk och skaldjur reagerar med tanniner — skapar metallisk bismak. Råa ostron: Muscadet, Chablis, Albariño. Pocherad fisk: Pinot Grigio, Soave. Grillad helfisk: Grüner Veltliner, Vermentino. Stekt med smörsås: Chardonnay från Bourgogne.</div></div>
+        <div class="qt-item" id="qt-ost"><div class="qt-row" onclick="toggleQt('qt-ost')"><div class="qt-label">Ost</div><div class="qt-val">Beror på osten — ingen enkel regel</div><div class="qt-more">→</div></div><div class="qt-detail">Rödvin passar inte alltid. Lagrade ostar (Parmesan, Comté) har umami som förstärker tanniner negativt. Friska vita passar bättre till de flesta ostar. Klassiker: Chablis till getost, Sauternes till roquefort. Rödvin: välj mjukare ostar som brie med Pinot Noir.</div></div>
       </div>
     </div>
 
-    <div class="exp-section" id="sec-intensitet">
-      <div class="exp-header" onclick="toggleSec('sec-intensitet')"><div class="exp-header-left"><div class="exp-title">Matcha intensitet — den glömda regeln</div><div class="exp-summary">En delikat rätt och ett kraftigt vin drar åt varsitt håll.</div></div><div class="exp-arrow">▾</div></div>
-      <div class="exp-body">
-        <p>Intensitetsmatchning är den regel som flest nybörjare missar, och den är lika viktig som smakkemi. Idén är enkel: lätt mat till lätta drycker, kraftig mat till kraftiga drycker. Om en av dem dominerar för mycket försvinner den andra helt.</p>
-        <p>En citron- och örtagräddmarinerad branzino med en sallad av fänkål och kapris är en delikat rätt med subtila smaker. Serveras den med ett kraftigt, ekfatlagt Barolo på 14% alkohol med kraftiga tanniner och mörk frukt — försvinner fisken totalt. Allt du smakar är vinet. Det är precis lika illa som ett kulinariskt misstag som att salta för mycket.</p>
-        <p>Omvänt: en grillad côte de boeuf på 600 gram med chimichurri, rostad vitlök och rosmarin är en intensiv rätt med massiv smak. Ett lätt Beaujolais eller en tunn rosé blir osynliga bredvid den. Du behöver ett vin med tillräcklig tyngd — en kraftig Rioja Reserva, ett Côtes du Rhône baserat på Grenache och Syrah, eller ett argentinskt Malbec.</p>
-        <p>Intensitet avgörs av: tillagningsmetod (rå vs. grillad vs. långkokt), kryddstyrka, mängd fett och sås, och hur många smakkomponenter rätten har. En och samma ingrediens kan kräva helt olika vin beroende på hur den tillagas — rå tonfisk som sashimi kräver ett lätt vin, men tonfisk rimmad och grillad med salsa kräver något med mer kropp.</p>
-        <div class="tip"><strong>Snabbtest:</strong> Stäng ögonen och tänk på rätten. Upplevs den som lätt och subtil, medelfyllig och välkryddad, eller kraftig och dominant? Välj dryck på exakt samma intensitetsnivå.</div>
+    <div class="guide-section-plain">
+      <h3>Fördjupning</h3>
+      <p class="sec-summary">Klicka för att öppna och läsa mer om varje ämne.</p>
+
+      <div class="exp-section" id="sec-harmoni">
+        <div class="exp-header" onclick="toggleSec('sec-harmoni')"><div class="exp-header-left"><div class="exp-title">Harmoni eller kontrast — de två strategierna</div><div class="exp-summary">Allt mat-och-dryckestänkande bygger på en av dessa två.</div></div><div class="exp-arrow">▾</div></div>
+        <div class="exp-body"><p><strong>Harmoni</strong> innebär att dryckens smaker speglar matens egna smaker. Rik hummer bisque med ekfatslagrat Chardonnay — bådas krämighet förstärker varandra.</p><p><strong>Kontrast</strong> innebär att dryckens smaker balanserar matens svagheter. Samma bisque med frisk Champagne — syran skär igenom krämigheten och lyfter hummerns sötma.</p><p>Harmoni ger en mjuk, bekväm upplevelse. Kontrast ger mer spänning och minnesvärda ögonblick. Börja med harmoni om du är osäker.</p></div>
       </div>
-    </div>
 
-    <div class="exp-section" id="sec-smaker">
-      <div class="exp-header" onclick="toggleSec('sec-smaker')"><div class="exp-header-left"><div class="exp-title">De fem grundsmakerna — vad de gör med drycken</div><div class="exp-summary">Förstår du detta vet du 80% av allt du behöver.</div></div><div class="exp-arrow">▾</div></div>
-      <div class="exp-body">
-        <p>Alla smaker i mat kan brytas ned till fem grundsmaker: salt, surt, sött, bittert och umami. Varje grundsmak påverkar drycken på ett förutsägbart och konsekvent sätt. Lär du dig dessa reaktioner kan du resonera dig fram till rätt dryck utan att ha smakat just den kombinationen förut.</p>
-        <div class="flavor-grid">
-          <div class="flavor-card" id="fc-salt"><div class="flavor-header" onclick="toggleFlavor('fc-salt')"><div><div class="flavor-name">Salt</div><div class="flavor-rule">Mjukar upp drycken</div></div><div class="flavor-arrow">▾</div></div>
-          <div class="flavor-body">Salt dämpar kemiskt upplevelsen av bitterhet och strävhet i drycken. Det innebär att tanniner och humlebeska upplevs mjukare och rundare. Samtidigt lyfter salt fram fruktighet och sötma i vinet. Effekt: nästan vilken dryck som helst mår bra av salt mat. Salt är den mest förlåtande av alla smaker. Klassiskt exempel: lagrad parmesan med Barolo — saltets effekt gör att de kraftiga tanninerna i Barolo mjuknar märkbart.</div></div>
-
-          <div class="flavor-card" id="fc-syra"><div class="flavor-header" onclick="toggleFlavor('fc-syra')"><div><div class="flavor-name">Surt / Syrligt</div><div class="flavor-rule">Kräver syra i drycken</div></div><div class="flavor-arrow">▾</div></div>
-          <div class="flavor-body">Om maten har mer syra än drycken upplevs drycken som platt, söt och fruktig på ett negativt sätt — all dess fräschör försvinner. Maten "stjäl" syraupplevelsen och lämnar bara sötma kvar i drycken. Lösning: välj alltid en dryck med minst lika hög syra som maten. Viner med naturligt hög syra: Sauvignon Blanc, Riesling, Chablis, Albariño, Barbera d'Asti, Champagne. Undvik: feta, mjuka vita som Viognier eller ekfatslagrat Chardonnay till syrlig mat.</div></div>
-
-          <div class="flavor-card" id="fc-umami"><div class="flavor-header" onclick="toggleFlavor('fc-umami')"><div><div class="flavor-name">Umami</div><div class="flavor-rule">Förstärker bitterhet</div></div><div class="flavor-arrow">▾</div></div>
-          <div class="flavor-body">Umami förstärker bitterheten och strävheten hos tanniner markant. Ett vin med kraftiga tanniner kan smaka metalliskt och torrt ihop med umami-rika rätter. Umami finns i: lagrad ost, svamp, soja, miso, ansjovis, sardiner, tomater (särskilt koncentrerade), och långlagrat kött. Lösning: välj viner med mjuka, mogna tanniner (Pinot Noir, mjuk Merlot), eller friska vita viner. Undvik: kraftiga, unga röda med hård tanninstruktur som Barolo, Brunello, Cabernet Sauvignon.</div></div>
-
-          <div class="flavor-card" id="fc-kryddigt"><div class="flavor-header" onclick="toggleFlavor('fc-kryddigt')"><div><div class="flavor-name">Hett / Kryddigt</div><div class="flavor-rule">Alkohol och tannin förvärrar</div></div><div class="flavor-arrow">▾</div></div>
-          <div class="flavor-body">Capsaicin (hettan i chili) och andra skarpa kryddor aktiverar samma smärtreceptorer i munnen som alkohol och tanniner. De adderas till varandra — ett vin med 14% alkohol och kraftiga tanniner kan göra en mediumstark curry outhärdlig. Sötma och kolsyra motverkar däremot hettan. Lösning: halvtorrt Riesling, Moscato, lätt Prosecco, eller iskall lager. Om du vill ha rött: välj ett lätt, fruktrikt vin med låg alkohol (12-12.5%) och minimala tanniner.</div></div>
-
-          <div class="flavor-card" id="fc-sott"><div class="flavor-header" onclick="toggleFlavor('fc-sott')"><div><div class="flavor-name">Sött</div><div class="flavor-rule">Drycken får aldrig vara torrare</div></div><div class="flavor-arrow">▾</div></div>
-          <div class="flavor-body">Söt mat avslöjar brutalt om drycken inte hänger med. Om maten är sötare upplevs drycken som syrlig, skarp och tunn — all elegans försvinner. Det är den exakta anledningen till att torrt rödvin smakar trist till en chokladkaka. Lösning: drycken måste vara minst lika söt som maten. Klassiska kombinationer: Sauternes till crème brûlée, Vintage Port till mörk choklad, Moscato d'Asti till bärpannacotta, Tokaji till fruktpaj.</div></div>
-
-          <div class="flavor-card" id="fc-fett"><div class="flavor-header" onclick="toggleFlavor('fc-fett')"><div><div class="flavor-name">Fett</div><div class="flavor-rule">Syra och kolsyra rensar</div></div><div class="flavor-arrow">▾</div></div>
-          <div class="flavor-body">Fett belägger smaklökarna med en hinna som dämpar smakupplevelsen. En frisk dryck med hög syra eller kolsyra bryter ned denna hinna kemiskt och "återställer" munnen inför nästa tugga — precis som citron på stekt fisk. Tanniner binder till proteiner i fettet med liknande effekt. Lösning: syrliga vita viner, Champagne, Cava, eller tanninrika röda till fett kött. Undvik: mjuka, söta drycker till fet mat — fettet och sötman adderas och resulterar i en tung, klumpig upplevelse.</div></div>
-        </div>
+      <div class="exp-section" id="sec-intensitet">
+        <div class="exp-header" onclick="toggleSec('sec-intensitet')"><div class="exp-header-left"><div class="exp-title">Matcha intensitet — den glömda regeln</div><div class="exp-summary">En delikat rätt och ett kraftigt vin drar åt varsitt håll.</div></div><div class="exp-arrow">▾</div></div>
+        <div class="exp-body"><p>Lätt mat till lätta drycker, kraftig mat till kraftiga drycker. En citronmarinerad branzino försvinner totalt bredvid ett kraftigt Barolo. En 600g côte de boeuf gör ett lätt Beaujolais osynligt.</p><p><strong>Snabbtest:</strong> Upplevs rätten som lätt och subtil, medelfyllig, eller kraftig och dominant? Välj dryck på exakt samma intensitetsnivå.</p></div>
       </div>
-    </div>
 
-    <div class="exp-section" id="sec-flera">
-      <div class="exp-header" onclick="toggleSec('sec-flera')"><div class="exp-header-left"><div class="exp-title">När rätten har flera smaker — prioriteringsordning</div><div class="exp-summary">Vad styr valet när rätten är söt, syrlig och kryddig på en gång?</div></div><div class="exp-arrow">▾</div></div>
-      <div class="exp-body">
-        <p>Verklig mat har sällan bara en smak. En pad thai är söt, salt, syrlig, umami och lätt kryddig samtidigt. En god biff bourguignon är umami-intensiv, salt, med syra från vinet i såsen och fett från köttet. Vad väljer man då?</p>
-        <p>Svaret är att <strong>identifiera den dominerande smaken</strong> — den som slår igenom tydligast — och låta den styra drycksvalet. De övriga smakerna finlusterar sedan valet. Ställ dig frågan: vad är det absolut första jag känner när jag tar en tugga?</p>
-        <div class="tip">Tänk på rätten som ett musikstycke. Det finns många instrument, men ett som bär melodin. Drycken väljs efter melodin — inte alla bakgrundsljud.</div>
-        <p>När du har identifierat den dominerande smaken, konsultera listan nedan för hur smaker prioriteras när de konkurrerar:</p>
-        <div class="prio-table">
-          <div class="prio-row"><div class="prio-label">1. Hetta slår allt</div><div class="prio-val">Ignorerad hetta förstör upplevelsen av hela drycken. Alkohol förvärrar aktivt. Börja alltid med att hantera hettan — välj låg alkohol, sötma och kolsyra oavsett allt annat.</div></div>
-          <div class="prio-row"><div class="prio-label">2. Sötma är känslig</div><div class="prio-val">Söt mat avslöjar direkt om drycken är för torr och gör vinet surt och trist. Näst efter hetta är sötma det som kräver mest hänsyn.</div></div>
-          <div class="prio-row"><div class="prio-label">3. Syra är dominant</div><div class="prio-val">Hög syra i maten gör en platt dryck ännu plattare. Syra i maten måste mötas med syra i drycken — annars kollapsas dryckens struktur helt.</div></div>
-          <div class="prio-row"><div class="prio-label">4. Umami kräver mjukhet</div><div class="prio-val">Umami-rika rätter kräver att du väljer bort tannintung dryck. Om rätten är kraftigt umami-dominerad — välj alltid mjukare alternativ.</div></div>
-          <div class="prio-row"><div class="prio-label">5. Salt är förlåtande</div><div class="prio-val">Salt gör de flesta drycker bättre. Om salt är en av smakerna, lägg fokus på de andra. Salt sköter sig självt.</div></div>
-          <div class="prio-row"><div class="prio-label">6. Fett — använd syra</div><div class="prio-val">Om rätten är tung och fet fungerar nästan alltid en frisk, syrlig dryck. Det är ett säkert fallback när du är osäker.</div></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="exp-section" id="sec-ursprung">
-      <div class="exp-header" onclick="toggleSec('sec-ursprung')"><div class="exp-header-left"><div class="exp-title">Tänk på ursprung — regionens logik</div><div class="exp-summary">Mat och dryck från samma plats har formats av samma klimat, jord och kultur.</div></div><div class="exp-arrow">▾</div></div>
-      <div class="exp-body">
-        <p>Innan globalisering, kylkedja och snabba transporter drack folk det som producerades inom några mils avstånd från maten de åt. Det var inte ett val — det var verkligheten. Och under hundratals och ibland tusentals år formades mat och dryck sida vid sida, påverkade av samma klimat, samma jordmån, och samma kultur. Resultatet är kombinationer som är djupare inbyggda i varandra än vi ofta inser.</p>
-        <p>Konkreta exempel: <strong>Chianti + pasta med tomatsås</strong> — Chianti görs av Sangiovese-druvan som naturligt har mycket syra och lite tannin. Tomatsåsens höga syranivå kräver ett lika syrigt vin, annars upplevs vinet som sött och trist. Chianti matchar för att det är byggt för tomaten. <strong>Alsace Riesling + choucroute garnie</strong> — den klassiska alsassiska fläskrätten är salt, fet och lätt syrlig av surkål. Alsace Riesling är mineralisk, frisk och lätt floralhalvtorr — den skär igenom fettet och matchar syran. De har formats i samma kök. <strong>Chablis + ostron</strong> — Chablis odlas på kimmeridgekalksten, en gammal havsbotten full av fossil av ostron och skaldjur. Vinet har en distinkt mineral- och jodig karaktär som direkt speglar havssmakerna i ostronet.</p>
-        <p>Praktisk tillämpning: Lagar du en rätt från ett specifikt land eller region — börja med att undersöka vad de dricker där. Det är inte garanterat perfekt, men det är en av de bästa och snabbaste genvägar som finns. Japansk mat + sake eller lager. Spansk tapas + Fino Sherry eller Cava. Fransk bistromat + det regionala vinet.</p>
-        <div class="tip">Regionen ger alltid ett trovärdigt startförslag. Avvik sedan medvetet om du vill experimentera.</div>
-      </div>
-    </div>
-
-    <div class="exp-section" id="sec-ol">
-      <div class="exp-header" onclick="toggleSec('sec-ol')"><div class="exp-header-left"><div class="exp-title">Öl, drinkar och alkoholfritt</div><div class="exp-summary">Exakt samma smakprinciper — andra byggstenar.</div></div><div class="exp-arrow">▾</div></div>
-      <div class="exp-body">
-        <p>Allt vi hittills gått igenom om syra, sötma, tanniner och intensitet gäller lika fullt för öl, cocktails och alkoholfria drycker. Smakkemi gör inte skillnad på druvor och korn.</p>
-        <p><strong>Öl</strong> har fyra primära smakkomponenter: beska (från humle), sötma (från malt), syra (från jäsning), och kolsyra. En <strong>IPA</strong> är dominerat av humlebeska och aromatisk humle — den passar utmärkt till fet, smakrik mat som grillat kött, starka ostar och kryddiga rätter, eftersom beskan skär igenom fettet på samma sätt som tanniner. En <strong>Weissbier</strong> är mjuk, fruktig med bananiga och nellikeliknande aromer och måttlig syra — den passar lätt till kyckling, skaldjur och lätt asiatisk mat. En <strong>Stout eller Porter</strong> är mörk, rostad och med naturlig sötma — den fungerar utmärkt till chokladdesserter, grillat kött och fylliga grytor, precis som ett kraftigt rödvin. En <strong>Sour ale</strong> har uttalad syra och passar till syrliga, lätträtter på samma sätt som ett friskt vitt vin.</p>
-        <p><strong>Drinkar</strong> kan analyseras på exakt samma sätt. En <strong>Gin &amp; Tonic</strong> är torr, besk (quinine i tonics), lätt syrlig och kolsyrad — den passar till skaldjur och lätt mat av samma anledning som ett friskt Chablis. En <strong>Aperol Spritz</strong> är bitter, söt och bubblande — den fungerar till salt, fet antipasto för att bitterheten och kolsyran skär igenom fettet. En <strong>Margarita</strong> är syrlig, lätt salt och med citrusaromer — den är byggd för mexikansk mat med lime och sälta.</p>
-        <p><strong>Alkoholfria drycker</strong> följer samma logik. Kombucha har naturlig syra och passar till liknande rätter som ett friskt vitt vin. Elderflower tonic är blommig och lätt söt — den passar till delikata, lätta rätter. Pressad äppeljuice med hög syra kan faktiskt matcha en vinägerdressing bättre än ett mjukt vin.</p>
-      </div>
-    </div>
-
-    <div class="exp-section" id="sec-temp">
-      <div class="exp-header" onclick="toggleSec('sec-temp')"><div class="exp-header-left"><div class="exp-title">Temperatur — det mest underskattade</div><div class="exp-summary">Fel temperatur kan förstöra ett perfekt vin till en perfekt rätt.</div></div><div class="exp-arrow">▾</div></div>
-      <div class="exp-body">
-        <p>Temperatur påverkar hur vi uppfattar alla smaker i en dryck. För kallt och aromer stängs ned, fruktighet försvinner, och syra och tanniner känns hårdare. För varmt och alkoholen tar överhanden, drycken känns slapp och flabbig, och finheten i aromaerna dunstar bort.</p>
-        <p><strong>Vita viner och rosé</strong> ska generellt serveras kylt men inte iskallt: 8–12°C. Lätta, friska vita (Sauvignon Blanc, Chablis, Pinot Grigio) i det lägre spannet, 8–10°C. Mer komplexa vita med kropp (ekfatslagrat Chardonnay, Viognier, mogna Riesling) i det högre, 10–12°C. Iskallt vitt vin förlorar all aromatik och upplevs som bara syrligt och tunt.</p>
-        <p><strong>Röda viner</strong> ska ha "rumstemperatur" — men det klassiska rådet härstammar från en tid när europeiska slott och matsalar höll 16–18°C, inte moderna uppvärmda hem på 22–23°C. Servera lätta röda (Pinot Noir, Gamay/Beaujolais) vid 14–16°C — gärna lätt kylt i kylskåpet i 20 minuter. Kraftiga röda (Cabernet Sauvignon, Barolo, Amarone) vid 17–19°C. För varmt rödvin smakar alkoholen och tar bort all elegans.</p>
-        <p><strong>Mousserande</strong> ska alltid vara välkylt, 6–9°C. Champagne och Cava förlorar sina finaste aromer vid fel temperatur — för kallt och de stängs ned, för varmt och bubblorna försvinner snabbt och syran blir skarp.</p>
-        <div class="tip"><strong>Snabbfix:</strong> Är vinet för varmt — 20 minuter i kylskåpet. Är det för kallt — håll glaset i handen ett par minuter och vänta. Glasets form hjälper: ett bredbuktat glas frigör aromer snabbare när vinet värms upp.</div>
-      </div>
-    </div>
-
-    <div class="exp-section" id="sec-undvik">
-      <div class="exp-header" onclick="toggleSec('sec-undvik')"><div class="exp-header-left"><div class="exp-title">Kombinationer att undvika — och varför</div><div class="exp-summary">Förstå misstagen och du undviker dem automatiskt.</div></div><div class="exp-arrow">▾</div></div>
-      <div class="exp-body">
-        <p>Det finns inga absoluta förbudsregler inom mat och dryck — men det finns kombinationer som konsekvent skapar obehagliga smakupplevelser för de flesta. Förstår du varför de inte fungerar behöver du aldrig memorera dem.</p>
-        <div class="avoid-table">
-          <div class="avoid-row">
-            <div class="avoid-combo">Kryddig het mat + kraftigt torrt rödvin</div>
-            <div class="avoid-why">Alkohol och capsaicin (chili) aktiverar samma smärtreceptorer och adderas — ett vin på 14% med tanniner förvandlar mediumstark mat till eld. Välj istället: halvtorrt Riesling, iskall lager, eller Prosecco.</div>
-          </div>
-          <div class="avoid-row">
-            <div class="avoid-combo">Söt dessert + torrt vin</div>
-            <div class="avoid-why">Söt mat gör att ett torrt vin smakar surt, trist och nästan obehagligt. Sötman i maten exponerar torkheten i vinet brutalt. Välj istället: Sauternes, Moscato d'Asti, Vintage Port, eller Eiswein beroende på desserten.</div>
-          </div>
-          <div class="avoid-row">
-            <div class="avoid-combo">Vinägerdressing på sallad + mjukt vitt vin</div>
-            <div class="avoid-why">En stark syra i dressingen gör att ett mjukt vin som Pinot Grigio eller Chardonnay upplevs som platt och sötsmaknde — all struktur försvinner. Välj istället: Sauvignon Blanc, Chablis, Vinho Verde, eller Albariño med minst lika hög syra.</div>
-          </div>
-          <div class="avoid-row">
-            <div class="avoid-combo">Umami-intensiv mat + ungt tanninrikt rödvin</div>
-            <div class="avoid-why">Svamp, lagrad ost, soja och miso förstärker tanninernas bitterhet och skapar en metallisk, järnaktig bismak som är svår att ignorera. Välj istället: Pinot Noir, mjuk Merlot, eller ett friskt vitt vin som Chablis.</div>
-          </div>
-          <div class="avoid-row">
-            <div class="avoid-combo">Delikat fisk + kraftigt tanninrikt rödvin</div>
-            <div class="avoid-why">Fiskens jodhaltiga mineraler reagerar kemiskt med tanniner och skapar metallsmak. Drycken dränker dessutom fiskens subtila smaker. Välj istället: Muscadet, Albariño, Chablis, eller Champagne Blanc de Blancs.</div>
-          </div>
-          <div class="avoid-row">
-            <div class="avoid-combo">Mörk choklad + torrt tanninrikt rödvin</div>
-            <div class="avoid-why">Chokladens naturliga bitterhet krockar med tanninernas bitterhet — de adderas i stället för att balansera. Välj istället: Vintage Port (tanniner plus sötma), Pedro Ximénez Sherry (söt, koncentrerad), eller Banyuls från södra Frankrike.</div>
-          </div>
-          <div class="avoid-row">
-            <div class="avoid-combo">Ägg (kokt, scrambled, äggulekrämig) + de flesta viner</div>
-            <div class="avoid-why">Ägg är en av de svåraste råvarorna att kombinera med vin. Äggulans svavelhaltiga aromer reagerar med tanniner och skapar en obehaglig metalliskhet. Champagne är det klassiska och faktiskt välmotiverade undantaget — kolsyran och syran hanterar äggulans tyngd. Brut Champagne till äggröra är en klassisk kombination av god anledning.</div>
-          </div>
-          <div class="avoid-row">
-            <div class="avoid-combo">Spenat + de flesta vita viner</div>
-            <div class="avoid-why">Spenat innehåller oxalsyra som ger en metallisk, besk känsla på tungan (den "kladdig" känslan efter att ha ätit spenat). Denna kemiska effekt förvärras av tanniner och hög syra i vin. Välj istället: ett lätt, aromatiskt vin som Pinot Gris, eller ett lätt fruktrikt rödvin som Pinot Noir.</div>
+      <div class="exp-section" id="sec-fem">
+        <div class="exp-header" onclick="toggleSec('sec-fem')"><div class="exp-header-left"><div class="exp-title">De fem grundsmakerna — vad de gör med drycken</div><div class="exp-summary">Förstår du detta vet du 80% av allt du behöver.</div></div><div class="exp-arrow">▾</div></div>
+        <div class="exp-body">
+          <div class="flavor-grid">
+            <div class="flavor-card" id="fl-salt"><div class="flavor-header" onclick="toggleFlavor('fl-salt')"><div><div class="flavor-name">Salt</div><div class="flavor-rule">Mjukar upp drycken</div></div><div class="flavor-arrow">▾</div></div><div class="flavor-body">Salt dämpar bitterhet och strävhet kemiskt. Tanniner och humlebeska upplevs mjukare och rundare. Salt lyfter också fram fruktighet och sötma. Det mest förlåtande av alla smaker — nästan vilken dryck mår bra av salt mat.</div></div>
+            <div class="flavor-card" id="fl-surt"><div class="flavor-header" onclick="toggleFlavor('fl-surt')"><div><div class="flavor-name">Surt / Syrligt</div><div class="flavor-rule">Kräver syra i drycken</div></div><div class="flavor-arrow">▾</div></div><div class="flavor-body">Om maten har mer syra upplevs drycken som platt och söt — all fräschör försvinner. Välj alltid minst lika hög syra. Viner med naturligt hög syra: Sauvignon Blanc, Riesling, Chablis, Albariño, Barbera d'Asti, Champagne.</div></div>
+            <div class="flavor-card" id="fl-umami"><div class="flavor-header" onclick="toggleFlavor('fl-umami')"><div><div class="flavor-name">Umami</div><div class="flavor-rule">Förstärker bitterhet</div></div><div class="flavor-arrow">▾</div></div><div class="flavor-body">Umami förstärker tanninernas bitterhet markant — kan ge metallisk smak. Finns i: lagrad ost, svamp, soja, miso, ansjovis, sardiner, tomater, långlagrat kött. Välj: Pinot Noir, mjuk Merlot, friska vita. Undvik: Barolo, Brunello, ung Cab Sauv.</div></div>
+            <div class="flavor-card" id="fl-hett"><div class="flavor-header" onclick="toggleFlavor('fl-hett')"><div><div class="flavor-name">Hett / Kryddigt</div><div class="flavor-rule">Alkohol och tannin förvärrar</div></div><div class="flavor-arrow">▾</div></div><div class="flavor-body">Capsaicin och alkohol aktiverar samma smärtreceptorer och adderas. Sötma och kolsyra motverkar hettan. Välj: halvtorrt Riesling, Moscato, lätt Prosecco, eller iskall lager. Rödvin: lätt, fruktrikt med låg alkohol (12–12,5%) och minimala tanniner.</div></div>
+            <div class="flavor-card" id="fl-sott"><div class="flavor-header" onclick="toggleFlavor('fl-sott')"><div><div class="flavor-name">Sött</div><div class="flavor-rule">Drycken får aldrig vara torrare</div></div><div class="flavor-arrow">▾</div></div><div class="flavor-body">Söt mat avslöjar brutalt om drycken är för torr — den smakar syrlig och tunn. Drycken måste vara minst lika söt som maten. Klassiker: Sauternes till crème brûlée, Vintage Port till choklad, Moscato d'Asti till bärpannacotta.</div></div>
+            <div class="flavor-card" id="fl-fett"><div class="flavor-header" onclick="toggleFlavor('fl-fett')"><div><div class="flavor-name">Fett</div><div class="flavor-rule">Syra och kolsyra rensar</div></div><div class="flavor-arrow">▾</div></div><div class="flavor-body">Fett belägger smaklökarna. Syra eller kolsyra i drycken bryter ned fetthinnan — precis som citron på stekt fisk. Välj: syrliga vita, Champagne, Cava, eller tanninrika röda till fett kött. Undvik: mjuka, söta drycker till fet mat.</div></div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="exp-section" id="sec-glasform">
-      <div class="exp-header" onclick="toggleSec('sec-glasform')"><div class="exp-header-left"><div class="exp-title">Glasets betydelse</div><div class="exp-summary">Rätt glas förändrar faktiskt hur vinet smakar — inte bara hur det ser ut.</div></div><div class="exp-arrow">▾</div></div>
-      <div class="exp-body">
-        <p>Glasets form är ingen marknadsföring — det finns välgrundad smakvetenskap bakom varför olika viner serveras i olika glas. Principen handlar om hur aromer koncentreras och leds mot näsan, och hur vinet träffar tungan.</p>
-        <p><strong>Röda viner</strong> serveras i breda, runda glas med stor buk (Bordeaux- och Bourgogneglas). Den stora ytan gör att vinet snabbt oxiderar i kontakt med luft, vilket mjukar upp tanniner och öppnar upp aromer. Pinot Noir från Bourgogne serveras i extremt breda, ballong-formade glas just för att den druvan behöver mer syre för att blomma ut.</p>
-        <p><strong>Vita viner</strong> serveras i smalare, mer avlånga glas som håller temperaturen lägre längre — vin värms upp snabbare i ett bredare glas. Det smalare glaset koncentrerar också de finare, mer flyktiga aromaerna och leder dem direkt mot näsan när du dricker.</p>
-        <p><strong>Champagne och mousserande</strong> serveras traditionellt i flöjtglas (flutes) som bevarar bubblorna länge och koncentrerar de finaste jäsningsaromererna. Modernare sommelierpraxis föredrar dock ett bredare champagneglas, liknande ett vitt vinglas — det ger mer aromatisk komplexitet på bekostnad av lite av bubblefesten.</p>
-        <div class="tip">Har du inte rätt glas? Använd det bredaste rena glaset du har. Forma händerna runt buk-delen och låt värmen från handflatorna öppna upp aromaerna. Det funkar förvånansvärt bra.</div>
-      </div>
-    </div>
-
-    <div class="exp-section" id="sec-druvor">
-      <div class="exp-header" onclick="toggleSec('sec-druvor')"><div class="exp-header-left"><div class="exp-title">De vanligaste druvorna — vad de smakar</div><div class="exp-summary">Vet du vad drycken smakar kan du matcha utan att ha provat den.</div></div><div class="exp-arrow">▾</div></div>
-      <div class="exp-body">
-        <p>En av de snabbaste vägarna till bättre dryckesval är att lära sig vad de vanligaste druvsorterna smakar och hur de beter sig mot mat. Du behöver inte kunna alla — men kan du de fem vita och fem röda nedan täcker du 80% av allt som säljs på Systembolaget.</p>
-
-        <p style="margin-top:18px;"><strong style="font-size:14px;">Vita druvsorts</strong></p>
-        <div class="avoid-table" style="margin-top:8px;">
-          <div class="avoid-row">
-            <div class="avoid-combo">Sauvignon Blanc</div>
-            <div class="avoid-why">Skarp, frisk och distinkt syrlig med aromer av gröna örter, gräs, citrus och ibland stickelbär. Nästan alltid torr. Hög syra gör den perfekt till syrlig mat — ceviche, sallader med vinägerdressing, getost, skaldjur. Klassiska regioner: Loire (Sancerre, Pouilly-Fumé) och Nya Zeeland (Marlborough). På Systembolaget: leta efter "Sauvignon Blanc Marlborough" för ett pålitligt och prisvärt val.</div>
-          </div>
-          <div class="avoid-row">
-            <div class="avoid-combo">Chardonnay</div>
-            <div class="avoid-why">Världens mest mångsidiga vite druva — smakar radikalt olika beroende på var och hur det tillverkas. Utan ekfatslagring: friskt, mineraliskt, med äpple och citrus (Chablis). Med ekfatslagring: krämigt, smörigt, med vanilj och rostad hasselnöt (Meursault, Napa Valley). Passar till: kyckling, fisk med smörsås, skaldjur, krämig pasta. Det ekfatslagrade Chardonnay är vinets svar på en rik, krämig rätt.</div>
-          </div>
-          <div class="avoid-row">
-            <div class="avoid-combo">Riesling</div>
-            <div class="avoid-why">Missförstådd och undervärderad. Naturligt hög syra och kan göras allt från knastertorrt till honungssött. Aromer av persika, aprikos, citrus och den klassiska "bensindoften" som mogna Riesling utvecklar (faktiskt ett tecken på kvalitet). Halvtorra Riesling från Alsace och Tyskland är det bästa valet till kryddig asiatisk mat — sötman dämpar hettan, syran skär igenom fett. Torr Riesling passar till skaldjur och delikat fisk.</div>
-          </div>
-          <div class="avoid-row">
-            <div class="avoid-combo">Pinot Grigio / Pinot Gris</div>
-            <div class="avoid-why">Samma druva, helt olika stilar beroende på region. Italiensk Pinot Grigio är lätt, neutral och frisk — en "säker" dryck som passar till det mesta utan att utmärka sig. Alsassisk Pinot Gris är rikare, kryddigare och mer komplex med aromer av päron, rökighet och ibland lite sötma — passar till rikare rätter, rökt mat och asiatisk fusion.</div>
-          </div>
-          <div class="avoid-row">
-            <div class="avoid-combo">Albariño</div>
-            <div class="avoid-why">Spansk druva från Galicien (Rías Baixas) med ett av vinvärldens tydligaste "terroir-fingeravtryck". Frisk, mineralisk, nästan saltaktig med aromer av persika, citrus och havet. Naturligt hög syra. Byggd för skaldjur — musslor, räkor, pilgrimsmusslor och fisk från Atlantkusten. Om du äter spansk mat eller skaldjur är Albariño ett av de säkraste valen som finns.</div>
+      <div class="exp-section" id="sec-undvik">
+        <div class="exp-header" onclick="toggleSec('sec-undvik')"><div class="exp-header-left"><div class="exp-title">Kombinationer att undvika — och varför</div><div class="exp-summary">Förstå misstagen och du undviker dem automatiskt.</div></div><div class="exp-arrow">▾</div></div>
+        <div class="exp-body">
+          <div class="avoid-table">
+            <div class="avoid-row"><div class="avoid-combo">Kryddig het mat + kraftigt torrt rödvin</div><div class="avoid-why">Alkohol och capsaicin adderas — förvandlar mediumstark mat till eld. Välj halvtorrt Riesling, lager eller Prosecco.</div></div>
+            <div class="avoid-row"><div class="avoid-combo">Söt dessert + torrt vin</div><div class="avoid-why">Söt mat gör att torrt vin smakar surt och obehagligt. Välj Sauternes, Moscato d'Asti eller Vintage Port.</div></div>
+            <div class="avoid-row"><div class="avoid-combo">Vinägerdressing + mjukt vitt vin</div><div class="avoid-why">Stark syra gör att Pinot Grigio eller Chardonnay upplevs som platt. Välj Sauvignon Blanc, Chablis eller Albariño.</div></div>
+            <div class="avoid-row"><div class="avoid-combo">Umami-intensiv mat + ungt tanninrikt rödvin</div><div class="avoid-why">Svamp, lagrad ost och soja skapar metallisk bismak med unga tanniner. Välj Pinot Noir, mjuk Merlot eller friskt vitt.</div></div>
+            <div class="avoid-row"><div class="avoid-combo">Delikat fisk + kraftigt tanninrikt rödvin</div><div class="avoid-why">Jodföreningar i fisk reagerar med tanniner — metallsmak. Välj Muscadet, Albariño, Chablis eller Champagne Blanc de Blancs.</div></div>
+            <div class="avoid-row"><div class="avoid-combo">Mörk choklad + torrt tanninrikt rödvin</div><div class="avoid-why">Chokladens och tanninernas bitterhet adderas istället för att balansera. Välj Vintage Port, Pedro Ximénez Sherry eller Banyuls.</div></div>
           </div>
         </div>
+      </div>
 
-        <p style="margin-top:18px;"><strong style="font-size:14px;">Röda druvsorts</strong></p>
-        <div class="avoid-table" style="margin-top:8px;">
-          <div class="avoid-row">
-            <div class="avoid-combo">Cabernet Sauvignon</div>
-            <div class="avoid-why">Världens mest kända röda druva. Kraftig, tanninrik och med aromer av svarta vinbär, plommon, ceder och ibland paprika. Behöver ofta luftas — öppna flaskan en timme innan eller häll i en karaff. Passar perfekt till grillat, marmorerat nötkött, lamm och starka ostar. Tanninerna mjukar upp mot fettet i köttet och det sker en unik kemisk balans. Undvik: fisk, kryddig mat, lätta rätter.</div>
+      <div class="exp-section" id="sec-temp">
+        <div class="exp-header" onclick="toggleSec('sec-temp')"><div class="exp-header-left"><div class="exp-title">Temperatur — det mest underskattade</div><div class="exp-summary">Fel temperatur kan förstöra ett perfekt vin till en perfekt rätt.</div></div><div class="exp-arrow">▾</div></div>
+        <div class="exp-body">
+          <p>För kallt: aromer stängs ned, syra och tanniner känns hårdare. För varmt: alkoholen tar överhanden, vinet blir slapp och aromer dunstar.</p>
+          <div class="prio-table">
+            <div class="prio-row"><div class="prio-label">Lätta vita (Sauvignon Blanc, Chablis)</div><div class="prio-val">8–10°C</div></div>
+            <div class="prio-row"><div class="prio-label">Fylliga vita (Chardonnay, Viognier)</div><div class="prio-val">10–12°C</div></div>
+            <div class="prio-row"><div class="prio-label">Rosé</div><div class="prio-val">8–12°C</div></div>
+            <div class="prio-row"><div class="prio-label">Lätta röda (Pinot Noir, Beaujolais)</div><div class="prio-val">14–16°C — gärna lätt kylt</div></div>
+            <div class="prio-row"><div class="prio-label">Kraftiga röda (Cabernet, Barolo)</div><div class="prio-val">17–19°C</div></div>
+            <div class="prio-row"><div class="prio-label">Champagne & mousserande</div><div class="prio-val">6–9°C</div></div>
           </div>
-          <div class="avoid-row">
-            <div class="avoid-combo">Pinot Noir</div>
-            <div class="avoid-why">Svår att odla, svår att göra bra, men när det lyckas är det unikt. Lätt till medelfyllig kropp, mjuka tanniner och silkig textur. Aromer av körsbär, hallon, jordgubb och med mognad: svamp, jordmån, vilt. Det är det mest mångsidiga röda vinet för matlagning — det enda röda som faktiskt fungerar till lax, tonfisk, kyckling och svamp. Också perfekt till umami-rika rätter av just den anledningen att tanninerna är mjuka.</div>
-          </div>
-          <div class="avoid-row">
-            <div class="avoid-combo">Syrah / Shiraz</div>
-            <div class="avoid-why">Samma druva — "Syrah" är den franska beteckningen (Rhône-dalen), "Shiraz" den australiska. Franska Syrah: elegant, pepprig, med aromer av svartpeppar, olivkött, violer och rökt kött. Australisk Shiraz: kraftfullare, sötare frukt, mörkare och mer jamiga aromer. Båda passar till grillat och rökt kött, vilt, och kryddiga grytor. Den svartpeppriga karaktären speglar sig i grillkolens rökighet på ett unikt sätt.</div>
-          </div>
-          <div class="avoid-row">
-            <div class="avoid-combo">Merlot</div>
-            <div class="avoid-why">Mjukaste av de stora röda druvorna. Låga tanniner, rund och fruktig med aromer av körsbär, plommon, choklad och lätt kryddighet. Ofta felaktigt avfärdad som "för enkel" — men det är just mjukheten som gör Merlot perfekt till mat. Passar till: pasta med köttfärssås, kyckling med rödvinssås, svamp, enklare grytor och till de flesta rätter där rött vin passar men Cabernet Sauvignon vore för kraftigt.</div>
-          </div>
-          <div class="avoid-row">
-            <div class="avoid-combo">Grenache / Garnacha</div>
-            <div class="avoid-why">Odlas framförallt i södra Frankrike (Rhône, Languedoc) och Spanien. Fruktig, värmande och med generös sötma — aromer av jordgubb, körsbär, lakrits och kryddor. Ofta hög alkohol. Vanlig i blends (Côtes du Rhône, Châteauneuf-du-Pape). Passar till: medelhavsmat, lamm, kycklinggrytor, tapas och rätter med oliver och tomater. Det är vinets svar på en Provence-semester.</div>
-          </div>
+          <div class="tip"><strong>Snabbfix:</strong> För varmt — 20 minuter i kylskåpet. För kallt — håll glaset i handen ett par minuter.</div>
         </div>
-        <div class="tip"><strong>Praktisk poäng:</strong> Nästa gång du är på Systembolaget och inte vet vad du ska välja — läs etikettens baksida. Alla produkter har en smakbeskrivning. Matcha den mot rätten du ska laga med hjälp av principerna i den här guiden.</div>
       </div>
     </div>
-
-    <div class="exp-section" id="sec-personligt">
-      <div class="exp-header" onclick="toggleSec('sec-personligt')"><div class="exp-header-left"><div class="exp-title">Det viktigaste av allt</div><div class="exp-summary">All kunskap i världen ersätter inte din egen upplevelse.</div></div><div class="exp-arrow">▾</div></div>
-      <div class="exp-body">
-        <p>Den här guiden ger dig verktygen för att resonera kring mat och dryck på samma sätt som en utbildad sommelier. Men det finns en sak ingen guide kan ge dig: din egen smakhistoria.</p>
-        <p>Smakupplevelse är djupt personlig och formas av genetik, uppväxt, kulturella associationer och vad du ätit och druckit under hela ditt liv. Vissa människor är super-tasters — de är genetiskt predisponerade att uppleva bitterhet starkare. Andra är mer känsliga för syra. Det gör att "rätt" kombination faktiskt kan skilja sig från person till person.</p>
-        <p>Allt i den här guiden är statistiska sannolikheter baserade på hur de flesta människors smakreceptorer fungerar — inte absoluta sanningar. Den verkliga kunskapen kommer när du börjar experimentera, notera och reflektera över dina egna upplevelser. En "felaktig" kombination som du älskar är inte fel. Den är din.</p>
-        <div class="tip">Det enda rätta svaret på "vad passar till den här rätten?" är det du och dina gäster faktiskt njuter av. Reglerna är en karta — inte terrängen.</div>
-      </div>
-    </div>
-
-  </div><!-- /guide -->
+  </div>
 </main>
 
 <script>
-// ─── STATE ────────────────────────────────────────────────────────────────────
+// ── API KEY ────────────────────────────────────────────────────────────────────
+function getApiKey() { return localStorage.getItem('smakkompass_apikey') || ''; }
+function saveApiKey() {
+  const key = document.getElementById('api-key-input').value.trim();
+  if (!key.startsWith('sk-')) { alert('Nyckeln verkar inte stämma — den ska börja med "sk-"'); return; }
+  localStorage.setItem('smakkompass_apikey', key);
+  document.getElementById('api-banner').style.display = 'none';
+  document.getElementById('api-banner-ok').style.display = 'flex';
+}
+function clearApiKey() {
+  localStorage.removeItem('smakkompass_apikey');
+  document.getElementById('api-banner').style.display = 'flex';
+  document.getElementById('api-banner-ok').style.display = 'none';
+  document.getElementById('api-key-input').value = '';
+}
+(function checkKey() {
+  if (getApiKey()) {
+    document.getElementById('api-banner').style.display = 'none';
+    document.getElementById('api-banner-ok').style.display = 'flex';
+  }
+})();
+
+// ── CLAUDE API ────────────────────────────────────────────────────────────────
+async function callClaude(messages, system) {
+  const key = getApiKey();
+  if (!key) { alert('Ange din Anthropic API-nyckel i fältet högst upp på sidan.'); return null; }
+  const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+    body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1500, system, messages })
+  });
+  const data = await resp.json();
+  if (!resp.ok) throw new Error(data.error?.message || 'API-fel');
+  return data.content[0]?.text || '';
+}
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
 let current = null;
 let detaljniva = 'normal';
 
-const CHIPS = [
-  'Grillad lax med citronsås och dill',
-  'Kryddig thaigryta med kokosmjölk och räkor',
-  'Friterade dumplings med sesam-sojaås',
-  'Oxfilé med rödvinssås och tryffel',
-  'Pasta carbonara med pancetta',
-  'Sushi och sashimi',
-  'Margherita pizza',
-  'Köttbullar med gräddsås och lingon',
-  'Grillad hummer med vitlökssmör',
-  'Lammrack med örtkrusta och rotfrukter',
-  'Vegansk burger med avokado',
-  'Mörk chokladmousse',
-  'Ceviche med lime och jalapeño',
-  'Falafel med hummus och tabbouleh',
-  'Ugnsbakad fetaost med honung och nötter',
-];
+const CHIPS = ['Grillad lax med citronsås','Kryddig thaigryta med räkor','Oxfilé med rödvinssås','Pasta carbonara','Sushi och sashimi','Köttbullar med gräddsås','Grillad hummer','Lammrack med örtkrusta','Vegansk burger','Mörk chokladmousse','Ceviche med lime','Falafel med hummus'];
 
-// ─── INIT ─────────────────────────────────────────────────────────────────────
 (function init() {
   updateBadge();
   renderChips();
+  initChat();
   document.getElementById('mat-input').addEventListener('keydown', function(e) {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); matchaDryck(); }
   });
@@ -1260,499 +643,215 @@ const CHIPS = [
 
 function renderChips() {
   const shuffled = [...CHIPS].sort(() => Math.random() - 0.5).slice(0, 4);
-  document.getElementById('chips-wrap').innerHTML = shuffled
-    .map(c => `<div class="chip" onclick="fill('${c.replace(/'/g, "\\'")}')">${c.split(' ').slice(0,2).join(' ')}</div>`)
-    .join('');
+  document.getElementById('chips-wrap').innerHTML = shuffled.map(c => `<span class="chip" onclick="fillChip(this)">${c}</span>`).join('');
 }
+function fillChip(el) { document.getElementById('mat-input').value = el.textContent; }
+function setDetail(el) { document.querySelectorAll('.detail-btn').forEach(b => b.classList.remove('active')); el.classList.add('active'); detaljniva = el.dataset.val; }
 
-function fill(t) {
-  document.getElementById('mat-input').value = t;
-  document.getElementById('mat-input').focus();
-}
-
-function setDetail(el) {
-  document.querySelectorAll('.detail-btn').forEach(b => b.classList.remove('active'));
-  el.classList.add('active');
-  detaljniva = el.dataset.val;
-}
-
-// ─── TAB ──────────────────────────────────────────────────────────────────────
+// ── TAB ───────────────────────────────────────────────────────────────────────
 function switchTab(name, el) {
+  document.querySelectorAll('.section, .panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  el.classList.add('active');
   document.getElementById('panel-' + name).classList.add('active');
+  el.classList.add('active');
   if (name === 'saved') renderSaved();
-  if (name === 'chat' && chatHistory.length === 0) initChat();
 }
-
 function switchTabMobile(name) {
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.mobile-nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('panel-' + name).classList.add('active');
   document.getElementById('mnb-' + name).classList.add('active');
   if (name === 'saved') renderSaved();
-  if (name === 'chat' && chatHistory.length === 0) initChat();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// ─── TOGGLE HELPERS ───────────────────────────────────────────────────────────
+// ── TOGGLE HELPERS ────────────────────────────────────────────────────────────
 function toggleSec(id) { document.getElementById(id).classList.toggle('open'); }
 function toggleQt(id) { document.getElementById(id).classList.toggle('open'); }
 function toggleFlavor(id) { document.getElementById(id).classList.toggle('open'); }
 function toggleRecept(id) { document.getElementById(id).classList.toggle('open'); }
 
-// ─── SYSTEMBOLAGET HELPERS ────────────────────────────────────────────────────
+// ── SB HELPERS ────────────────────────────────────────────────────────────────
 function sbUrl(q) {
-  const clean = (q || '').replace(/\b(19|20)\d{2}\b/g, '').replace(/\(.*?\)/g, '').trim();
+  const clean = (q || '').replace(/\b(19|20)\d{2}\b/g,'').replace(/\(.*?\)/g,'').trim();
   return 'https://www.systembolaget.se/sok/?searchQuery=' + encodeURIComponent(clean);
 }
-
-function sbFooter(namn, sokterm) {
-  const sok = sokterm || namn || '';
-  const uid = 'cp-' + Math.random().toString(36).slice(2, 8);
-  return `
-    <div class="drink-card-footer">
-      <button class="btn-copy" id="${uid}" onclick="copyNr('${namn.replace(/'/g,"\\'")}','${uid}')">Kopiera namn</button>
-      <a class="sb-link" href="${sbUrl(sok)}" target="_blank" rel="noopener">Systembolaget →</a>
-    </div>`;
+function sbFooter(namn) {
+  if (!namn) return '';
+  const uid = 'cp-' + Math.random().toString(36).slice(2,8);
+  return `<div class="drink-card-footer">
+    <button class="btn-copy" id="${uid}" onclick="copyNr('${namn.replace(/'/g,"\\'")}','${uid}')">Kopiera namn</button>
+    <a class="sb-link" href="${sbUrl(namn)}" target="_blank" rel="noopener">Systembolaget →</a>
+  </div>`;
 }
-
 function copyNr(text, btnId) {
+  navigator.clipboard.writeText(text).catch(() => {});
   const btn = document.getElementById(btnId);
-  navigator.clipboard.writeText(text).catch(() => {
-    const el = document.createElement('textarea');
-    el.value = text; el.style.position = 'fixed'; el.style.opacity = '0';
-    document.body.appendChild(el); el.select(); document.execCommand('copy');
-    document.body.removeChild(el);
-  }).finally ? navigator.clipboard.writeText(text).finally(() => done()) : done();
-  function done() { if (btn) { btn.textContent = '✓ Kopierat!'; btn.classList.add('copied'); setTimeout(() => { btn.textContent = 'Kopiera namn'; btn.classList.remove('copied'); }, 2000); } }
   if (btn) { btn.textContent = '✓ Kopierat!'; btn.classList.add('copied'); setTimeout(() => { btn.textContent = 'Kopiera namn'; btn.classList.remove('copied'); }, 2000); }
 }
 
-// ─── MAIN FETCH ───────────────────────────────────────────────────────────────
+// ── MATCH ─────────────────────────────────────────────────────────────────────
 async function matchaDryck() {
   const mat = document.getElementById('mat-input').value.trim();
-  if (!mat) {
-    document.getElementById('mat-input').focus();
-    return;
-  }
-
+  if (!mat) { document.getElementById('mat-input').focus(); return; }
   const btn = document.getElementById('match-btn');
   const area = document.getElementById('result-area');
-  btn.disabled = true;
-  btn.textContent = 'Analyserar...';
+  btn.disabled = true; btn.textContent = 'Analyserar...';
+  area.innerHTML = `<div class="status"><div class="status-spinner"></div><br>Sommelieren analyserar rätten…<div class="status-sub">Söker perfekta matchningar</div></div>`;
 
-  area.innerHTML = `
-    <div class="status">
-      <div class="status-spinner"></div>
-      Sommelieren tänker…
-      <div class="status-sub">Analyserar smaker och söker matchningar</div>
-    </div>`;
+  const system = `Du är en WSET Diploma-certifierad sommelier. Svara ALLTID med ett JSON-objekt och inget annat. Inga backticks, ingen text utanför JSON. Exakt detta format:
+{"ratt":"namn på rätten","smakprofil":"2 meningar om smakprofilen","dominerandeSmaker":["smak1","smak2","smak3"],"sommelierTips":"1-2 meningar personligt tips","viner":[{"namn":"vinnamn","producent":"producent","druva":"druvsort","region":"region","pris_sek":"ca XXX kr","varfor":"varför det passar"},{"namn":"...","producent":"...","druva":"...","region":"...","pris_sek":"ca XXX kr","varfor":"..."}],"ol":{"namn":"ölnamn","bryggeri":"bryggeri","typ":"ölstil","land":"land","pris_sek":"ca XX kr","varfor":"varför det passar"},"alkoholfritt":{"namn":"namn","beskrivning":"kort beskrivning","varfor":"varför det passar","pris_sek":"ca XX kr"},"drinkar":[{"namn":"drinknamn","varfor":"varför det passar","recept":{"ingredienser":["X cl ingrediens"],"instruktion":"gör så här"}}]}`;
+
+  const detailMap = { enkel: 'Ge enkla, tillgängliga rekommendationer. Prioritera välkända viner från Systembolaget.', normal: 'Ge professionella rekommendationer med bra balans mellan tillgänglighet och kvalitet.', detaljerad: 'Ge detaljerade, djupgående rekommendationer med terroir-information och avancerad smakkemi.' };
 
   try {
-    const r = await fetch('/api/match', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ratt: mat, detaljniva }),
-    });
-
+    const text = await callClaude([{ role: 'user', content: `Rätt: "${mat}". ${detailMap[detaljniva]} Ge dryckesrekommendationer på svenska.` }], system);
+    if (!text) return;
     let data;
     try {
-      data = await r.json();
-    } catch {
-      throw new Error('Kunde inte läsa svaret från servern.');
+      const clean = text.replace(/```json|```/g,'').trim();
+      data = JSON.parse(clean);
+    } catch(e) {
+      throw new Error('Kunde inte tolka svaret. Försök igen.');
     }
-
-    if (!r.ok) {
-      throw new Error(data.error || `Serverfel (${r.status})`);
-    }
-
-    current = data;
-    current._input = mat;
+    current = { ...data, _input: mat };
     renderResult(current);
-
-  } catch (e) {
-    area.innerHTML = `
-      <div class="error-box">
-        <div class="error-box-icon">⚠</div>
-        <div><strong>Något gick fel</strong><br>${e.message || 'Okänt fel — försök igen.'}<br><br>
-        <small style="opacity:0.7">Tips: Kontrollera att API-nyckeln är korrekt inställd i Netlify.</small></div>
-      </div>`;
+  } catch(e) {
+    area.innerHTML = `<div class="error-box"><div class="error-box-icon">⚠</div><div><strong>Något gick fel</strong><br>${e.message || 'Okänt fel — försök igen.'}</div></div>`;
   }
-
-  btn.disabled = false;
-  btn.textContent = 'Matcha →';
+  btn.disabled = false; btn.textContent = 'Matcha →';
 }
 
-// ─── RENDER RESULT ────────────────────────────────────────────────────────────
 function renderResult(d) {
-  // Smak-pills
-  const smakerHtml = (d.dominerandeSmaker || [])
-    .map(s => `<span class="smaker-pill">${s}</span>`)
-    .join('');
-
-  // Sommelier-tips
-  const tipsHtml = d.sommelierTips ? `
-    <div class="sommelier-tip">
-      <div class="sommelier-tip-icon">🍷</div>
-      <div>
-        <div class="sommelier-tip-label">Sommelierens tips</div>
-        ${d.sommelierTips}
-      </div>
-    </div>` : '';
-
-  // Viner
+  const smakerHtml = (d.dominerandeSmaker || []).map(s => `<span class="smaker-pill">${s}</span>`).join('');
+  const tipsHtml = d.sommelierTips ? `<div class="sommelier-tip"><div class="sommelier-tip-icon">🍷</div><div><div class="sommelier-tip-label">Sommelierens tips</div>${d.sommelierTips}</div></div>` : '';
   const viner = d.viner || [];
-  const vinerHtml = viner.map((v) => `
-    <div class="vin-item">
-      <div class="vin-item-top">
-        <div class="vin-meta">
-          <div class="vin-namn">${v.namn}</div>
-          <div class="vin-sub">${[v.producent, v.druva, v.region].filter(Boolean).join(' · ')}</div>
-          ${v.pris_sek ? `<span class="vin-pris">${v.pris_sek}</span>` : ''}
-        </div>
-      </div>
-      <div class="vin-varfor">${v.varfor}</div>
-      ${sbFooter(v.namn, v.systembolaget_sok)}
-    </div>`).join('');
-
-  // Drinkar
-  const drinkar = d.drinkar || [];
-  const drinkarHtml = drinkar.map((dr, i) => `
-    <div class="drink-card">
-      <div class="drink-card-top">
-        <div class="drink-card-header">
-          <div class="drink-icon drinkar">🍹</div>
-          <div>
-            <div class="drink-type">Drink</div>
-            <div class="drink-name">${dr.namn}</div>
-          </div>
-        </div>
-        <div class="drink-why">${dr.varfor}</div>
-      </div>
-      <div class="drink-card-footer">
-        <button class="btn-recept" onclick="toggleRecept('recept-${i}')">Visa recept ↓</button>
-      </div>
-      <div class="recept-body" id="recept-${i}">
-        <div class="recept-heading">Ingredienser</div>
-        <ul class="recept-ing">${(dr.recept?.ingredienser || []).map(ing => `<li>${ing}</li>`).join('')}</ul>
-        <div class="recept-heading">Gör så här</div>
-        <div class="recept-inst">${dr.recept?.instruktion || ''}</div>
-      </div>
-    </div>`).join('');
-
-  // Alkoholfritt
-  const af = d.alkoholfritt || {};
-
-  // Öl
+  const vinerHtml = viner.map(v => `<div class="vin-item"><div class="vin-item-top"><div class="vin-meta"><div class="vin-namn">${v.namn}</div><div class="vin-sub">${[v.producent,v.druva,v.region].filter(Boolean).join(' · ')}</div>${v.pris_sek ? `<span class="vin-pris">${v.pris_sek}</span>` : ''}</div></div><div class="vin-varfor">${v.varfor}</div></div>`).join('');
   const ol = d.ol || {};
+  const af = d.alkoholfritt || {};
+  const drinkar = d.drinkar || [];
+  const drinkarHtml = drinkar.map((dr, i) => {
+    const rid = 'rec-' + i;
+    const ingHtml = (dr.recept?.ingredienser || []).map(ing => `<li>${ing}</li>`).join('');
+    return `<div class="card-full"><div class="drink-card-top"><div class="drink-card-header"><div class="drink-icon drinkar">🍹</div><div><div class="drink-type">Drink</div><div class="drink-name">${dr.namn}</div></div></div><div class="drink-why">${dr.varfor}</div></div><div class="drink-card-footer"><button class="btn-recept" onclick="toggleRecept('${rid}')">Visa recept ↓</button></div><div class="recept-body" id="${rid}"><div class="recept-heading">Ingredienser</div><ul class="recept-ing">${ingHtml}</ul><div class="recept-heading">Gör så här</div><div class="recept-inst">${dr.recept?.instruktion || ''}</div></div></div>`;
+  }).join('');
 
-  document.getElementById('result-area').innerHTML = `
-    <div class="result-section">
-
-      <div class="result-header">
-        <div>
-          <div class="result-dish">${d.ratt || d._input}</div>
-          <div class="result-profile">${d.smakprofil || ''}</div>
-          ${smakerHtml ? `<div class="result-smaker">${smakerHtml}</div>` : ''}
-        </div>
-        <button class="btn-save" id="save-btn" onclick="spara()">Spara</button>
-      </div>
-
-      ${tipsHtml}
-
-      <div class="drink-card" style="margin-bottom:12px">
-        <div class="drink-card-top">
-          <div class="drink-card-header">
-            <div class="drink-icon vin">🍷</div>
-            <div>
-              <div class="drink-type">Vin</div>
-              <div class="drink-name">${viner.length} förslag</div>
-            </div>
-          </div>
-        </div>
-        <div class="vin-list">${vinerHtml}</div>
-      </div>
-
-      <div class="cards-grid">
-        <div class="drink-card">
-          <div class="drink-card-top">
-            <div class="drink-card-header">
-              <div class="drink-icon ol">🍺</div>
-              <div>
-                <div class="drink-type">Öl · ${ol.typ || ''}</div>
-                <div class="drink-name">${ol.namn || ''}</div>
-                <div class="drink-sub">${[ol.bryggeri, ol.land].filter(Boolean).join(' · ')}</div>
-              </div>
-            </div>
-            <div class="drink-why">${ol.varfor || ''}</div>
-            ${ol.pris_sek ? `<span class="drink-pris">${ol.pris_sek}</span>` : ''}
-          </div>
-          ${sbFooter(ol.namn, ol.systembolaget_sok)}
-        </div>
-
-        <div class="drink-card">
-          <div class="drink-card-top">
-            <div class="drink-card-header">
-              <div class="drink-icon alkoholfritt">◎</div>
-              <div>
-                <div class="drink-type">Alkoholfritt</div>
-                <div class="drink-name">${af.namn || ''}</div>
-                <div class="drink-sub">${af.beskrivning || ''}</div>
-              </div>
-            </div>
-            <div class="drink-why">${af.varfor || ''}</div>
-            ${af.pris_sek ? `<span class="drink-pris">${af.pris_sek}</span>` : ''}
-          </div>
-          ${af.namn ? sbFooter(af.namn, af.systembolaget_sok) : ''}
-        </div>
-      </div>
-
-      ${drinkarHtml ? `<div class="cards-grid">${drinkarHtml}</div>` : ''}
-
-    </div>`;
+  document.getElementById('result-area').innerHTML = `<div class="result-section">
+    <div class="result-header">
+      <div><div class="result-dish">${d.ratt || d._input}</div><div class="result-profile">${d.smakprofil || ''}</div>${smakerHtml ? `<div class="result-smaker">${smakerHtml}</div>` : ''}</div>
+      <button class="btn-save" id="save-btn" onclick="spara()">🔖 Spara</button>
+    </div>
+    ${tipsHtml}
+    <div class="cards-grid">
+      <div class="drink-card"><div class="drink-card-top"><div class="drink-card-header"><div class="drink-icon vin">🍷</div><div><div class="drink-type">Vin</div><div class="drink-name">${viner.length} förslag</div></div></div></div><div class="vin-list">${vinerHtml}</div>${viner[0] ? sbFooter(viner[0].namn) : ''}</div>
+      <div class="drink-card"><div class="drink-card-top"><div class="drink-card-header"><div class="drink-icon ol">🍺</div><div><div class="drink-type">Öl · ${ol.typ || ''}</div><div class="drink-name">${ol.namn || ''}</div><div class="drink-sub">${[ol.bryggeri,ol.land].filter(Boolean).join(' · ')}</div></div></div><div class="drink-why">${ol.varfor || ''}</div>${ol.pris_sek ? `<span class="drink-pris">${ol.pris_sek}</span>` : ''}</div>${sbFooter(ol.namn)}</div>
+    </div>
+    <div class="card-full"><div class="drink-card-top"><div class="drink-card-header"><div class="drink-icon alkoholfritt">◎</div><div><div class="drink-type">Alkoholfritt</div><div class="drink-name">${af.namn || ''}</div><div class="drink-sub">${af.beskrivning || ''}</div></div></div><div class="drink-why">${af.varfor || ''}</div>${af.pris_sek ? `<span class="drink-pris">${af.pris_sek}</span>` : ''}</div>${af.namn ? sbFooter(af.namn) : ''}</div>
+    ${drinkarHtml}
+  </div>`;
 }
 
-// ─── SPARA ────────────────────────────────────────────────────────────────────
+// ── SPARA ─────────────────────────────────────────────────────────────────────
 function spara() {
   if (!current) return;
   const saved = getSaved();
-  const viner = (current.viner || []).map(v => v.namn).join(', ');
-  saved.unshift({
-    id: Date.now(),
-    date: new Date().toLocaleDateString('sv-SE'),
-    ratt: current.ratt || current._input,
-    vin: viner || '—',
-    ol: current.ol?.namn || '—',
-    drink: (current.drinkar || [])[0]?.namn || '—',
-    af: current.alkoholfritt?.namn || null,
-  });
+  saved.unshift({ id: Date.now(), date: new Date().toLocaleDateString('sv-SE'), ratt: current.ratt || current._input, vin: (current.viner || []).map(v => v.namn).join(', ') || '—', ol: current.ol?.namn || '—', drink: (current.drinkar || [])[0]?.namn || '—', af: current.alkoholfritt?.namn || null });
   localStorage.setItem('smakkompass_saved', JSON.stringify(saved));
   const btn = document.getElementById('save-btn');
   if (btn) { btn.textContent = '✓ Sparad'; btn.classList.add('saved'); }
   updateBadge();
 }
-
-function getSaved() {
-  try { return JSON.parse(localStorage.getItem('smakkompass_saved') || '[]'); }
-  catch { return []; }
-}
-
+function getSaved() { try { return JSON.parse(localStorage.getItem('smakkompass_saved') || '[]'); } catch { return []; } }
 function updateBadge() {
   const n = getSaved().length;
-  ['saved-count', 'saved-count-m'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) { el.textContent = n; el.style.display = n > 0 ? 'inline' : 'none'; }
-  });
+  ['saved-count','saved-count-m'].forEach(id => { const el = document.getElementById(id); if (el) { el.textContent = n; el.style.display = n > 0 ? 'inline' : 'none'; } });
 }
-
-function radera(id) {
-  localStorage.setItem('smakkompass_saved', JSON.stringify(getSaved().filter(s => s.id !== id)));
-  updateBadge();
-  renderSaved();
-}
-
+function radera(id) { localStorage.setItem('smakkompass_saved', JSON.stringify(getSaved().filter(s => s.id !== id))); updateBadge(); renderSaved(); }
 function renderSaved() {
   const area = document.getElementById('saved-area');
   const saved = getSaved();
-  if (!saved.length) {
-    area.innerHTML = `
-      <div class="saved-empty">
-        <div style="font-size:36px;margin-bottom:12px">—</div>
-        Inga sparade kombinationer än.<br>Matcha en rätt och tryck Spara.
-      </div>`;
-    return;
-  }
-  area.innerHTML = '<div class="saved-grid">' + saved.map(s => `
-    <div class="saved-card">
-      <div class="saved-top">
-        <div>
-          <div class="saved-dish">${s.ratt}</div>
-          <div class="saved-date">${s.date}</div>
-        </div>
-        <button class="btn-del" onclick="radera(${s.id})" title="Ta bort">✕</button>
-      </div>
-      <div class="saved-pills">
-        <span class="pill vin">🍷 ${s.vin || '—'}</span>
-        <span class="pill ol">🍺 ${s.ol || '—'}</span>
-        <span class="pill dr">🍹 ${s.drink || '—'}</span>
-        ${s.af ? `<span class="pill af">◎ ${s.af}</span>` : ''}
-      </div>
-    </div>`).join('') + '</div>';
+  if (!saved.length) { area.innerHTML = `<div class="saved-empty"><div style="font-size:36px;margin-bottom:12px">🔖</div>Inga sparade kombinationer än.<br>Matcha en rätt och tryck Spara.</div>`; return; }
+  area.innerHTML = '<div class="saved-grid">' + saved.map(s => `<div class="saved-card"><div class="saved-top"><div><div class="saved-dish">${s.ratt}</div><div class="saved-date">${s.date}</div></div><button class="btn-del" onclick="radera(${s.id})">✕</button></div><div class="saved-pills">${s.vin !== '—' ? `<span class="pill vin">🍷 ${s.vin}</span>` : ''}${s.ol !== '—' ? `<span class="pill ol">🍺 ${s.ol}</span>` : ''}${s.drink !== '—' ? `<span class="pill dr">🍹 ${s.drink}</span>` : ''}${s.af ? `<span class="pill af">◎ ${s.af}</span>` : ''}</div></div>`).join('') + '</div>';
+}
 
-// ─── CHAT ─────────────────────────────────────────────────────────────────────
+// ── CHAT ──────────────────────────────────────────────────────────────────────
 let chatHistory = [];
 let chatTyping = false;
-
-const CHAT_SYSTEM = `Du är Erik, en varm och engagerad svensk sommelier med WSET Diploma och 20 års erfarenhet från restauranger i Sverige och Frankrike. Du jobbar nu som personlig dryckesrådgivare via Smakkompass.
-
-Din personlighet:
-- Varm, pedagogisk och aldrig nedlåtande — du älskar att lära ut till nybörjare
-- Pratar svenska i ett naturligt, konversationellt tonfall — inte formellt
-- Delar gärna med dig av personliga åsikter och tips
-- Förklarar alltid VARFÖR, inte bara VAD
-- Använder gärna vardagliga liknelser ("det smakar ungefär som...")
-- Är ärlig — om något inte passar, säger du det
-
-Du kan svara på ALLT som rör:
-- Vin, öl, sprit, cider, alkoholfria drycker
-- Mat- och dryckeskombinationer
-- Systembolagets sortiment och produkter
-- Vinregioner, druvsorts, producenter
-- Servering: temperatur, glas, karafering, förvaring
-- Vinprovning och smakvokabulär
-- Presenter och tillfällen (bröllop, midsommar, jubileum)
-- Prisrekommendationer på Systembolaget
-- Allmänna matlagningsfrågor kopplade till dryck
-
-Om någon skriver t.ex. "jag ska äta pasta ikväll" eller "vi har middagsgäster på fredag" — förstå kontexten och fråga vad de ska äta eller ge ett generellt råd.
-
-Svara aldrig med JSON. Skriv alltid i naturlig löptext med eventuella radbrytningar. Håll svaren lagom långa — inte för korta, men inte heller en uppsats om det inte behövs. Avslutar gärna med en följdfråga eller ett tips om det passar naturligt.`;
+const CHAT_SYSTEM = `Du är Erik, en varm och engagerad svensk sommelier med WSET Diploma och 20 års erfarenhet från restauranger i Sverige och Frankrike. Du jobbar nu som personlig dryckesrådgivare via Smakkompass. Du är pedagogisk, varm och aldrig nedlåtande. Förklara alltid VARFÖR. Ge konkreta rekommendationer med priser i SEK och produkter från Systembolaget. Svara alltid på svenska. Max 200 ord per svar. Svara i naturlig löptext, inte JSON.`;
 
 function initChat() {
   chatHistory = [];
   const msgs = document.getElementById('chat-messages');
   if (!msgs) return;
   msgs.innerHTML = '';
-  appendAiMessage('Hej! Jag är Erik, er personliga sommelier här på Smakkompass. 🍷\n\nFråga mig om allt som rör dryck och mat — om vilket vin som passar till din middag, vilket glas du ska använda, hur kallt du ska servera bubblet eller vad den där konstiga druvsorten på etiketten egentligen smakar.\n\nVad kan jag hjälpa dig med?');
+  appendAiMsg('Hej! Jag är Erik, er personliga sommelier här på Smakkompass. 🍷\n\nFråga mig om allt som rör dryck och mat — vilket vin som passar till middagen, hur kallt du ska servera bubblet, eller vad den där druvsorten på etiketten egentligen smakar.\n\nVad kan jag hjälpa dig med?');
 }
-
-function appendUserMessage(text) {
+function appendUserMsg(text) {
   const msgs = document.getElementById('chat-messages');
-  const div = document.createElement('div');
-  div.className = 'msg user';
-  div.innerHTML = `
-    <div class="msg-icon">👤</div>
-    <div class="msg-bubble">${escHtml(text).replace(/\n/g,'<br>')}</div>`;
-  msgs.appendChild(div);
-  scrollChat();
+  const d = document.createElement('div'); d.className = 'msg user';
+  d.innerHTML = `<div class="msg-icon">👤</div><div class="msg-bubble">${escHtml(text).replace(/\n/g,'<br>')}</div>`;
+  msgs.appendChild(d); scrollChat();
 }
-
-function appendAiMessage(text) {
+function appendAiMsg(text) {
   const msgs = document.getElementById('chat-messages');
-  const div = document.createElement('div');
-  div.className = 'msg ai';
-  div.innerHTML = `
-    <div class="msg-icon">🍷</div>
-    <div class="msg-bubble">${formatAiText(text)}</div>`;
-  msgs.appendChild(div);
-  scrollChat();
-  return div;
+  const d = document.createElement('div'); d.className = 'msg ai';
+  d.innerHTML = `<div class="msg-icon" style="background:var(--warm-brown)">🍷</div><div class="msg-bubble">${formatAiText(text)}</div>`;
+  msgs.appendChild(d); scrollChat(); return d;
 }
-
 function showTyping() {
   const msgs = document.getElementById('chat-messages');
-  const div = document.createElement('div');
-  div.className = 'msg ai';
-  div.id = 'typing-indicator';
-  div.innerHTML = `
-    <div class="msg-icon">🍷</div>
-    <div class="msg-bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>`;
-  msgs.appendChild(div);
-  scrollChat();
+  const d = document.createElement('div'); d.className = 'msg ai'; d.id = 'typing-ind';
+  d.innerHTML = `<div class="msg-icon" style="background:var(--warm-brown)">🍷</div><div class="msg-bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>`;
+  msgs.appendChild(d); scrollChat();
 }
-
-function removeTyping() {
-  const el = document.getElementById('typing-indicator');
-  if (el) el.remove();
-}
-
-function scrollChat() {
-  const msgs = document.getElementById('chat-messages');
-  if (msgs) msgs.scrollTop = msgs.scrollHeight;
-}
-
-function escHtml(s) {
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
-
-function formatAiText(text) {
-  // Bold **text**
-  text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-  // Italic *text*
-  text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
-  // Bullet lists
-  text = text.replace(/^[-•] (.+)$/gm, '<li>$1</li>');
-  text = text.replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>');
-  // Line breaks
-  text = text.replace(/\n\n/g, '</p><p style="margin-top:8px">');
-  text = text.replace(/\n/g, '<br>');
-  return text;
+function removeTyping() { const el = document.getElementById('typing-ind'); if (el) el.remove(); }
+function scrollChat() { const m = document.getElementById('chat-messages'); if (m) m.scrollTop = m.scrollHeight; }
+function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function formatAiText(t) {
+  t = t.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
+  t = t.replace(/\*(.*?)\*/g,'<em>$1</em>');
+  t = t.replace(/\n\n/g,'</p><p style="margin-top:8px">');
+  t = t.replace(/\n/g,'<br>');
+  return '<p>' + t + '</p>';
 }
 
 async function sendChat() {
   const input = document.getElementById('chat-input');
   const text = input.value.trim();
   if (!text || chatTyping) return;
-
-  // Hide suggestions after first message
   const sugs = document.getElementById('chat-suggestions');
   if (sugs) sugs.style.display = 'none';
-
-  input.value = '';
-  input.style.height = '48px';
-  chatTyping = true;
-  document.getElementById('chat-send').disabled = true;
-
-  appendUserMessage(text);
+  input.value = ''; input.style.height = '48px';
+  chatTyping = true; document.getElementById('chat-send').disabled = true;
+  appendUserMsg(text);
   chatHistory.push({ role: 'user', content: text });
-
   showTyping();
-
   try {
-    const r = await fetch('/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: chatHistory }),
-    });
-
+    const reply = await callClaude(chatHistory, CHAT_SYSTEM);
     removeTyping();
-
-    let data;
-    try { data = await r.json(); } catch { throw new Error('Kunde inte läsa svaret.'); }
-    if (!r.ok) throw new Error(data.error || `Serverfel ${r.status}`);
-
-    const reply = data.reply || 'Ursäkta, något gick fel. Försök igen!';
-    chatHistory.push({ role: 'assistant', content: reply });
-    appendAiMessage(reply);
-
-  } catch (e) {
-    removeTyping();
-    appendAiMessage('Ursäkta, något gick fel just nu. Försök igen om ett ögonblick! 🙏');
+    if (reply) { chatHistory.push({ role: 'assistant', content: reply }); appendAiMsg(reply); }
+    else { appendAiMsg('Ursäkta, något gick fel. Försök igen!'); }
+  } catch(e) {
+    removeTyping(); appendAiMsg('Ursäkta, något gick fel just nu. Kontrollera att API-nyckeln stämmer och försök igen. 🙏');
   }
-
-  chatTyping = false;
-  document.getElementById('chat-send').disabled = false;
-  input.focus();
+  chatTyping = false; document.getElementById('chat-send').disabled = false; input.focus();
 }
-
-function sendSuggestion(btn) {
-  const text = btn.textContent;
-  document.getElementById('chat-input').value = text;
-  sendChat();
-}
-
+function sendSuggestion(btn) { document.getElementById('chat-input').value = btn.textContent; sendChat(); }
 function clearChat() {
-  chatHistory = [];
-  const msgs = document.getElementById('chat-messages');
-  if (msgs) msgs.innerHTML = '';
-  const sugs = document.getElementById('chat-suggestions');
-  if (sugs) sugs.style.display = '';
+  chatHistory = []; const msgs = document.getElementById('chat-messages'); if (msgs) msgs.innerHTML = '';
+  const sugs = document.getElementById('chat-suggestions'); if (sugs) sugs.style.display = '';
   initChat();
 }
 
-// Auto-resize chat textarea
 document.addEventListener('DOMContentLoaded', () => {
-  const input = document.getElementById('chat-input');
-  if (input) {
-    input.addEventListener('input', () => {
-      input.style.height = '48px';
-      input.style.height = Math.min(input.scrollHeight, 120) + 'px';
-    });
-    input.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
-    });
+  const inp = document.getElementById('chat-input');
+  if (inp) {
+    inp.addEventListener('input', () => { inp.style.height = '48px'; inp.style.height = Math.min(inp.scrollHeight, 120) + 'px'; });
+    inp.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); } });
   }
+  const apiInp = document.getElementById('api-key-input');
+  if (apiInp) { apiInp.addEventListener('keydown', e => { if (e.key === 'Enter') saveApiKey(); }); }
 });
-
+</script>
+</body>
+</html>
