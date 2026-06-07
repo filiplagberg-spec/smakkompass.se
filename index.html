@@ -551,9 +551,11 @@ async function sendMsg() {
     const bubbleContent = aiBubble.querySelector('.msg-bubble');
 
     const trimmed = full.trim();
-    if (trimmed.startsWith('{')) {
+    // Strip markdown code fences if present
+    const cleaned = trimmed.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '').trim();
+    if (cleaned.startsWith('{')) {
       try {
-        const parsed = JSON.parse(trimmed);
+        const parsed = JSON.parse(cleaned);
         if (parsed.typ === 'match') {
           lastMatch = parsed;
           bubbleContent.innerHTML = '';
