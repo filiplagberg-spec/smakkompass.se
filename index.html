@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smakkompass — Dryckesmatchning</title>
+<title>Smakkompass — Din personliga sommelier</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -12,7 +12,6 @@
   --warm-brown: #3d2b1f;
   --terracotta: #b85c3a;
   --terracotta-light: #f0e0d8;
-  --terracotta-mid: #d4794e;
   --green: #2d4a3e;
   --green-light: #d8e8e0;
   --gold: #c49a3c;
@@ -27,8 +26,9 @@
   --shadow-md: 0 4px 16px rgba(61,43,31,0.10);
 }
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; -webkit-font-smoothing: antialiased; }
+body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; -webkit-font-smoothing: antialiased; display: flex; flex-direction: column; }
 
+/* NAV */
 nav {
   background: var(--white);
   border-bottom: 1px solid var(--border);
@@ -37,744 +37,447 @@ nav {
   align-items: center;
   justify-content: space-between;
   height: 60px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
+  flex-shrink: 0;
   box-shadow: var(--shadow-sm);
 }
 .nav-logo { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--warm-brown); letter-spacing: -0.02em; }
 .nav-logo span { color: var(--terracotta); }
 .nav-tabs { display: flex; gap: 2px; }
-.nav-tab { padding: 8px 16px; font-size: 13px; font-weight: 500; cursor: pointer; border: none; background: none; color: var(--text-muted); border-radius: 8px; transition: all 0.15s; touch-action: manipulation; }
+.nav-tab { padding: 8px 16px; font-size: 13px; font-weight: 500; cursor: pointer; border: none; background: none; color: var(--text-muted); border-radius: 8px; transition: all 0.15s; touch-action: manipulation; font-family: 'DM Sans', sans-serif; }
 .nav-tab.active { background: var(--terracotta-light); color: var(--terracotta); }
 .nav-tab:hover:not(.active) { background: var(--cream-dark); color: var(--text); }
-.saved-badge { background: var(--terracotta); color: white; font-size: 11px; font-weight: 500; border-radius: 10px; padding: 1px 6px; margin-left: 4px; display: none; }
+.saved-badge { background: var(--terracotta); color: white; font-size: 11px; border-radius: 10px; padding: 1px 6px; margin-left: 4px; display: none; }
 
+/* PANELS */
+.panel { display: none; flex: 1; }
+.panel.active { display: flex; flex-direction: column; }
 
-
-@media (max-width: 600px) {
-  nav { display: none; }
-  .mobile-nav {
-    display: flex;
-    position: fixed;
-    bottom: 0; left: 0; right: 0;
-    z-index: 200;
-    background: var(--white);
-    border-top: 1px solid var(--border);
-    box-shadow: 0 -2px 12px rgba(61,43,31,0.08);
-    padding-bottom: env(safe-area-inset-bottom);
-  }
-  .mobile-nav-btn {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 10px 0 8px;
-    border: none;
-    background: none;
-    cursor: pointer;
-    color: var(--text-muted);
-    font-size: 10px;
-    font-weight: 500;
-    gap: 3px;
-    transition: color 0.15s;
-    touch-action: manipulation;
-  }
-  .mobile-nav-btn .mni { font-size: 22px; line-height: 1; }
-  .mobile-nav-btn.active { color: var(--terracotta); }
-  .mobile-nav-btn .saved-badge { margin: 0; }
-  main { padding: 1.5rem 1rem 100px; }
-  .api-banner { padding: 10px 1rem; }
+/* ── ERIK CHAT PANEL ─────────────────────────────────────────── */
+#panel-erik {
+  height: calc(100vh - 60px);
+  max-height: calc(100vh - 60px);
+  overflow: hidden;
 }
-.mobile-nav { display: none; }
-main { max-width: 740px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
-.panel { display: none; }
-.panel.active { display: block; }
-
-.hero { text-align: center; margin-bottom: 2rem; }
-.hero h1 { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 400; color: var(--warm-brown); line-height: 1.15; margin-bottom: 10px; }
-.hero h1 em { font-style: italic; color: var(--terracotta); }
-.hero p { font-size: 15px; color: var(--text-muted); font-weight: 300; line-height: 1.6; }
-@media (max-width: 600px) {
-  .hero { margin-bottom: 1.25rem; }
-  .hero h1 { font-size: 28px; }
-  .hero p { font-size: 14px; }
-}
-
-.search-card {
-  background: var(--white);
-  border-radius: 20px;
-  padding: 1.25rem;
-  border: 1px solid var(--border);
-  margin-bottom: 1.25rem;
-  box-shadow: var(--shadow-sm);
-}
-@media (min-width: 601px) { .search-card { padding: 1.75rem; } }
-.search-label { font-size: 11px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 10px; }
-textarea {
+.erik-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-width: 760px;
+  margin: 0 auto;
   width: 100%;
-  padding: 13px 14px;
+  padding: 0 1.5rem;
+}
+
+/* Hero intro — visas bara när chatten är tom */
+.erik-intro {
+  padding: 2rem 0 1rem;
+  text-align: center;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+.erik-intro.hidden { display: none; }
+.erik-avatar-wrap { position: relative; display: inline-block; margin-bottom: 1rem; }
+.erik-avatar {
+  width: 72px; height: 72px;
+  background: var(--warm-brown);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px;
+  margin: 0 auto;
+  box-shadow: 0 4px 20px rgba(61,43,31,0.25);
+}
+.erik-online {
+  position: absolute; bottom: 2px; right: 2px;
+  width: 14px; height: 14px;
+  background: #4caf7d;
+  border-radius: 50%;
+  border: 2px solid var(--cream);
+}
+.erik-intro h1 { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 400; color: var(--warm-brown); margin-bottom: 6px; }
+.erik-intro h1 em { font-style: italic; color: var(--terracotta); }
+.erik-intro p { font-size: 14px; color: var(--text-muted); line-height: 1.6; max-width: 440px; margin: 0 auto; }
+
+/* Suggestions */
+.suggestions-wrap {
+  display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
+  padding: 1rem 0 0.5rem;
+  flex-shrink: 0;
+}
+.suggestions-wrap.hidden { display: none; }
+.sug { padding: 8px 14px; font-size: 13px; color: var(--terracotta); background: var(--white); border: 1px solid rgba(184,92,58,0.25); border-radius: 20px; cursor: pointer; transition: all 0.15s; touch-action: manipulation; font-family: 'DM Sans', sans-serif; line-height: 1.3; }
+.sug:hover, .sug:active { background: var(--terracotta); color: white; border-color: var(--terracotta); }
+
+/* Messages */
+.erik-messages {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 0.5rem 0 1rem;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+.erik-messages::-webkit-scrollbar { width: 4px; }
+.erik-messages::-webkit-scrollbar-thumb { background: var(--cream-dark); border-radius: 4px; }
+
+.msg { display: flex; gap: 10px; align-items: flex-end; }
+.msg.user { flex-direction: row-reverse; }
+.msg-avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; margin-bottom: 2px; }
+.msg.ai .msg-avatar { background: var(--warm-brown); }
+.msg.user .msg-avatar { background: var(--terracotta-light); font-size: 13px; }
+.msg-bubble {
+  max-width: 78%;
+  padding: 12px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  line-height: 1.7;
+  word-break: break-word;
+}
+.msg.user .msg-bubble { background: var(--terracotta); color: white; border-bottom-right-radius: 4px; }
+.msg.ai .msg-bubble { background: var(--white); color: var(--text); border: 1px solid var(--border); border-bottom-left-radius: 4px; box-shadow: var(--shadow-sm); }
+.msg.ai .msg-bubble strong { color: var(--warm-brown); font-weight: 600; }
+.msg.ai .msg-bubble em { font-style: italic; color: var(--text-muted); }
+.msg.ai .msg-bubble p + p { margin-top: 8px; }
+
+/* Match result card inside chat */
+.match-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  margin-top: 10px;
+  box-shadow: var(--shadow-sm);
+  max-width: 100%;
+}
+.match-card-header { background: var(--warm-brown); color: var(--cream); padding: 12px 16px; font-family: 'Playfair Display', serif; font-size: 16px; display: flex; align-items: center; gap: 8px; }
+.match-section { padding: 12px 16px; border-bottom: 1px solid var(--border); }
+.match-section:last-child { border-bottom: none; }
+.match-section-label { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 6px; }
+.match-item { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; }
+.match-item:last-child { margin-bottom: 0; }
+.match-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.match-info { flex: 1; min-width: 0; }
+.match-name { font-size: 14px; font-weight: 500; color: var(--text); line-height: 1.3; }
+.match-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; line-height: 1.4; }
+.match-why { font-size: 13px; color: var(--text-muted); margin-top: 4px; line-height: 1.5; }
+.match-pris { display: inline-block; font-size: 11px; font-weight: 500; color: var(--gold); background: var(--gold-light); padding: 2px 8px; border-radius: 10px; margin-top: 4px; }
+.match-actions { display: flex; gap: 8px; padding: 10px 16px; background: var(--cream); flex-wrap: wrap; }
+.match-btn { padding: 7px 14px; font-size: 12.5px; font-weight: 500; border-radius: 10px; cursor: pointer; transition: all 0.15s; touch-action: manipulation; font-family: 'DM Sans', sans-serif; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; }
+.match-btn.sb { background: var(--white); border: 1px solid rgba(184,92,58,0.3); color: var(--terracotta); }
+.match-btn.sb:hover { background: var(--terracotta); color: white; border-color: var(--terracotta); }
+.match-btn.save { background: var(--white); border: 1px solid rgba(45,74,62,0.3); color: var(--green); }
+.match-btn.save:hover { background: var(--green); color: white; }
+.match-btn.saved { background: var(--green); color: white; border-color: var(--green); pointer-events: none; }
+
+/* Typing dots */
+.typing-dots { display: flex; gap: 5px; align-items: center; padding: 4px 0; }
+.typing-dots span { width: 8px; height: 8px; background: var(--text-muted); border-radius: 50%; animation: bounce 1.2s infinite; opacity: 0.5; }
+.typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes bounce { 0%,60%,100% { transform: translateY(0); opacity:0.5; } 30% { transform: translateY(-7px); opacity:1; } }
+
+/* Input row */
+.erik-input-wrap { padding: 0.75rem 0 1rem; flex-shrink: 0; border-top: 1px solid var(--border); }
+.erik-input-row { display: flex; gap: 10px; align-items: flex-end; }
+.erik-input {
+  flex: 1;
+  padding: 13px 16px;
   font-size: 16px;
+  font-family: 'DM Sans', sans-serif;
   border: 1.5px solid var(--cream-dark);
-  border-radius: 12px;
-  background: var(--cream);
+  border-radius: 16px;
+  background: var(--white);
   color: var(--text);
   resize: none;
-  height: 88px;
-  font-family: 'DM Sans', sans-serif;
-  line-height: 1.6;
-  transition: border-color 0.2s, background 0.2s;
+  height: 50px;
+  max-height: 130px;
+  line-height: 1.5;
+  transition: border-color 0.2s;
+  overflow-y: hidden;
 }
-textarea:focus { outline: none; border-color: var(--terracotta); background: var(--white); }
-textarea::placeholder { color: var(--text-muted); opacity: 0.7; }
-.search-row { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; gap: 10px; flex-wrap: wrap; }
-.chips-wrap { display: flex; gap: 6px; flex-wrap: wrap; flex: 1; min-width: 0; }
-.chip { padding: 6px 12px; font-size: 12px; color: var(--text-muted); background: var(--cream); border: 1px solid var(--border); border-radius: 20px; cursor: pointer; transition: all 0.15s; user-select: none; touch-action: manipulation; white-space: nowrap; }
-.chip:hover, .chip:active { background: var(--terracotta-light); color: var(--terracotta); border-color: var(--terracotta); }
-@media (max-width: 600px) {
-  .chips-wrap { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 2px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
-  .chips-wrap::-webkit-scrollbar { display: none; }
-  .search-row { flex-direction: column; align-items: stretch; }
+.erik-input:focus { outline: none; border-color: var(--terracotta); }
+.erik-input::placeholder { color: var(--text-muted); opacity: 0.65; }
+.btn-send {
+  width: 50px; height: 50px;
+  border-radius: 16px;
+  background: var(--terracotta);
+  border: none; color: white;
+  font-size: 22px;
+  cursor: pointer;
+  transition: all 0.15s;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  touch-action: manipulation;
 }
-.detail-row { display: flex; align-items: center; gap: 8px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); flex-wrap: wrap; }
-.detail-label { font-size: 12px; color: var(--text-muted); font-weight: 500; }
-.detail-btns { display: flex; gap: 4px; }
-.detail-btn { padding: 6px 14px; font-size: 12px; font-weight: 500; border: 1px solid var(--border); border-radius: 20px; background: var(--cream); color: var(--text-muted); cursor: pointer; transition: all 0.15s; touch-action: manipulation; }
-.detail-btn.active { background: var(--warm-brown); color: var(--white); border-color: var(--warm-brown); }
-.btn-search { padding: 14px; font-size: 15px; font-weight: 500; border: none; border-radius: 12px; background: var(--terracotta); color: white; cursor: pointer; transition: all 0.18s; white-space: nowrap; letter-spacing: 0.01em; touch-action: manipulation; width: 100%; }
-@media (min-width: 601px) { .btn-search { width: auto; padding: 12px 28px; font-size: 14px; } .search-row { flex-wrap: nowrap; } .chips-wrap { flex-wrap: wrap; } }
-.btn-search:hover { background: #a04d2e; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(184,92,58,0.3); }
-.btn-search:active { transform: scale(0.97) translateY(0); box-shadow: none; background: #a04d2e; }
-.btn-search:disabled { opacity: 0.55; cursor: not-allowed; transform: none; box-shadow: none; }
+.btn-send:hover { background: #a04d2e; transform: scale(1.05); }
+.btn-send:active { transform: scale(0.95); }
+.btn-send:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 
-.status { text-align: center; padding: 3rem 0; color: var(--text-muted); font-size: 14px; }
-.status-icon { font-size: 36px; margin-bottom: 12px; }
-.status-spinner { display: inline-block; width: 32px; height: 32px; border: 2px solid var(--cream-dark); border-top-color: var(--terracotta); border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 12px; }
-@keyframes spin { to { transform: rotate(360deg); } }
-.status-sub { font-size: 12px; opacity: 0.6; margin-top: 6px; }
-.error-box { background: #fff0ee; border: 1px solid #f0c0b0; border-radius: 14px; padding: 16px 18px; font-size: 14px; color: #8b2500; line-height: 1.6; margin-top: 1rem; display: flex; align-items: flex-start; gap: 10px; }
-.error-box-icon { font-size: 18px; flex-shrink: 0; }
-
-.result-section { animation: fadeUp 0.4s ease; }
-@keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
-.result-header { background: var(--white); border: 1px solid var(--border); border-radius: 18px; padding: 1.25rem; margin-bottom: 12px; display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; box-shadow: var(--shadow-sm); }
-@media (min-width: 601px) { .result-header { padding: 1.4rem 1.6rem; } }
-@media (max-width: 600px) { .result-header { flex-direction: column; gap: 14px; } .btn-save { width: 100%; text-align: center; } }
-.result-dish { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--warm-brown); line-height: 1.2; margin-bottom: 6px; }
-@media (min-width: 601px) { .result-dish { font-size: 24px; } }
-.result-profile { font-size: 13.5px; color: var(--text-muted); line-height: 1.65; }
-.result-smaker { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
-.smaker-pill { padding: 3px 10px; font-size: 11px; font-weight: 500; border-radius: 20px; background: var(--cream-dark); color: var(--text-muted); }
-.btn-save { padding: 10px 18px; font-size: 13px; font-weight: 500; border: 1.5px solid var(--green); border-radius: 10px; background: transparent; color: var(--green); cursor: pointer; transition: all 0.15s; white-space: nowrap; flex-shrink: 0; touch-action: manipulation; }
-.btn-save:hover { background: var(--green); color: white; }
-.btn-save.saved { background: var(--green); color: white; pointer-events: none; }
-
-.sommelier-tip { background: var(--warm-brown); color: var(--cream); border-radius: 16px; padding: 1.1rem 1.4rem; margin-bottom: 12px; display: flex; align-items: flex-start; gap: 12px; font-size: 13.5px; line-height: 1.65; box-shadow: var(--shadow-sm); }
-.sommelier-tip-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
-.sommelier-tip-label { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.6; margin-bottom: 3px; }
-
-.cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
-@media (max-width: 560px) { .cards-grid { grid-template-columns: 1fr; } }
-.drink-card { background: var(--white); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; box-shadow: var(--shadow-sm); transition: box-shadow 0.2s; }
-.drink-card:hover { box-shadow: var(--shadow-md); }
-.drink-card-top { padding: 1rem; }
-@media (min-width: 601px) { .drink-card-top { padding: 1.15rem; } }
-.drink-card-header { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; }
-.drink-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 11px; font-size: 18px; flex-shrink: 0; }
-.drink-icon.vin { background: var(--terracotta-light); }
-.drink-icon.ol { background: var(--gold-light); }
-.drink-icon.drinkar { background: var(--green-light); }
-.drink-icon.alkoholfritt { background: var(--blue-light); }
-.drink-type { font-size: 10.5px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.09em; color: var(--text-muted); }
-.drink-name { font-size: 14px; font-weight: 500; color: var(--text); margin-top: 1px; line-height: 1.3; word-break: break-word; }
-.drink-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; line-height: 1.4; word-break: break-word; }
-.drink-why { font-size: 13px; color: var(--text-muted); line-height: 1.65; }
-.drink-pris { display: inline-block; font-size: 11.5px; font-weight: 500; color: var(--gold); background: var(--gold-light); padding: 2px 9px; border-radius: 10px; margin-top: 8px; }
-
-.vin-list { border-top: 1px solid var(--border); }
-.vin-item { padding: 14px 1.15rem 0; }
-.vin-item + .vin-item { border-top: 1px solid var(--border); }
-.vin-item-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 8px; }
-@media (max-width: 600px) { .vin-item-top { flex-direction: column; gap: 10px; } }
-.vin-meta { flex: 1; }
-.vin-namn { font-size: 14.5px; font-weight: 500; color: var(--text); line-height: 1.3; }
-.vin-sub { font-size: 12px; color: var(--text-muted); margin-top: 3px; line-height: 1.5; }
-.vin-pris { font-size: 11.5px; font-weight: 500; color: var(--gold); background: var(--gold-light); padding: 2px 9px; border-radius: 10px; white-space: nowrap; margin-top: 4px; display: inline-block; }
-.vin-varfor { font-size: 13px; color: var(--text-muted); line-height: 1.65; padding-bottom: 12px; }
-
-.drink-card-footer { padding: 10px 1.15rem; border-top: 1px solid var(--border); display: flex; gap: 8px; align-items: center; flex-wrap: wrap; background: var(--cream); }
-.sb-link { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 500; color: var(--terracotta); text-decoration: none; padding: 8px 14px; background: var(--white); border: 1px solid rgba(184,92,58,0.25); border-radius: 10px; transition: all 0.15s; touch-action: manipulation; min-height: 40px; }
-.sb-link:hover, .sb-link:active { background: var(--terracotta); color: white; border-color: var(--terracotta); }
-.btn-recept { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 500; color: var(--green); padding: 8px 14px; background: var(--white); border: 1px solid rgba(45,74,62,0.25); border-radius: 10px; cursor: pointer; transition: all 0.15s; touch-action: manipulation; min-height: 40px; }
-.btn-recept:hover, .btn-recept:active { background: var(--green); color: white; border-color: var(--green); }
-.recept-body { display: none; padding: 14px 1.15rem 16px; border-top: 1px solid var(--border); background: var(--cream); }
-.recept-body.open { display: block; animation: fadeUp 0.25s ease; }
-.recept-heading { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 8px; }
-.recept-ing { list-style: none; margin-bottom: 12px; }
-.recept-ing li { font-size: 13px; color: var(--text); padding: 5px 0; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
-.recept-ing li:before { content: '·'; color: var(--terracotta); font-size: 18px; line-height: 0; margin-top: 2px; }
-.recept-ing li:last-child { border-bottom: none; }
-.recept-inst { font-size: 13px; color: var(--text-muted); line-height: 1.7; }
-
-.btn-copy { display: inline-flex; align-items: center; gap: 5px; padding: 7px 13px; font-size: 12.5px; font-weight: 500; border: 1px solid rgba(184,92,58,0.25); border-radius: 10px; background: var(--white); color: var(--terracotta); cursor: pointer; transition: all 0.15s; touch-action: manipulation; min-height: 40px; }
-.btn-copy:hover, .btn-copy:active { background: var(--terracotta); color: white; border-color: var(--terracotta); }
-.btn-copy.copied { background: var(--green); color: white; border-color: var(--green); pointer-events: none; }
-
-.card-full { background: var(--white); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; margin-bottom: 12px; box-shadow: var(--shadow-sm); }
-
-.saved-empty { text-align: center; padding: 4rem 0; color: var(--text-muted); font-size: 14px; }
+/* ── SAVED PANEL ─────────────────────────────────────────────── */
+#panel-saved { padding: 2rem 1.5rem 3rem; max-width: 760px; margin: 0 auto; width: 100%; }
+.saved-empty { text-align: center; padding: 5rem 0; color: var(--text-muted); font-size: 14px; }
 .saved-grid { display: grid; gap: 12px; }
 .saved-card { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 1.25rem 1.5rem; box-shadow: var(--shadow-sm); }
-.saved-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 12px; }
-.saved-dish { font-family: 'Playfair Display', serif; font-size: 17px; color: var(--warm-brown); line-height: 1.3; }
+.saved-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; }
+.saved-dish { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--warm-brown); }
 .saved-date { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
 .saved-pills { display: flex; gap: 7px; flex-wrap: wrap; }
 .pill { display: inline-flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: 20px; font-size: 12px; }
 .pill.vin { background: var(--terracotta-light); color: var(--terracotta); }
 .pill.ol { background: var(--gold-light); color: #7a5000; }
-.pill.dr { background: var(--green-light); color: var(--green); }
 .pill.af { background: var(--blue-light); color: var(--blue); }
-.btn-del { background: none; border: none; font-size: 16px; cursor: pointer; color: var(--text-muted); padding: 3px 7px; border-radius: 7px; transition: all 0.15s; line-height: 1; }
+.btn-del { background: none; border: none; font-size: 16px; cursor: pointer; color: var(--text-muted); padding: 4px 8px; border-radius: 7px; transition: all 0.15s; }
 .btn-del:hover { background: #fff0ee; color: #c0392b; }
 
-.chat-wrap { display: flex; flex-direction: column; height: calc(100vh - 60px - 5rem); min-height: 400px; max-height: 780px; }
-@media (max-width: 600px) { .chat-wrap { height: calc(100vh - 140px); max-height: none; } }
-.chat-header { background: var(--warm-brown); border-radius: 18px; padding: 1rem 1.25rem; margin-bottom: 12px; display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
-.chat-avatar { width: 44px; height: 44px; background: rgba(255,255,255,0.12); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
-.chat-header-info { flex: 1; min-width: 0; }
-.chat-header-name { font-family: 'Playfair Display', serif; font-size: 16px; color: var(--cream); font-weight: 400; }
-.chat-header-status { font-size: 11.5px; color: rgba(245,240,232,0.6); margin-top: 2px; }
-.chat-clear { background: rgba(255,255,255,0.1); border: none; border-radius: 10px; color: rgba(245,240,232,0.7); font-size: 12px; font-weight: 500; padding: 7px 12px; cursor: pointer; transition: all 0.15s; flex-shrink: 0; touch-action: manipulation; }
-.chat-clear:hover { background: rgba(255,255,255,0.18); color: var(--cream); }
-.chat-messages { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding: 4px 2px 8px; -webkit-overflow-scrolling: touch; scroll-behavior: smooth; }
-.chat-messages::-webkit-scrollbar { width: 4px; }
-.chat-messages::-webkit-scrollbar-track { background: transparent; }
-.chat-messages::-webkit-scrollbar-thumb { background: var(--cream-dark); border-radius: 4px; }
-.msg { display: flex; gap: 8px; align-items: flex-end; max-width: 100%; }
-.msg.user { flex-direction: row-reverse; }
-.msg-bubble { max-width: 82%; padding: 11px 14px; border-radius: 18px; font-size: 14px; line-height: 1.65; word-break: break-word; }
-@media (min-width: 601px) { .msg-bubble { max-width: 75%; } }
-.msg.user .msg-bubble { background: var(--terracotta); color: white; border-bottom-right-radius: 5px; }
-.msg.ai .msg-bubble { background: var(--white); color: var(--text); border: 1px solid var(--border); border-bottom-left-radius: 5px; box-shadow: var(--shadow-sm); }
-.msg-icon { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; margin-bottom: 2px; }
-.msg.ai .msg-icon { background: var(--warm-brown); }
-.msg.user .msg-icon { background: var(--terracotta-light); }
-.typing-dots { display: flex; gap: 4px; align-items: center; padding: 4px 2px; }
-.typing-dots span { width: 7px; height: 7px; background: var(--text-muted); border-radius: 50%; animation: bounce 1.2s infinite; opacity: 0.5; }
-.typing-dots span:nth-child(2) { animation-delay: 0.2s; }
-.typing-dots span:nth-child(3) { animation-delay: 0.4s; }
-@keyframes bounce { 0%,60%,100% { transform: translateY(0); opacity:0.5; } 30% { transform: translateY(-6px); opacity:1; } }
-.msg.ai .msg-bubble strong { color: var(--warm-brown); font-weight: 600; }
-.msg.ai .msg-bubble em { font-style: italic; color: var(--text-muted); }
-.chat-suggestions { display: flex; gap: 7px; flex-wrap: wrap; padding: 8px 0 4px; flex-shrink: 0; }
-.sug-chip { padding: 7px 12px; font-size: 12.5px; color: var(--terracotta); background: var(--terracotta-light); border: 1px solid rgba(184,92,58,0.2); border-radius: 20px; cursor: pointer; transition: all 0.15s; touch-action: manipulation; line-height: 1.3; text-align: left; }
-.sug-chip:hover, .sug-chip:active { background: var(--terracotta); color: white; }
-@media (max-width: 600px) {
-  .chat-suggestions { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding-bottom: 6px; }
-  .chat-suggestions::-webkit-scrollbar { display: none; }
-  .sug-chip { white-space: nowrap; flex-shrink: 0; }
-}
-.chat-input-row { display: flex; gap: 8px; align-items: flex-end; padding-top: 10px; border-top: 1px solid var(--border); flex-shrink: 0; }
-.chat-input { flex: 1; padding: 12px 14px; font-size: 16px; font-family: 'DM Sans', sans-serif; border: 1.5px solid var(--cream-dark); border-radius: 14px; background: var(--cream); color: var(--text); resize: none; height: 48px; max-height: 120px; overflow-y: hidden; line-height: 1.5; transition: border-color 0.2s, background 0.2s; }
-.chat-input:focus { outline: none; border-color: var(--terracotta); background: var(--white); }
-.chat-input::placeholder { color: var(--text-muted); opacity: 0.6; }
-.btn-send { width: 48px; height: 48px; border-radius: 14px; background: var(--terracotta); border: none; color: white; font-size: 20px; cursor: pointer; transition: all 0.15s; flex-shrink: 0; display: flex; align-items: center; justify-content: center; touch-action: manipulation; }
-.btn-send:hover { background: #a04d2e; transform: scale(1.05); }
-.btn-send:active { transform: scale(0.95); }
-.btn-send:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
-
-.guide-hero { background: var(--warm-brown); color: var(--cream); border-radius: 18px; padding: 1.5rem 1.25rem; margin-bottom: 1.25rem; position: relative; overflow: hidden; }
-@media (min-width: 601px) { .guide-hero { padding: 2.25rem 2rem; border-radius: 20px; } }
-.guide-hero::before { content: '🍷'; position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); font-size: 64px; opacity: 0.07; pointer-events: none; }
-.guide-hero h2 { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 400; margin-bottom: 8px; line-height: 1.3; }
-@media (min-width: 601px) { .guide-hero h2 { font-size: 26px; } }
-.guide-hero p { font-size: 13px; opacity: 0.72; line-height: 1.7; }
-
-.guide-section-plain { margin-bottom: 1.5rem; }
-.guide-section-plain h3 { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 400; color: var(--warm-brown); margin-bottom: 5px; }
-.guide-section-plain .sec-summary { font-size: 13px; color: var(--text-muted); margin-bottom: 10px; line-height: 1.6; }
-.quick-table { background: var(--white); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow-sm); }
+/* ── GUIDE PANEL ─────────────────────────────────────────────── */
+#panel-guide { overflow-y: auto; }
+.guide-inner { max-width: 760px; margin: 0 auto; padding: 2rem 1.5rem 4rem; width: 100%; }
+.guide-hero { background: var(--warm-brown); color: var(--cream); border-radius: 20px; padding: 2rem; margin-bottom: 1.5rem; position: relative; overflow: hidden; }
+.guide-hero::before { content: '🍷'; position: absolute; right: 1.5rem; top: 50%; transform: translateY(-50%); font-size: 72px; opacity: 0.07; pointer-events: none; }
+.guide-hero h2 { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 400; margin-bottom: 8px; }
+.guide-hero p { font-size: 13.5px; opacity: 0.72; line-height: 1.7; }
+.sec-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 400; color: var(--warm-brown); margin: 1.5rem 0 0.75rem; }
+.quick-table { background: var(--white); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow-sm); margin-bottom: 1rem; }
 .qt-item + .qt-item { border-top: 1px solid var(--border); }
-.qt-row { display: flex; align-items: center; gap: 8px; padding: 14px 16px; font-size: 14px; cursor: pointer; transition: background 0.12s; user-select: none; touch-action: manipulation; min-height: 52px; }
-.qt-row:hover, .qt-row:active { background: var(--cream); }
-.qt-label { font-weight: 500; color: var(--text); flex: 1; line-height: 1.4; }
-.qt-val { display: none; }
-.qt-more { font-size: 13px; color: var(--terracotta); font-weight: 600; flex-shrink: 0; transition: transform 0.2s; padding: 4px 8px; background: var(--terracotta-light); border-radius: 8px; }
+.qt-row { display: flex; align-items: center; gap: 8px; padding: 14px 18px; cursor: pointer; transition: background 0.12s; min-height: 52px; touch-action: manipulation; }
+.qt-row:hover { background: var(--cream); }
+.qt-label { font-weight: 500; color: var(--text); flex: 1; font-size: 14px; }
+.qt-more { font-size: 13px; color: var(--terracotta); font-weight: 600; background: var(--terracotta-light); padding: 3px 10px; border-radius: 8px; transition: transform 0.2s; flex-shrink: 0; }
 .qt-item.open .qt-more { transform: rotate(90deg); }
-.qt-detail { display: none; padding: 14px 16px 18px; font-size: 13.5px; color: var(--text-muted); line-height: 1.8; border-top: 1px solid var(--border); background: var(--cream); animation: fadeUp 0.2s ease; }
+.qt-detail { display: none; padding: 12px 18px 16px; font-size: 13.5px; color: var(--text-muted); line-height: 1.8; border-top: 1px solid var(--border); background: var(--cream); }
 .qt-item.open .qt-detail { display: block; }
-.qt-item.open > .qt-row { background: var(--cream); }
-@media (min-width: 601px) {
-  .qt-row { padding: 13px 18px; font-size: 13.5px; }
-  .qt-val { display: block; color: var(--text-muted); line-height: 1.5; flex: 2; font-size: 13px; }
-  .qt-label { flex: none; min-width: 160px; }
-  .qt-more { background: none; padding: 0; font-size: 12px; }
-}
-
 .exp-section { border: 1px solid var(--border); border-radius: 14px; background: var(--white); margin-bottom: 10px; overflow: hidden; box-shadow: var(--shadow-sm); }
-.exp-header { display: flex; align-items: center; justify-content: space-between; padding: 16px; cursor: pointer; user-select: none; transition: background 0.15s; gap: 12px; touch-action: manipulation; min-height: 60px; }
-@media (min-width: 601px) { .exp-header { padding: 17px 22px; } }
-.exp-header:hover, .exp-header:active { background: var(--cream); }
-.exp-header-left { flex: 1; min-width: 0; }
-.exp-title { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 400; color: var(--warm-brown); margin-bottom: 2px; line-height: 1.3; }
-@media (min-width: 601px) { .exp-title { font-size: 17px; } }
-.exp-summary { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
-.exp-arrow { font-size: 20px; color: var(--text-muted); flex-shrink: 0; transition: transform 0.25s; line-height: 1; width: 28px; text-align: center; }
+.exp-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; cursor: pointer; transition: background 0.15s; gap: 12px; touch-action: manipulation; min-height: 60px; }
+.exp-header:hover { background: var(--cream); }
+.exp-title { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 400; color: var(--warm-brown); margin-bottom: 2px; }
+.exp-summary { font-size: 12px; color: var(--text-muted); }
+.exp-arrow { font-size: 20px; color: var(--text-muted); transition: transform 0.25s; flex-shrink: 0; }
 .exp-section.open .exp-arrow { transform: rotate(180deg); }
-.exp-body { display: none; padding: 0 16px 20px; border-top: 1px solid var(--border); }
-@media (min-width: 601px) { .exp-body { padding: 0 22px 24px; } }
+.exp-body { display: none; padding: 0 20px 20px; border-top: 1px solid var(--border); }
 .exp-section.open .exp-body { display: block; }
 .exp-body p { font-size: 13.5px; color: var(--text-muted); line-height: 1.85; margin-top: 14px; }
 .exp-body p + p { margin-top: 10px; }
 .exp-body strong { color: var(--text); font-weight: 500; }
+.temp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; }
+.temp-row { display: flex; flex-direction: column; gap: 3px; background: var(--cream); border-radius: 10px; padding: 10px 12px; }
+.temp-badge { font-size: 12px; font-weight: 600; color: var(--terracotta); }
+.temp-label { font-size: 12px; color: var(--text-muted); }
 
-.flavor-grid { display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 14px; }
-@media (min-width: 480px) { .flavor-grid { grid-template-columns: 1fr 1fr; } }
-.flavor-card { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
-.flavor-header { display: flex; align-items: center; justify-content: space-between; padding: 13px 14px; cursor: pointer; background: var(--cream); transition: background 0.15s; user-select: none; touch-action: manipulation; min-height: 52px; }
-.flavor-header:hover, .flavor-header:active { background: var(--cream-dark); }
-.flavor-name { font-size: 14px; font-weight: 500; color: var(--text); }
-.flavor-rule { font-size: 11.5px; color: var(--terracotta); font-weight: 500; margin-top: 2px; }
-.flavor-arrow { font-size: 14px; color: var(--text-muted); transition: transform 0.2s; flex-shrink: 0; margin-left: 10px; }
-.flavor-card.open .flavor-arrow { transform: rotate(180deg); }
-.flavor-body { display: none; padding: 13px 14px; font-size: 13.5px; color: var(--text-muted); line-height: 1.7; border-top: 1px solid var(--border); background: var(--white); }
-.flavor-card.open .flavor-body { display: block; }
-
-.avoid-table { margin-top: 14px; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
-.avoid-row { padding: 13px 14px; }
-.avoid-row + .avoid-row { border-top: 1px solid var(--border); }
-.avoid-combo { font-weight: 500; color: var(--text); margin-bottom: 5px; font-size: 14px; line-height: 1.3; }
-.avoid-why { font-size: 13px; color: var(--text-muted); line-height: 1.7; }
-
-.tip { border-left: 3px solid var(--terracotta); padding: 12px 14px; margin-top: 14px; font-size: 13.5px; color: var(--text-muted); line-height: 1.7; background: var(--terracotta-light); border-radius: 0 10px 10px 0; }
-.tip strong { color: var(--text); font-weight: 500; }
-
-.prio-table { margin-top: 14px; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
-.prio-row { display: flex; flex-direction: column; gap: 3px; padding: 12px 14px; font-size: 13.5px; }
-.prio-row + .prio-row { border-top: 1px solid var(--border); }
-.prio-label { font-weight: 500; color: var(--text); }
-.prio-val { color: var(--text-muted); line-height: 1.6; font-size: 13px; }
-@media (min-width: 601px) {
-  .prio-row { flex-direction: row; align-items: flex-start; gap: 12px; }
-  .prio-label { min-width: 190px; flex-shrink: 0; }
-  .prio-val { font-size: 13.5px; }
+/* MOBILE */
+@media (max-width: 600px) {
+  nav { padding: 0 1rem; }
+  .nav-tabs .nav-tab:nth-child(3) { display: none; }
+  .mobile-saved { display: flex; }
+  #panel-erik { height: calc(100vh - 60px - 56px); }
+  .erik-layout { padding: 0 1rem; }
+  .erik-intro { padding: 1.25rem 0 0.5rem; }
+  .erik-avatar { width: 58px; height: 58px; font-size: 26px; }
+  .erik-intro h1 { font-size: 22px; }
+  .suggestions-wrap { gap: 6px; overflow-x: auto; flex-wrap: nowrap; padding-bottom: 4px; justify-content: flex-start; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .suggestions-wrap::-webkit-scrollbar { display: none; }
+  .sug { flex-shrink: 0; }
+  .msg-bubble { max-width: 86%; font-size: 13.5px; }
+  #panel-saved { padding: 1.25rem 1rem 5rem; }
+  .guide-inner { padding: 1.25rem 1rem 5rem; }
+  .temp-grid { grid-template-columns: 1fr; }
+  .mobile-bottom-nav { display: flex; }
 }
-.exp-subhead { font-size: 13px; font-weight: 500; color: var(--text); margin-top: 16px; margin-bottom: 4px; }
+.mobile-bottom-nav {
+  display: none;
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--white); border-top: 1px solid var(--border);
+  z-index: 200;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.mbn-btn { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 0 8px; border: none; background: none; cursor: pointer; color: var(--text-muted); font-size: 10px; font-weight: 500; gap: 3px; touch-action: manipulation; font-family: 'DM Sans', sans-serif; }
+.mbn-btn .ico { font-size: 20px; line-height: 1; }
+.mbn-btn.active { color: var(--terracotta); }
 </style>
 </head>
 <body>
 
-
-
 <nav>
   <div class="nav-logo">Smak<span>kompass</span></div>
   <div class="nav-tabs">
-    <button class="nav-tab active" onclick="switchTab('match',this)">Matcha</button>
-    <button class="nav-tab" onclick="switchTab('chat',this)">Sommelier</button>
-    <button class="nav-tab" onclick="switchTab('saved',this)">Sparade <span class="saved-badge" id="saved-count"></span></button>
-    <button class="nav-tab" onclick="switchTab('guide',this)">Guide</button>
+    <button class="nav-tab active" onclick="showPanel('erik',this)">Sommelier</button>
+    <button class="nav-tab" onclick="showPanel('saved',this)">Sparade <span class="saved-badge" id="saved-badge"></span></button>
+    <button class="nav-tab" onclick="showPanel('guide',this)">Guide</button>
   </div>
 </nav>
 
-<div class="mobile-nav" id="mobile-nav">
-  <button class="mobile-nav-btn active" id="mnb-match" onclick="switchTabMobile('match')"><span class="mni">🍽</span>Matcha</button>
-  <button class="mobile-nav-btn" id="mnb-chat" onclick="switchTabMobile('chat')"><span class="mni">🍷</span>Sommelier</button>
-  <button class="mobile-nav-btn" id="mnb-saved" onclick="switchTabMobile('saved')"><span class="mni">🔖</span>Sparade <span class="saved-badge" id="saved-count-m"></span></button>
-  <button class="mobile-nav-btn" id="mnb-guide" onclick="switchTabMobile('guide')"><span class="mni">📖</span>Guide</button>
+<!-- MOBILE NAV -->
+<div class="mobile-bottom-nav">
+  <button class="mbn-btn active" id="mbn-erik" onclick="showPanelMobile('erik')"><span class="ico">🍷</span>Sommelier</button>
+  <button class="mbn-btn" id="mbn-saved" onclick="showPanelMobile('saved')"><span class="ico">🔖</span>Sparade</button>
+  <button class="mbn-btn" id="mbn-guide" onclick="showPanelMobile('guide')"><span class="ico">📖</span>Guide</button>
 </div>
 
-<main>
-  <!-- MATCH -->
-  <div id="panel-match" class="panel active">
-    <div class="hero">
-      <h1>Hitta rätt dryck<br>till din <em>rätt</em></h1>
-      <p>Beskriv vad du lagar — få professionella matchningar<br>på vin, öl, drinkar och alkoholfritt</p>
-    </div>
-    <div class="search-card">
-      <label class="search-label">Din rätt</label>
-      <textarea id="mat-input" placeholder="Beskriv rätten... t.ex. grillad entrecôte med chimichurri och rostad potatis"></textarea>
-      <div class="detail-row">
-        <span class="detail-label">Detaljnivå:</span>
-        <div class="detail-btns">
-          <button class="detail-btn" data-val="enkel" onclick="setDetail(this)">Enkel</button>
-          <button class="detail-btn active" data-val="normal" onclick="setDetail(this)">Normal</button>
-          <button class="detail-btn" data-val="detaljerad" onclick="setDetail(this)">Detaljerad</button>
-        </div>
-      </div>
-      <div class="search-row">
-        <div class="chips-wrap" id="chips-wrap"></div>
-        <button class="btn-search" id="match-btn" onclick="matchaDryck()">Matcha →</button>
-      </div>
-    </div>
-    <div id="result-area">
-      <div class="status">
-        <div class="status-icon">◌</div>
-        Skriv in en rätt ovan för att komma igång
-        <div class="status-sub">Allt från en enkel pasta till en nordisk sjusätters</div>
-      </div>
-    </div>
-  </div>
+<!-- ── PANEL: ERIK ───────────────────────────────────────────── -->
+<div id="panel-erik" class="panel active">
+  <div class="erik-layout">
 
-  <!-- CHAT -->
-  <div id="panel-chat" class="panel">
-    <div class="chat-wrap">
-      <div class="chat-header">
-        <div class="chat-avatar">🍷</div>
-        <div class="chat-header-info">
-          <div class="chat-header-name">Sommelier Erik</div>
-          <div class="chat-header-status">Ställ en fråga om vin, mat eller dryck</div>
-        </div>
-        <button class="chat-clear" onclick="clearChat()">Rensa</button>
+    <div class="erik-intro" id="erik-intro">
+      <div class="erik-avatar-wrap">
+        <div class="erik-avatar">🍷</div>
+        <div class="erik-online"></div>
       </div>
-      <div class="chat-messages" id="chat-messages"></div>
-      <div class="chat-suggestions" id="chat-suggestions">
-        <button class="sug-chip" onclick="sendSuggestion(this)">Vilket glas till rött vin?</button>
-        <button class="sug-chip" onclick="sendSuggestion(this)">Jag ska äta sushi ikväll</button>
-        <button class="sug-chip" onclick="sendSuggestion(this)">Bästa champagnen under 200 kr?</button>
-        <button class="sug-chip" onclick="sendSuggestion(this)">Vad är skillnaden på Merlot och Cabernet?</button>
-        <button class="sug-chip" onclick="sendSuggestion(this)">Vilket vin passar till oxfilé?</button>
-        <button class="sug-chip" onclick="sendSuggestion(this)">Hur serverar man vin rätt temperatur?</button>
-      </div>
-      <div class="chat-input-row">
-        <textarea class="chat-input" id="chat-input" placeholder="Fråga om vin, mat, glas, temperatur..." rows="1"></textarea>
-        <button class="btn-send" id="chat-send" onclick="sendChat()">↑</button>
+      <h1>Din personliga <em>sommelier</em></h1>
+      <p>Berätta vad du lagar — jag matchar rätt dryck. Eller ställ en fråga om vin, öl eller mat.</p>
+    </div>
+
+    <div class="suggestions-wrap" id="suggestions">
+      <button class="sug" onclick="useSug(this)">🥩 Jag grillar entrecôte ikväll</button>
+      <button class="sug" onclick="useSug(this)">🐟 Vad passar till lax?</button>
+      <button class="sug" onclick="useSug(this)">🍝 Pasta carbonara</button>
+      <button class="sug" onclick="useSug(this)">🌶️ Kryddig thaigryta</button>
+      <button class="sug" onclick="useSug(this)">🧀 Vad vet du om ost och vin?</button>
+      <button class="sug" onclick="useSug(this)">🍾 Budget-champagne?</button>
+    </div>
+
+    <div class="erik-messages" id="erik-messages"></div>
+
+    <div class="erik-input-wrap">
+      <div class="erik-input-row">
+        <textarea class="erik-input" id="erik-input" placeholder="Berätta vad du lagar, eller ställ en fråga..." rows="1"></textarea>
+        <button class="btn-send" id="btn-send" onclick="sendMsg()">↑</button>
       </div>
     </div>
-  </div>
 
-  <!-- SAVED -->
-  <div id="panel-saved" class="panel">
-    <div class="hero">
-      <h1>Sparade<br><em>kombinationer</em></h1>
-      <p>Dina favoritparningar på ett ställe</p>
-    </div>
-    <div id="saved-area"></div>
   </div>
+</div>
 
-  <!-- GUIDE -->
-  <div id="panel-guide" class="panel">
+<!-- ── PANEL: SPARADE ────────────────────────────────────────── -->
+<div id="panel-saved" class="panel">
+  <div style="font-family:'Playfair Display',serif;font-size:28px;font-weight:400;color:var(--warm-brown);margin-bottom:6px;">Sparade<br><em style="color:var(--terracotta)">kombinationer</em></div>
+  <p style="font-size:14px;color:var(--text-muted);margin-bottom:1.5rem;">Dina favoritparningar på ett ställe</p>
+  <div id="saved-area"></div>
+</div>
+
+<!-- ── PANEL: GUIDE ──────────────────────────────────────────── -->
+<div id="panel-guide" class="panel">
+  <div class="guide-inner">
     <div class="guide-hero">
       <h2>Din guide till mat &amp; dryck</h2>
-      <p>Här hittar du den kunskap som sommeliererna studerar i flera år — förklarad på ett sätt som faktiskt går att förstå och använda direkt i köket.</p>
-    </div>
-    <div class="guide-section-plain">
-      <h3>Snabbreferens</h3>
-      <p class="sec-summary">Slå upp vad som passar till din rätt. Klicka på en rad för att förstå varför.</p>
-      <div class="quick-table">
-        <div class="qt-item" id="qt-salt"><div class="qt-row" onclick="toggleQt('qt-salt')"><div class="qt-label">Salt mat</div><div class="qt-val">Passar med nästan vad som helst</div><div class="qt-more">→</div></div><div class="qt-detail">Salt är dryckens bästa vän. Det dämpar bitterhet och strävhet — tanniner och humlebeska upplevs mjukare. Klassisk kombination: ostron och champagne. Praktiskt tips: fokusera på de andra smakerna i rätten — saltet sköter sig självt.</div></div>
-        <div class="qt-item" id="qt-syra"><div class="qt-row" onclick="toggleQt('qt-syra')"><div class="qt-label">Syrlig mat</div><div class="qt-val">Kräver minst lika syrlig dryck</div><div class="qt-more">→</div></div><div class="qt-detail">Om maten har mer syra än drycken upplevs drycken som platt och söt. Välj alltid en dryck med minst lika hög syra. Till ceviche: Albariño eller Vinho Verde. Till vinägerdressing: Sauvignon Blanc eller Chablis. Till tomatsås: Chianti eller Barbera d'Asti.</div></div>
-        <div class="qt-item" id="qt-umami"><div class="qt-row" onclick="toggleQt('qt-umami')"><div class="qt-label">Umami-rik mat</div><div class="qt-val">Mjukt, fruktigt vin — hårda tanniner undviks</div><div class="qt-more">→</div></div><div class="qt-detail">Umami förstärker bitterheten hos tanniner — vinet kan smaka metalliskt. Umami finns i: lagrad ost, svamp, soja, miso, ansjovis. Välj: Pinot Noir, mjuk Merlot, eller friska vita viner. Undvik: Barolo, Brunello, ung Cabernet Sauvignon.</div></div>
-        <div class="qt-item" id="qt-kryddigt"><div class="qt-row" onclick="toggleQt('qt-kryddigt')"><div class="qt-label">Kryddig och het mat</div><div class="qt-val">Låg alkohol, sötma och kolsyra — undvik torrt rödvin</div><div class="qt-more">→</div></div><div class="qt-detail">Hetta och alkohol adderas — kraftigt rödvin gör kryddig mat outhärdlig. Kolsyra är faktiskt kylande. Bäst: halvtorrt Riesling, Prosecco, Cava, eller iskall lager. Undvik: Amarone, Barolo, Zinfandel och kraftiga röda med hög alkohol.</div></div>
-        <div class="qt-item" id="qt-sott"><div class="qt-row" onclick="toggleQt('qt-sott')"><div class="qt-label">Söt mat och desserter</div><div class="qt-val">Drycken måste vara minst lika söt — aldrig torrare</div><div class="qt-more">→</div></div><div class="qt-detail">När maten är sötare än drycken upplevs drycken som syrlig och livlös. Drycken ska alltid vara lika söt eller sötare. Klassiker: Sauternes till crème brûlée, Vintage Port till mörk choklad, Moscato d'Asti till bärdesserter.</div></div>
-        <div class="qt-item" id="qt-fett"><div class="qt-row" onclick="toggleQt('qt-fett')"><div class="qt-label">Fet och rik mat</div><div class="qt-val">Syra, kolsyra eller tanniner skär igenom</div><div class="qt-more">→</div></div><div class="qt-detail">Fett belägger smaklökarna. Syra bryter ned fetthinnan kemiskt — som att pressa citron på stekt fisk. Kolsyra skrubbar bort fettet mekaniskt. Tanniner binder till proteiner i fettet. Välj: syrliga vita, Champagne, Cava, eller tanninrika röda till fett kött.</div></div>
-        <div class="qt-item" id="qt-grillat"><div class="qt-row" onclick="toggleQt('qt-grillat')"><div class="qt-label">Grillat och rökt</div><div class="qt-val">Fruktiga, tanninrika röda — rök trivs med tanniner</div><div class="qt-more">→</div></div><div class="qt-detail">Grillningens bittra och rökiga aromer kompletterar tanninerna. Till entrecôte/lamm: Cabernet Sauvignon. Till fläsk/rökt kyckling: Syrah/Shiraz. Till grillad fisk: rosé från Provence.</div></div>
-        <div class="qt-item" id="qt-fisk"><div class="qt-row" onclick="toggleQt('qt-fisk')"><div class="qt-label">Fisk och skaldjur</div><div class="qt-val">Friska vita, mousserande eller lätt rosé</div><div class="qt-more">→</div></div><div class="qt-detail">Fisk och skaldjur reagerar med tanniner — skapar metallisk bismak. Råa ostron: Muscadet, Chablis, Albariño. Pocherad fisk: Pinot Grigio, Soave. Grillad helfisk: Grüner Veltliner, Vermentino. Stekt med smörsås: Chardonnay från Bourgogne.</div></div>
-        <div class="qt-item" id="qt-ost"><div class="qt-row" onclick="toggleQt('qt-ost')"><div class="qt-label">Ost</div><div class="qt-val">Beror på osten — ingen enkel regel</div><div class="qt-more">→</div></div><div class="qt-detail">Rödvin passar inte alltid. Lagrade ostar (Parmesan, Comté) har umami som förstärker tanniner negativt. Friska vita passar bättre till de flesta ostar. Klassiker: Chablis till getost, Sauternes till roquefort. Rödvin: välj mjukare ostar som brie med Pinot Noir.</div></div>
-      </div>
+      <p>Det sommeliererna studerar i år — förklarat så att du kan använda det direkt i köket.</p>
     </div>
 
-    <div class="guide-section-plain">
-      <h3>Fördjupning</h3>
-      <p class="sec-summary">Klicka för att öppna och läsa mer om varje ämne.</p>
+    <div class="sec-title">Snabbreferens</div>
+    <div class="quick-table">
+      <div class="qt-item" id="qt-salt"><div class="qt-row" onclick="toggleQt('qt-salt')"><div class="qt-label">🧂 Salt mat</div><div class="qt-more">→</div></div><div class="qt-detail">Salt är dryckens bästa vän — det dämpar bitterhet och tanniner. Klassisk kombination: ostron och champagne. Fokusera på övriga smaker i rätten; saltet sköter sig självt.</div></div>
+      <div class="qt-item" id="qt-syra"><div class="qt-row" onclick="toggleQt('qt-syra')"><div class="qt-label">🍋 Syrlig mat</div><div class="qt-more">→</div></div><div class="qt-detail">Om maten har mer syra än drycken upplevs drycken som platt och söt. Välj alltid minst lika hög syra. Till ceviche: Albariño. Till tomatsås: Chianti. Till vinägerdressing: Chablis.</div></div>
+      <div class="qt-item" id="qt-umami"><div class="qt-row" onclick="toggleQt('qt-umami')"><div class="qt-label">🍄 Umami-rik mat</div><div class="qt-more">→</div></div><div class="qt-detail">Umami (svamp, lagrad ost, soja) förstärker tanniners bitterhet — kan ge metallsmak. Välj: Pinot Noir, mjuk Merlot, friska vita. Undvik: Barolo, ung Cabernet Sauvignon.</div></div>
+      <div class="qt-item" id="qt-het"><div class="qt-row" onclick="toggleQt('qt-het')"><div class="qt-label">🌶️ Het och kryddig mat</div><div class="qt-more">→</div></div><div class="qt-detail">Alkohol och capsaicin adderas — kraftigt rödvin gör maten outhärdlig. Välj: halvtorrt Riesling, Prosecco, Cava, eller iskall lager. Sötma och kolsyra kyler ner hettan.</div></div>
+      <div class="qt-item" id="qt-sott"><div class="qt-row" onclick="toggleQt('qt-sott')"><div class="qt-label">🍰 Söta desserter</div><div class="qt-more">→</div></div><div class="qt-detail">Drycken måste vara minst lika söt som maten — annars smakar den sur och livlös. Klassiker: Sauternes till crème brûlée, Vintage Port till mörk choklad.</div></div>
+      <div class="qt-item" id="qt-fisk"><div class="qt-row" onclick="toggleQt('qt-fisk')"><div class="qt-label">🐟 Fisk och skaldjur</div><div class="qt-more">→</div></div><div class="qt-detail">Jodföreningar i fisk reagerar med tanniner och ger metallsmak. Välj: Muscadet, Chablis, Albariño, Champagne Blanc de Blancs. Rosé fungerar till grillad fisk.</div></div>
+    </div>
 
-      <div class="exp-section" id="sec-harmoni">
-        <div class="exp-header" onclick="toggleSec('sec-harmoni')"><div class="exp-header-left"><div class="exp-title">Harmoni eller kontrast — de två strategierna</div><div class="exp-summary">Allt mat-och-dryckestänkande bygger på en av dessa två.</div></div><div class="exp-arrow">▾</div></div>
-        <div class="exp-body"><p><strong>Harmoni</strong> innebär att dryckens smaker speglar matens egna smaker. Rik hummer bisque med ekfatslagrat Chardonnay — bådas krämighet förstärker varandra.</p><p><strong>Kontrast</strong> innebär att dryckens smaker balanserar matens svagheter. Samma bisque med frisk Champagne — syran skär igenom krämigheten och lyfter hummerns sötma.</p><p>Harmoni ger en mjuk, bekväm upplevelse. Kontrast ger mer spänning och minnesvärda ögonblick. Börja med harmoni om du är osäker.</p></div>
-      </div>
+    <div class="sec-title">Fördjupning</div>
 
-      <div class="exp-section" id="sec-intensitet">
-        <div class="exp-header" onclick="toggleSec('sec-intensitet')"><div class="exp-header-left"><div class="exp-title">Matcha intensitet — den glömda regeln</div><div class="exp-summary">En delikat rätt och ett kraftigt vin drar åt varsitt håll.</div></div><div class="exp-arrow">▾</div></div>
-        <div class="exp-body"><p>Lätt mat till lätta drycker, kraftig mat till kraftiga drycker. En citronmarinerad branzino försvinner totalt bredvid ett kraftigt Barolo. En 600g côte de boeuf gör ett lätt Beaujolais osynligt.</p><p><strong>Snabbtest:</strong> Upplevs rätten som lätt och subtil, medelfyllig, eller kraftig och dominant? Välj dryck på exakt samma intensitetsnivå.</p></div>
-      </div>
+    <div class="exp-section" id="sec-harmoni">
+      <div class="exp-header" onclick="toggleSec('sec-harmoni')"><div><div class="exp-title">Harmoni eller kontrast</div><div class="exp-summary">De två strategierna bakom all pairing</div></div><div class="exp-arrow">▾</div></div>
+      <div class="exp-body"><p><strong>Harmoni:</strong> dryckens smaker speglar matens. Rik hummer bisque med ekfatslagrat Chardonnay — bådas krämighet förstärker varandra.</p><p><strong>Kontrast:</strong> dryckens smaker balanserar matens svagheter. Samma bisque med frisk Champagne — syran skär igenom fettet och lyfter hummerns sötma.</p><p>Harmoni ger en mjuk, bekväm upplevelse. Kontrast ger mer spänning. Börja med harmoni om du är osäker.</p></div>
+    </div>
 
-      <div class="exp-section" id="sec-fem">
-        <div class="exp-header" onclick="toggleSec('sec-fem')"><div class="exp-header-left"><div class="exp-title">De fem grundsmakerna — vad de gör med drycken</div><div class="exp-summary">Förstår du detta vet du 80% av allt du behöver.</div></div><div class="exp-arrow">▾</div></div>
-        <div class="exp-body">
-          <div class="flavor-grid">
-            <div class="flavor-card" id="fl-salt"><div class="flavor-header" onclick="toggleFlavor('fl-salt')"><div><div class="flavor-name">Salt</div><div class="flavor-rule">Mjukar upp drycken</div></div><div class="flavor-arrow">▾</div></div><div class="flavor-body">Salt dämpar bitterhet och strävhet kemiskt. Tanniner och humlebeska upplevs mjukare och rundare. Salt lyfter också fram fruktighet och sötma. Det mest förlåtande av alla smaker — nästan vilken dryck mår bra av salt mat.</div></div>
-            <div class="flavor-card" id="fl-surt"><div class="flavor-header" onclick="toggleFlavor('fl-surt')"><div><div class="flavor-name">Surt / Syrligt</div><div class="flavor-rule">Kräver syra i drycken</div></div><div class="flavor-arrow">▾</div></div><div class="flavor-body">Om maten har mer syra upplevs drycken som platt och söt — all fräschör försvinner. Välj alltid minst lika hög syra. Viner med naturligt hög syra: Sauvignon Blanc, Riesling, Chablis, Albariño, Barbera d'Asti, Champagne.</div></div>
-            <div class="flavor-card" id="fl-umami"><div class="flavor-header" onclick="toggleFlavor('fl-umami')"><div><div class="flavor-name">Umami</div><div class="flavor-rule">Förstärker bitterhet</div></div><div class="flavor-arrow">▾</div></div><div class="flavor-body">Umami förstärker tanninernas bitterhet markant — kan ge metallisk smak. Finns i: lagrad ost, svamp, soja, miso, ansjovis, sardiner, tomater, långlagrat kött. Välj: Pinot Noir, mjuk Merlot, friska vita. Undvik: Barolo, Brunello, ung Cab Sauv.</div></div>
-            <div class="flavor-card" id="fl-hett"><div class="flavor-header" onclick="toggleFlavor('fl-hett')"><div><div class="flavor-name">Hett / Kryddigt</div><div class="flavor-rule">Alkohol och tannin förvärrar</div></div><div class="flavor-arrow">▾</div></div><div class="flavor-body">Capsaicin och alkohol aktiverar samma smärtreceptorer och adderas. Sötma och kolsyra motverkar hettan. Välj: halvtorrt Riesling, Moscato, lätt Prosecco, eller iskall lager. Rödvin: lätt, fruktrikt med låg alkohol (12–12,5%) och minimala tanniner.</div></div>
-            <div class="flavor-card" id="fl-sott"><div class="flavor-header" onclick="toggleFlavor('fl-sott')"><div><div class="flavor-name">Sött</div><div class="flavor-rule">Drycken får aldrig vara torrare</div></div><div class="flavor-arrow">▾</div></div><div class="flavor-body">Söt mat avslöjar brutalt om drycken är för torr — den smakar syrlig och tunn. Drycken måste vara minst lika söt som maten. Klassiker: Sauternes till crème brûlée, Vintage Port till choklad, Moscato d'Asti till bärpannacotta.</div></div>
-            <div class="flavor-card" id="fl-fett"><div class="flavor-header" onclick="toggleFlavor('fl-fett')"><div><div class="flavor-name">Fett</div><div class="flavor-rule">Syra och kolsyra rensar</div></div><div class="flavor-arrow">▾</div></div><div class="flavor-body">Fett belägger smaklökarna. Syra eller kolsyra i drycken bryter ned fetthinnan — precis som citron på stekt fisk. Välj: syrliga vita, Champagne, Cava, eller tanninrika röda till fett kött. Undvik: mjuka, söta drycker till fet mat.</div></div>
-          </div>
+    <div class="exp-section" id="sec-intensitet">
+      <div class="exp-header" onclick="toggleSec('sec-intensitet')"><div><div class="exp-title">Matcha intensitet</div><div class="exp-summary">Den glömda grundregeln</div></div><div class="exp-arrow">▾</div></div>
+      <div class="exp-body"><p>Lätt mat till lätta drycker — kraftig mat till kraftiga drycker. En citronmarinerad branzino försvinner totalt bredvid ett kraftigt Barolo. En 600g côte de boeuf gör ett lätt Beaujolais osynligt.</p><p><strong>Snabbtest:</strong> Upplevs rätten som lätt, medelfyllig, eller kraftig? Välj dryck på exakt samma nivå.</p></div>
+    </div>
+
+    <div class="exp-section" id="sec-temp">
+      <div class="exp-header" onclick="toggleSec('sec-temp')"><div><div class="exp-title">Serveringstemperatur</div><div class="exp-summary">Det mest underskattade verktyget</div></div><div class="exp-arrow">▾</div></div>
+      <div class="exp-body">
+        <p>För kallt stänger aromer. För varmt lyfter alkoholen och vinet blir slapp.</p>
+        <div class="temp-grid">
+          <div class="temp-row"><div class="temp-badge">6–9°C</div><div class="temp-label">Champagne & mousserande</div></div>
+          <div class="temp-row"><div class="temp-badge">8–10°C</div><div class="temp-label">Lätta vita viner</div></div>
+          <div class="temp-row"><div class="temp-badge">10–12°C</div><div class="temp-label">Fylliga vita viner</div></div>
+          <div class="temp-row"><div class="temp-badge">8–12°C</div><div class="temp-label">Rosé</div></div>
+          <div class="temp-row"><div class="temp-badge">14–16°C</div><div class="temp-label">Lätta röda viner</div></div>
+          <div class="temp-row"><div class="temp-badge">17–19°C</div><div class="temp-label">Kraftiga röda viner</div></div>
         </div>
-      </div>
-
-      <div class="exp-section" id="sec-undvik">
-        <div class="exp-header" onclick="toggleSec('sec-undvik')"><div class="exp-header-left"><div class="exp-title">Kombinationer att undvika — och varför</div><div class="exp-summary">Förstå misstagen och du undviker dem automatiskt.</div></div><div class="exp-arrow">▾</div></div>
-        <div class="exp-body">
-          <div class="avoid-table">
-            <div class="avoid-row"><div class="avoid-combo">Kryddig het mat + kraftigt torrt rödvin</div><div class="avoid-why">Alkohol och capsaicin adderas — förvandlar mediumstark mat till eld. Välj halvtorrt Riesling, lager eller Prosecco.</div></div>
-            <div class="avoid-row"><div class="avoid-combo">Söt dessert + torrt vin</div><div class="avoid-why">Söt mat gör att torrt vin smakar surt och obehagligt. Välj Sauternes, Moscato d'Asti eller Vintage Port.</div></div>
-            <div class="avoid-row"><div class="avoid-combo">Vinägerdressing + mjukt vitt vin</div><div class="avoid-why">Stark syra gör att Pinot Grigio eller Chardonnay upplevs som platt. Välj Sauvignon Blanc, Chablis eller Albariño.</div></div>
-            <div class="avoid-row"><div class="avoid-combo">Umami-intensiv mat + ungt tanninrikt rödvin</div><div class="avoid-why">Svamp, lagrad ost och soja skapar metallisk bismak med unga tanniner. Välj Pinot Noir, mjuk Merlot eller friskt vitt.</div></div>
-            <div class="avoid-row"><div class="avoid-combo">Delikat fisk + kraftigt tanninrikt rödvin</div><div class="avoid-why">Jodföreningar i fisk reagerar med tanniner — metallsmak. Välj Muscadet, Albariño, Chablis eller Champagne Blanc de Blancs.</div></div>
-            <div class="avoid-row"><div class="avoid-combo">Mörk choklad + torrt tanninrikt rödvin</div><div class="avoid-why">Chokladens och tanninernas bitterhet adderas istället för att balansera. Välj Vintage Port, Pedro Ximénez Sherry eller Banyuls.</div></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="exp-section" id="sec-temp">
-        <div class="exp-header" onclick="toggleSec('sec-temp')"><div class="exp-header-left"><div class="exp-title">Temperatur — det mest underskattade</div><div class="exp-summary">Fel temperatur kan förstöra ett perfekt vin till en perfekt rätt.</div></div><div class="exp-arrow">▾</div></div>
-        <div class="exp-body">
-          <p>För kallt: aromer stängs ned, syra och tanniner känns hårdare. För varmt: alkoholen tar överhanden, vinet blir slapp och aromer dunstar.</p>
-          <div class="prio-table">
-            <div class="prio-row"><div class="prio-label">Lätta vita (Sauvignon Blanc, Chablis)</div><div class="prio-val">8–10°C</div></div>
-            <div class="prio-row"><div class="prio-label">Fylliga vita (Chardonnay, Viognier)</div><div class="prio-val">10–12°C</div></div>
-            <div class="prio-row"><div class="prio-label">Rosé</div><div class="prio-val">8–12°C</div></div>
-            <div class="prio-row"><div class="prio-label">Lätta röda (Pinot Noir, Beaujolais)</div><div class="prio-val">14–16°C — gärna lätt kylt</div></div>
-            <div class="prio-row"><div class="prio-label">Kraftiga röda (Cabernet, Barolo)</div><div class="prio-val">17–19°C</div></div>
-            <div class="prio-row"><div class="prio-label">Champagne & mousserande</div><div class="prio-val">6–9°C</div></div>
-          </div>
-          <div class="tip"><strong>Snabbfix:</strong> För varmt — 20 minuter i kylskåpet. För kallt — håll glaset i handen ett par minuter.</div>
-        </div>
+        <p style="margin-top:12px;font-size:13px;color:var(--text-muted);"><strong>Snabbfix:</strong> För varmt → 20 min i kylskåpet. För kallt → håll glaset i handen.</p>
       </div>
     </div>
+
   </div>
-</main>
+</div>
 
 <script>
-// ── API CALLS via backend ─────────────────────────────────────────────────────
-async function callClaude(messages, system) {
-  const resp = await fetch('/api/match', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ messages, system })
-  });
-  const data = await resp.json();
-  if (!resp.ok) throw new Error(data.error || 'API-fel');
-  return data.content[0]?.text || '';
-}
-
-// ── STATE ─────────────────────────────────────────────────────────────────────
-let current = null;
-let detaljniva = 'normal';
-
-const CHIPS = ['Grillad lax med citronsås','Kryddig thaigryta med räkor','Oxfilé med rödvinssås','Pasta carbonara','Sushi och sashimi','Köttbullar med gräddsås','Grillad hummer','Lammrack med örtkrusta','Vegansk burger','Mörk chokladmousse','Ceviche med lime','Falafel med hummus'];
-
-(function init() {
-  updateBadge();
-  renderChips();
-  initChat();
-  document.getElementById('mat-input').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); matchaDryck(); }
-  });
-})();
-
-function renderChips() {
-  const shuffled = [...CHIPS].sort(() => Math.random() - 0.5).slice(0, 4);
-  document.getElementById('chips-wrap').innerHTML = shuffled.map(c => `<span class="chip" onclick="fillChip(this)">${c}</span>`).join('');
-}
-function fillChip(el) { document.getElementById('mat-input').value = el.textContent; }
-function setDetail(el) { document.querySelectorAll('.detail-btn').forEach(b => b.classList.remove('active')); el.classList.add('active'); detaljniva = el.dataset.val; }
-
-// ── TAB ───────────────────────────────────────────────────────────────────────
-function switchTab(name, el) {
-  document.querySelectorAll('.section, .panel').forEach(p => p.classList.remove('active'));
+// ── PANELS ────────────────────────────────────────────────────────
+function showPanel(name, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
   document.getElementById('panel-' + name).classList.add('active');
-  el.classList.add('active');
+  if (btn) btn.classList.add('active');
   if (name === 'saved') renderSaved();
 }
-function switchTabMobile(name) {
+function showPanelMobile(name) {
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.mobile-nav-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.mbn-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('panel-' + name).classList.add('active');
-  document.getElementById('mnb-' + name).classList.add('active');
+  document.getElementById('mbn-' + name).classList.add('active');
   if (name === 'saved') renderSaved();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.scrollTo({ top: 0 });
 }
 
-// ── TOGGLE HELPERS ────────────────────────────────────────────────────────────
-function toggleSec(id) { document.getElementById(id).classList.toggle('open'); }
+// ── GUIDE TOGGLES ─────────────────────────────────────────────────
 function toggleQt(id) { document.getElementById(id).classList.toggle('open'); }
-function toggleFlavor(id) { document.getElementById(id).classList.toggle('open'); }
-function toggleRecept(id) { document.getElementById(id).classList.toggle('open'); }
+function toggleSec(id) { document.getElementById(id).classList.toggle('open'); }
 
-// ── SB HELPERS ────────────────────────────────────────────────────────────────
-function sbUrl(q) {
-  const clean = (q || '').replace(/\b(19|20)\d{2}\b/g,'').replace(/\(.*?\)/g,'').trim();
-  return 'https://www.systembolaget.se/sok/?searchQuery=' + encodeURIComponent(clean);
-}
-function sbFooter(namn) {
-  if (!namn) return '';
-  const uid = 'cp-' + Math.random().toString(36).slice(2,8);
-  return `<div class="drink-card-footer">
-    <button class="btn-copy" id="${uid}" onclick="copyNr('${namn.replace(/'/g,"\\'")}','${uid}')">Kopiera namn</button>
-    <a class="sb-link" href="${sbUrl(namn)}" target="_blank" rel="noopener">Systembolaget →</a>
-  </div>`;
-}
-function copyNr(text, btnId) {
-  navigator.clipboard.writeText(text).catch(() => {});
-  const btn = document.getElementById(btnId);
-  if (btn) { btn.textContent = '✓ Kopierat!'; btn.classList.add('copied'); setTimeout(() => { btn.textContent = 'Kopiera namn'; btn.classList.remove('copied'); }, 2000); }
-}
+// ── CHAT STATE ────────────────────────────────────────────────────
+let history = [];
+let busy = false;
+let lastMatch = null;
 
-// ── MATCH ─────────────────────────────────────────────────────────────────────
-async function matchaDryck() {
-  const mat = document.getElementById('mat-input').value.trim();
-  if (!mat) { document.getElementById('mat-input').focus(); return; }
-  const btn = document.getElementById('match-btn');
-  const area = document.getElementById('result-area');
-  btn.disabled = true; btn.textContent = 'Analyserar...';
-  area.innerHTML = `<div class="status"><div class="status-spinner"></div><br>Sommelieren analyserar rätten…<div class="status-sub">Söker perfekta matchningar</div></div>`;
+const SYSTEM = `Du är en varm och engagerad svensk sommelier med WSET Diploma och 20 års erfarenhet från restauranger i Sverige och Frankrike. Du jobbar nu som personlig dryckesrådgivare via Smakkompass.
 
-  const system = `Du är en WSET Diploma-certifierad sommelier. Svara ALLTID med ett JSON-objekt och inget annat. Inga backticks, ingen text utanför JSON. Exakt detta format:
-{"ratt":"namn på rätten","smakprofil":"2 meningar om smakprofilen","dominerandeSmaker":["smak1","smak2","smak3"],"sommelierTips":"1-2 meningar personligt tips","viner":[{"namn":"vinnamn","producent":"producent","druva":"druvsort","region":"region","pris_sek":"ca XXX kr","varfor":"varför det passar"},{"namn":"...","producent":"...","druva":"...","region":"...","pris_sek":"ca XXX kr","varfor":"..."}],"ol":{"namn":"ölnamn","bryggeri":"bryggeri","typ":"ölstil","land":"land","pris_sek":"ca XX kr","varfor":"varför det passar"},"alkoholfritt":{"namn":"namn","beskrivning":"kort beskrivning","varfor":"varför det passar","pris_sek":"ca XX kr"},"drinkar":[{"namn":"drinknamn","varfor":"varför det passar","recept":{"ingredienser":["X cl ingrediens"],"instruktion":"gör så här"}}]}`;
+Du är pedagogisk, varm och aldrig nedlåtande. Du förklarar alltid VARFÖR en kombination funkar.
 
-  const detailMap = { enkel: 'Ge enkla, tillgängliga rekommendationer. Prioritera välkända viner från Systembolaget.', normal: 'Ge professionella rekommendationer med bra balans mellan tillgänglighet och kvalitet.', detaljerad: 'Ge detaljerade, djupgående rekommendationer med terroir-information och avancerad smakkemi.' };
+NÄR ANVÄNDAREN NÄMNER EN MATRÄTT eller frågar vad som passar till mat:
+Svara med ett JSON-objekt i denna exakta form — ingenting annat, inga backticks:
+{"typ":"match","intro":"1-2 meningar personligt hälsning/intro om rätten","ratt":"rättens namn","viner":[{"namn":"vinnamn","druva":"druvsort","region":"region","pris":"ca XXX kr","varfor":"varför det passar"},{"namn":"...","druva":"...","region":"...","pris":"ca XXX kr","varfor":"..."}],"ol":{"namn":"ölnamn","typ":"ölstil","pris":"ca XX kr","varfor":"varför"},"alkoholfritt":{"namn":"namn","pris":"ca XX kr","varfor":"varför"},"tips":"ett kort praktiskt tips"}
 
-  try {
-    const text = await callClaude([{ role: 'user', content: `Rätt: "${mat}". ${detailMap[detaljniva]} Ge dryckesrekommendationer på svenska.` }], system);
-    if (!text) return;
-    let data;
-    try {
-      const clean = text.replace(/```json|```/g,'').trim();
-      data = JSON.parse(clean);
-    } catch(e) {
-      throw new Error('Kunde inte tolka svaret. Försök igen.');
-    }
-    current = { ...data, _input: mat };
-    renderResult(current);
-  } catch(e) {
-    area.innerHTML = `<div class="error-box"><div class="error-box-icon">⚠</div><div><strong>Något gick fel</strong><br>${e.message || 'Okänt fel — försök igen.'}</div></div>`;
-  }
-  btn.disabled = false; btn.textContent = 'Matcha →';
-}
+NÄR ANVÄNDAREN STÄLLER EN ALLMÄN FRÅGA om vin, öl, dryck, matlagning etc:
+Svara med naturlig löptext på svenska. Max 180 ord. Pedagogisk och varm ton. Inga JSON.
 
-function renderResult(d) {
-  const smakerHtml = (d.dominerandeSmaker || []).map(s => `<span class="smaker-pill">${s}</span>`).join('');
-  const tipsHtml = d.sommelierTips ? `<div class="sommelier-tip"><div class="sommelier-tip-icon">🍷</div><div><div class="sommelier-tip-label">Sommelierens tips</div>${d.sommelierTips}</div></div>` : '';
-  const viner = d.viner || [];
-  const vinerHtml = viner.map(v => `<div class="vin-item"><div class="vin-item-top"><div class="vin-meta"><div class="vin-namn">${v.namn}</div><div class="vin-sub">${[v.producent,v.druva,v.region].filter(Boolean).join(' · ')}</div>${v.pris_sek ? `<span class="vin-pris">${v.pris_sek}</span>` : ''}</div></div><div class="vin-varfor">${v.varfor}</div></div>`).join('');
-  const ol = d.ol || {};
-  const af = d.alkoholfritt || {};
-  const drinkar = d.drinkar || [];
-  const drinkarHtml = drinkar.map((dr, i) => {
-    const rid = 'rec-' + i;
-    const ingHtml = (dr.recept?.ingredienser || []).map(ing => `<li>${ing}</li>`).join('');
-    return `<div class="card-full"><div class="drink-card-top"><div class="drink-card-header"><div class="drink-icon drinkar">🍹</div><div><div class="drink-type">Drink</div><div class="drink-name">${dr.namn}</div></div></div><div class="drink-why">${dr.varfor}</div></div><div class="drink-card-footer"><button class="btn-recept" onclick="toggleRecept('${rid}')">Visa recept ↓</button></div><div class="recept-body" id="${rid}"><div class="recept-heading">Ingredienser</div><ul class="recept-ing">${ingHtml}</ul><div class="recept-heading">Gör så här</div><div class="recept-inst">${dr.recept?.instruktion || ''}</div></div></div>`;
-  }).join('');
+Produkter ska alltid vara tillgängliga på Systembolaget med pris i SEK. Svara alltid på svenska.`;
 
-  document.getElementById('result-area').innerHTML = `<div class="result-section">
-    <div class="result-header">
-      <div><div class="result-dish">${d.ratt || d._input}</div><div class="result-profile">${d.smakprofil || ''}</div>${smakerHtml ? `<div class="result-smaker">${smakerHtml}</div>` : ''}</div>
-      <button class="btn-save" id="save-btn" onclick="spara()">🔖 Spara</button>
-    </div>
-    ${tipsHtml}
-    <div class="cards-grid">
-      <div class="drink-card"><div class="drink-card-top"><div class="drink-card-header"><div class="drink-icon vin">🍷</div><div><div class="drink-type">Vin</div><div class="drink-name">${viner.length} förslag</div></div></div></div><div class="vin-list">${vinerHtml}</div>${viner[0] ? sbFooter(viner[0].namn) : ''}</div>
-      <div class="drink-card"><div class="drink-card-top"><div class="drink-card-header"><div class="drink-icon ol">🍺</div><div><div class="drink-type">Öl · ${ol.typ || ''}</div><div class="drink-name">${ol.namn || ''}</div><div class="drink-sub">${[ol.bryggeri,ol.land].filter(Boolean).join(' · ')}</div></div></div><div class="drink-why">${ol.varfor || ''}</div>${ol.pris_sek ? `<span class="drink-pris">${ol.pris_sek}</span>` : ''}</div>${sbFooter(ol.namn)}</div>
-    </div>
-    <div class="card-full"><div class="drink-card-top"><div class="drink-card-header"><div class="drink-icon alkoholfritt">◎</div><div><div class="drink-type">Alkoholfritt</div><div class="drink-name">${af.namn || ''}</div><div class="drink-sub">${af.beskrivning || ''}</div></div></div><div class="drink-why">${af.varfor || ''}</div>${af.pris_sek ? `<span class="drink-pris">${af.pris_sek}</span>` : ''}</div>${af.namn ? sbFooter(af.namn) : ''}</div>
-    ${drinkarHtml}
-  </div>`;
-}
+// ── SEND ──────────────────────────────────────────────────────────
+async function sendMsg() {
+  const inp = document.getElementById('erik-input');
+  const text = (inp.value || '').trim();
+  if (!text || busy) return;
+  inp.value = ''; inp.style.height = '50px';
+  hideIntro();
+  busy = true;
+  document.getElementById('btn-send').disabled = true;
 
-// ── SPARA ─────────────────────────────────────────────────────────────────────
-function spara() {
-  if (!current) return;
-  const saved = getSaved();
-  saved.unshift({ id: Date.now(), date: new Date().toLocaleDateString('sv-SE'), ratt: current.ratt || current._input, vin: (current.viner || []).map(v => v.namn).join(', ') || '—', ol: current.ol?.namn || '—', drink: (current.drinkar || [])[0]?.namn || '—', af: current.alkoholfritt?.namn || null });
-  localStorage.setItem('smakkompass_saved', JSON.stringify(saved));
-  const btn = document.getElementById('save-btn');
-  if (btn) { btn.textContent = '✓ Sparad'; btn.classList.add('saved'); }
-  updateBadge();
-}
-function getSaved() { try { return JSON.parse(localStorage.getItem('smakkompass_saved') || '[]'); } catch { return []; } }
-function updateBadge() {
-  const n = getSaved().length;
-  ['saved-count','saved-count-m'].forEach(id => { const el = document.getElementById(id); if (el) { el.textContent = n; el.style.display = n > 0 ? 'inline' : 'none'; } });
-}
-function radera(id) { localStorage.setItem('smakkompass_saved', JSON.stringify(getSaved().filter(s => s.id !== id))); updateBadge(); renderSaved(); }
-function renderSaved() {
-  const area = document.getElementById('saved-area');
-  const saved = getSaved();
-  if (!saved.length) { area.innerHTML = `<div class="saved-empty"><div style="font-size:36px;margin-bottom:12px">🔖</div>Inga sparade kombinationer än.<br>Matcha en rätt och tryck Spara.</div>`; return; }
-  area.innerHTML = '<div class="saved-grid">' + saved.map(s => `<div class="saved-card"><div class="saved-top"><div><div class="saved-dish">${s.ratt}</div><div class="saved-date">${s.date}</div></div><button class="btn-del" onclick="radera(${s.id})">✕</button></div><div class="saved-pills">${s.vin !== '—' ? `<span class="pill vin">🍷 ${s.vin}</span>` : ''}${s.ol !== '—' ? `<span class="pill ol">🍺 ${s.ol}</span>` : ''}${s.drink !== '—' ? `<span class="pill dr">🍹 ${s.drink}</span>` : ''}${s.af ? `<span class="pill af">◎ ${s.af}</span>` : ''}</div></div>`).join('') + '</div>';
-}
+  appendUser(text);
+  history.push({ role: 'user', content: text });
 
-// ── CHAT ──────────────────────────────────────────────────────────────────────
-let chatHistory = [];
-let chatTyping = false;
-const CHAT_SYSTEM = `Du är Erik, en varm och engagerad svensk sommelier med WSET Diploma och 20 års erfarenhet från restauranger i Sverige och Frankrike. Du jobbar nu som personlig dryckesrådgivare via Smakkompass. Du är pedagogisk, varm och aldrig nedlåtande. Förklara alltid VARFÖR. Ge konkreta rekommendationer med priser i SEK och produkter från Systembolaget. Svara alltid på svenska. Max 200 ord per svar. Svara i naturlig löptext, inte JSON.`;
-
-function initChat() {
-  chatHistory = [];
-  const msgs = document.getElementById('chat-messages');
-  if (!msgs) return;
-  msgs.innerHTML = '';
-  appendAiMsg('Hej! Jag är Erik, er personliga sommelier här på Smakkompass. 🍷\n\nFråga mig om allt som rör dryck och mat — vilket vin som passar till middagen, hur kallt du ska servera bubblet, eller vad den där druvsorten på etiketten egentligen smakar.\n\nVad kan jag hjälpa dig med?');
-}
-function appendUserMsg(text) {
-  const msgs = document.getElementById('chat-messages');
-  const d = document.createElement('div'); d.className = 'msg user';
-  d.innerHTML = `<div class="msg-icon">👤</div><div class="msg-bubble">${escHtml(text).replace(/\n/g,'<br>')}</div>`;
-  msgs.appendChild(d); scrollChat();
-}
-function appendAiMsg(text) {
-  const msgs = document.getElementById('chat-messages');
-  const d = document.createElement('div'); d.className = 'msg ai';
-  d.innerHTML = `<div class="msg-icon" style="background:var(--warm-brown)">🍷</div><div class="msg-bubble">${formatAiText(text)}</div>`;
-  msgs.appendChild(d); scrollChat(); return d;
-}
-function showTyping() {
-  const msgs = document.getElementById('chat-messages');
-  const d = document.createElement('div'); d.className = 'msg ai'; d.id = 'typing-ind';
-  d.innerHTML = `<div class="msg-icon" style="background:var(--warm-brown)">🍷</div><div class="msg-bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>`;
-  msgs.appendChild(d); scrollChat();
-}
-function removeTyping() { const el = document.getElementById('typing-ind'); if (el) el.remove(); }
-function scrollChat() { const m = document.getElementById('chat-messages'); if (m) m.scrollTop = m.scrollHeight; }
-function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function formatAiText(t) {
-  t = t.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
-  t = t.replace(/\*(.*?)\*/g,'<em>$1</em>');
-  t = t.replace(/\n\n/g,'</p><p style="margin-top:8px">');
-  t = t.replace(/\n/g,'<br>');
-  return '<p>' + t + '</p>';
-}
-
-async function sendChat() {
-  const input = document.getElementById('chat-input');
-  const text = (input.value || '').trim();
-  if (!text || chatTyping) return;
-  const sugs = document.getElementById('chat-suggestions');
-  if (sugs) sugs.style.display = 'none';
-  input.value = ''; input.style.height = '48px';
-  chatTyping = true;
-  const sendBtn = document.getElementById('chat-send');
-  if (sendBtn) sendBtn.disabled = true;
-  appendUserMsg(text);
-  chatHistory.push({ role: 'user', content: text });
-
-  // Create AI bubble for streaming
-  const msgs = document.getElementById('chat-messages');
-  const bubble = document.createElement('div');
-  bubble.className = 'msg ai';
-  bubble.innerHTML = `<div class="msg-icon" style="background:var(--warm-brown)">🍷</div><div class="msg-bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>`;
-  msgs.appendChild(bubble);
-  scrollChat();
-  const bubbleText = bubble.querySelector('.msg-bubble');
+  const typingEl = appendTyping();
 
   try {
     const resp = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: chatHistory, system: CHAT_SYSTEM })
+      body: JSON.stringify({ messages: history, system: SYSTEM })
     });
-    if (!resp.ok) { const e = await resp.json(); throw new Error(e.error?.message || 'API-fel'); }
+    if (!resp.ok) throw new Error('Server-fel');
+
     const reader = resp.body.getReader();
     const decoder = new TextDecoder();
-    let fullText = '';
-    bubbleText.innerHTML = '';
+    let full = '';
+    typingEl.remove();
+
+    const aiBubble = appendAiStreaming();
+    const bubbleContent = aiBubble.querySelector('.msg-bubble');
+
     while (true) {
       const { done, value } = await reader.read();
       if (done) break;
-      const chunk = decoder.decode(value);
-      const lines = chunk.split('\n');
+      const lines = decoder.decode(value).split('\n');
       for (const line of lines) {
         if (!line.startsWith('data: ')) continue;
         const data = line.slice(6).trim();
@@ -782,35 +485,197 @@ async function sendChat() {
         try {
           const parsed = JSON.parse(data);
           if (parsed.type === 'content_block_delta' && parsed.delta?.text) {
-            fullText += parsed.delta.text;
-            bubbleText.innerHTML = formatAiText(fullText);
-            scrollChat();
+            full += parsed.delta.text;
+            // Try to detect if it's JSON (match response)
+            const trimmed = full.trim();
+            if (trimmed.startsWith('{')) {
+              bubbleContent.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+            } else {
+              bubbleContent.innerHTML = formatText(full);
+            }
+            scrollMessages();
           }
         } catch {}
       }
     }
-    chatHistory.push({ role: 'assistant', content: fullText });
+
+    // Parse final response
+    const trimmed = full.trim();
+    if (trimmed.startsWith('{')) {
+      try {
+        const data = JSON.parse(trimmed.replace(/```json|```/g, '').trim());
+        if (data.typ === 'match') {
+          lastMatch = data;
+          bubbleContent.innerHTML = '';
+          if (data.intro) {
+            const introP = document.createElement('p');
+            introP.innerHTML = formatText(data.intro);
+            bubbleContent.appendChild(introP);
+          }
+          const card = buildMatchCard(data);
+          bubbleContent.appendChild(card);
+        } else {
+          bubbleContent.innerHTML = formatText(full);
+        }
+      } catch {
+        bubbleContent.innerHTML = formatText(full);
+      }
+    } else {
+      bubbleContent.innerHTML = formatText(full);
+    }
+
+    history.push({ role: 'assistant', content: full });
   } catch(e) {
-    bubbleText.innerHTML = 'Något gick fel. Kontrollera API-nyckeln och försök igen. 🙏';
+    typingEl.remove();
+    appendAi('Ursäkta, något gick fel just nu. Försök igen! 🙏');
   }
-  chatTyping = false;
-  if (sendBtn) sendBtn.disabled = false;
-  input.focus();
-}
-function sendSuggestion(btn) { document.getElementById('chat-input').value = btn.textContent; sendChat(); }
-function clearChat() {
-  chatHistory = []; const msgs = document.getElementById('chat-messages'); if (msgs) msgs.innerHTML = '';
-  const sugs = document.getElementById('chat-suggestions'); if (sugs) sugs.style.display = '';
-  initChat();
+
+  busy = false;
+  document.getElementById('btn-send').disabled = false;
+  scrollMessages();
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  const inp = document.getElementById('chat-input');
-  if (inp) {
-    inp.addEventListener('input', () => { inp.style.height = '48px'; inp.style.height = Math.min(inp.scrollHeight, 120) + 'px'; });
-    inp.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); } });
-  }
-});
+function useSug(btn) {
+  document.getElementById('erik-input').value = btn.textContent.replace(/^[^\s]+\s/, '');
+  sendMsg();
+}
+
+// ── MATCH CARD ────────────────────────────────────────────────────
+function buildMatchCard(d) {
+  const vinerHtml = (d.viner || []).map(v => `
+    <div class="match-item">
+      <div class="match-icon">🍷</div>
+      <div class="match-info">
+        <div class="match-name">${v.namn}</div>
+        <div class="match-sub">${[v.druva, v.region].filter(Boolean).join(' · ')}</div>
+        <div class="match-why">${v.varfor}</div>
+        ${v.pris ? `<span class="match-pris">${v.pris}</span>` : ''}
+      </div>
+    </div>`).join('');
+
+  const ol = d.ol || {};
+  const af = d.alkoholfritt || {};
+  const sbQ = encodeURIComponent((d.viner?.[0]?.namn || d.ratt || '').replace(/\b(19|20)\d{2}\b/g,'').trim());
+  const saveId = 'save-' + Date.now();
+
+  const card = document.createElement('div');
+  card.className = 'match-card';
+  card.innerHTML = `
+    <div class="match-card-header">🎯 Matchning för: ${d.ratt || ''}</div>
+    <div class="match-section">
+      <div class="match-section-label">Vin</div>
+      ${vinerHtml}
+    </div>
+    ${ol.namn ? `<div class="match-section">
+      <div class="match-section-label">Öl</div>
+      <div class="match-item"><div class="match-icon">🍺</div><div class="match-info"><div class="match-name">${ol.namn}</div><div class="match-sub">${ol.typ || ''}</div><div class="match-why">${ol.varfor || ''}</div>${ol.pris ? `<span class="match-pris">${ol.pris}</span>` : ''}</div></div>
+    </div>` : ''}
+    ${af.namn ? `<div class="match-section">
+      <div class="match-section-label">Alkoholfritt</div>
+      <div class="match-item"><div class="match-icon">◎</div><div class="match-info"><div class="match-name">${af.namn}</div><div class="match-why">${af.varfor || ''}</div>${af.pris ? `<span class="match-pris">${af.pris}</span>` : ''}</div></div>
+    </div>` : ''}
+    ${d.tips ? `<div class="match-section" style="background:var(--cream);font-size:13px;color:var(--text-muted);line-height:1.6;"><strong style="color:var(--warm-brown)">Sommelierens tips:</strong> ${d.tips}</div>` : ''}
+    <div class="match-actions">
+      <a class="match-btn sb" href="https://www.systembolaget.se/sok/?searchQuery=${sbQ}" target="_blank" rel="noopener">Systembolaget →</a>
+      <button class="match-btn save" id="${saveId}" onclick="sparaMatch('${saveId}')">🔖 Spara</button>
+    </div>`;
+  return card;
+}
+
+// ── MESSAGE HELPERS ───────────────────────────────────────────────
+function appendUser(text) {
+  const msgs = document.getElementById('erik-messages');
+  const d = document.createElement('div');
+  d.className = 'msg user';
+  d.innerHTML = `<div class="msg-avatar">👤</div><div class="msg-bubble">${esc(text).replace(/\n/g,'<br>')}</div>`;
+  msgs.appendChild(d); scrollMessages();
+}
+function appendAi(text) {
+  const msgs = document.getElementById('erik-messages');
+  const d = document.createElement('div');
+  d.className = 'msg ai';
+  d.innerHTML = `<div class="msg-avatar">🍷</div><div class="msg-bubble">${formatText(text)}</div>`;
+  msgs.appendChild(d); scrollMessages(); return d;
+}
+function appendAiStreaming() {
+  const msgs = document.getElementById('erik-messages');
+  const d = document.createElement('div');
+  d.className = 'msg ai';
+  d.innerHTML = `<div class="msg-avatar">🍷</div><div class="msg-bubble"></div>`;
+  msgs.appendChild(d); scrollMessages(); return d;
+}
+function appendTyping() {
+  const msgs = document.getElementById('erik-messages');
+  const d = document.createElement('div');
+  d.className = 'msg ai';
+  d.innerHTML = `<div class="msg-avatar">🍷</div><div class="msg-bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>`;
+  msgs.appendChild(d); scrollMessages(); return d;
+}
+function scrollMessages() { const m = document.getElementById('erik-messages'); if (m) m.scrollTop = m.scrollHeight; }
+function hideIntro() {
+  document.getElementById('erik-intro')?.classList.add('hidden');
+  document.getElementById('suggestions')?.classList.add('hidden');
+}
+function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function formatText(t) {
+  t = esc(t);
+  t = t.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
+  t = t.replace(/\*(.*?)\*/g,'<em>$1</em>');
+  t = t.replace(/\n\n/g,'</p><p>');
+  t = t.replace(/\n/g,'<br>');
+  return '<p>' + t + '</p>';
+}
+
+// ── SPARA ─────────────────────────────────────────────────────────
+function sparaMatch(btnId) {
+  if (!lastMatch) return;
+  const saved = getSaved();
+  saved.unshift({
+    id: Date.now(),
+    date: new Date().toLocaleDateString('sv-SE'),
+    ratt: lastMatch.ratt || '—',
+    vin: (lastMatch.viner || []).map(v => v.namn).join(', ') || '—',
+    ol: lastMatch.ol?.namn || null,
+    af: lastMatch.alkoholfritt?.namn || null
+  });
+  localStorage.setItem('smakkompass_saved', JSON.stringify(saved));
+  const btn = document.getElementById(btnId);
+  if (btn) { btn.textContent = '✓ Sparad'; btn.classList.add('saved'); }
+  updateBadge();
+}
+function getSaved() { try { return JSON.parse(localStorage.getItem('smakkompass_saved') || '[]'); } catch { return []; } }
+function updateBadge() {
+  const n = getSaved().length;
+  const b = document.getElementById('saved-badge');
+  if (b) { b.textContent = n; b.style.display = n > 0 ? 'inline' : 'none'; }
+}
+function renderSaved() {
+  const area = document.getElementById('saved-area');
+  const saved = getSaved();
+  if (!saved.length) { area.innerHTML = `<div class="saved-empty"><div style="font-size:40px;margin-bottom:12px">🔖</div>Inga sparade kombinationer än.<br><br>Berätta för Erik vad du ska laga!</div>`; return; }
+  area.innerHTML = '<div class="saved-grid">' + saved.map(s => `
+    <div class="saved-card">
+      <div class="saved-top">
+        <div><div class="saved-dish">${s.ratt}</div><div class="saved-date">${s.date}</div></div>
+        <button class="btn-del" onclick="radera(${s.id})">✕</button>
+      </div>
+      <div class="saved-pills">
+        ${s.vin && s.vin !== '—' ? `<span class="pill vin">🍷 ${s.vin}</span>` : ''}
+        ${s.ol ? `<span class="pill ol">🍺 ${s.ol}</span>` : ''}
+        ${s.af ? `<span class="pill af">◎ ${s.af}</span>` : ''}
+      </div>
+    </div>`).join('') + '</div>';
+}
+function radera(id) { localStorage.setItem('smakkompass_saved', JSON.stringify(getSaved().filter(s => s.id !== id))); updateBadge(); renderSaved(); }
+
+// ── INIT ──────────────────────────────────────────────────────────
+updateBadge();
+
+const inp = document.getElementById('erik-input');
+if (inp) {
+  inp.addEventListener('input', () => { inp.style.height = '50px'; inp.style.height = Math.min(inp.scrollHeight, 130) + 'px'; });
+  inp.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMsg(); } });
+}
 </script>
 </body>
 </html>
