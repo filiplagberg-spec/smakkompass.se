@@ -619,7 +619,7 @@ async function callClaude(messages, system) {
   const resp = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
-    body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1500, system, messages })
+    body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 1500, system, messages })
   });
   const data = await resp.json();
   if (!resp.ok) throw new Error(data.error?.message || 'API-fel');
@@ -817,24 +817,66 @@ function formatAiText(t) {
 
 async function sendChat() {
   const input = document.getElementById('chat-input');
-  const text = input.value.trim();
+  const text = (input.value || '').trim();
   if (!text || chatTyping) return;
   const sugs = document.getElementById('chat-suggestions');
   if (sugs) sugs.style.display = 'none';
   input.value = ''; input.style.height = '48px';
-  chatTyping = true; document.getElementById('chat-send').disabled = true;
+  chatTyping = true;
+  const sendBtn = document.getElementById('chat-send');
+  if (sendBtn) sendBtn.disabled = true;
   appendUserMsg(text);
   chatHistory.push({ role: 'user', content: text });
-  showTyping();
+
+  // Create AI bubble for streaming
+  const msgs = document.getElementById('chat-messages');
+  const bubble = document.createElement('div');
+  bubble.className = 'msg ai';
+  bubble.innerHTML = `<div class="msg-icon" style="background:var(--warm-brown)">🍷</div><div class="msg-bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>`;
+  msgs.appendChild(bubble);
+  scrollChat();
+  const bubbleText = bubble.querySelector('.msg-bubble');
+
+  const key = getApiKey();
+  if (!key) { bubbleText.innerHTML = 'Ange din API-nyckel högst upp på sidan.'; chatTyping = false; if (sendBtn) sendBtn.disabled = false; return; }
+
   try {
-    const reply = await callClaude(chatHistory, CHAT_SYSTEM);
-    removeTyping();
-    if (reply) { chatHistory.push({ role: 'assistant', content: reply }); appendAiMsg(reply); }
-    else { appendAiMsg('Ursäkta, något gick fel. Försök igen!'); }
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+      body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 1000, system: CHAT_SYSTEM, messages: chatHistory, stream: true })
+    });
+    if (!resp.ok) { const e = await resp.json(); throw new Error(e.error?.message || 'API-fel'); }
+    const reader = resp.body.getReader();
+    const decoder = new TextDecoder();
+    let fullText = '';
+    bubbleText.innerHTML = '';
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      const chunk = decoder.decode(value);
+      const lines = chunk.split('\n');
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        const data = line.slice(6).trim();
+        if (data === '[DONE]') continue;
+        try {
+          const parsed = JSON.parse(data);
+          if (parsed.type === 'content_block_delta' && parsed.delta?.text) {
+            fullText += parsed.delta.text;
+            bubbleText.innerHTML = formatAiText(fullText);
+            scrollChat();
+          }
+        } catch {}
+      }
+    }
+    chatHistory.push({ role: 'assistant', content: fullText });
   } catch(e) {
-    removeTyping(); appendAiMsg('Ursäkta, något gick fel just nu. Kontrollera att API-nyckeln stämmer och försök igen. 🙏');
+    bubbleText.innerHTML = 'Något gick fel. Kontrollera API-nyckeln och försök igen. 🙏';
   }
-  chatTyping = false; document.getElementById('chat-send').disabled = false; input.focus();
+  chatTyping = false;
+  if (sendBtn) sendBtn.disabled = false;
+  input.focus();
 }
 function sendSuggestion(btn) { document.getElementById('chat-input').value = btn.textContent; sendChat(); }
 function clearChat() {
