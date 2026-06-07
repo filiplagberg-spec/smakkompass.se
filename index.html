@@ -50,53 +50,7 @@ nav {
 .nav-tab:hover:not(.active) { background: var(--cream-dark); color: var(--text); }
 .saved-badge { background: var(--terracotta); color: white; font-size: 11px; font-weight: 500; border-radius: 10px; padding: 1px 6px; margin-left: 4px; display: none; }
 
-/* API KEY BANNER */
-.api-banner {
-  background: #fff8e8;
-  border-bottom: 1px solid #e8d5a0;
-  padding: 10px 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 13px;
-  color: #5a4000;
-  flex-wrap: wrap;
-}
-.api-banner input {
-  flex: 1;
-  min-width: 200px;
-  padding: 7px 12px;
-  border: 1px solid #d4b870;
-  border-radius: 8px;
-  font-size: 13px;
-  background: white;
-  color: var(--text);
-  font-family: 'DM Sans', sans-serif;
-}
-.api-banner input:focus { outline: none; border-color: var(--gold); }
-.api-banner button {
-  padding: 7px 14px;
-  background: var(--gold);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  white-space: nowrap;
-  touch-action: manipulation;
-}
-.api-banner button:hover { background: #a07d28; }
-.api-banner-ok {
-  background: #e8f5ee;
-  border-bottom: 1px solid #b0d8c0;
-  padding: 8px 1.5rem;
-  font-size: 12px;
-  color: var(--green);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
+
 
 @media (max-width: 600px) {
   nav { display: none; }
@@ -411,15 +365,7 @@ textarea::placeholder { color: var(--text-muted); opacity: 0.7; }
 </head>
 <body>
 
-<!-- API KEY BANNER -->
-<div id="api-banner" class="api-banner">
-  <span>🔑 Ange din Anthropic API-nyckel för att aktivera AI-funktionerna:</span>
-  <input type="password" id="api-key-input" placeholder="sk-ant-..." autocomplete="off" />
-  <button onclick="saveApiKey()">Spara</button>
-</div>
-<div id="api-banner-ok" class="api-banner-ok" style="display:none">
-  ✅ API-nyckel sparad — AI-funktionerna är aktiva. <button onclick="clearApiKey()" style="margin-left:12px;background:none;border:none;color:var(--green);font-size:12px;cursor:pointer;text-decoration:underline;">Byt nyckel</button>
-</div>
+
 
 <nav>
   <div class="nav-logo">Smak<span>kompass</span></div>
@@ -590,39 +536,15 @@ textarea::placeholder { color: var(--text-muted); opacity: 0.7; }
 </main>
 
 <script>
-// ── API KEY ────────────────────────────────────────────────────────────────────
-function getApiKey() { return localStorage.getItem('smakkompass_apikey') || ''; }
-function saveApiKey() {
-  const key = document.getElementById('api-key-input').value.trim();
-  if (!key.startsWith('sk-')) { alert('Nyckeln verkar inte stämma — den ska börja med "sk-"'); return; }
-  localStorage.setItem('smakkompass_apikey', key);
-  document.getElementById('api-banner').style.display = 'none';
-  document.getElementById('api-banner-ok').style.display = 'flex';
-}
-function clearApiKey() {
-  localStorage.removeItem('smakkompass_apikey');
-  document.getElementById('api-banner').style.display = 'flex';
-  document.getElementById('api-banner-ok').style.display = 'none';
-  document.getElementById('api-key-input').value = '';
-}
-(function checkKey() {
-  if (getApiKey()) {
-    document.getElementById('api-banner').style.display = 'none';
-    document.getElementById('api-banner-ok').style.display = 'flex';
-  }
-})();
-
-// ── CLAUDE API ────────────────────────────────────────────────────────────────
+// ── API CALLS via backend ─────────────────────────────────────────────────────
 async function callClaude(messages, system) {
-  const key = getApiKey();
-  if (!key) { alert('Ange din Anthropic API-nyckel i fältet högst upp på sidan.'); return null; }
-  const resp = await fetch('https://api.anthropic.com/v1/messages', {
+  const resp = await fetch('/api/match', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
-    body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 1500, system, messages })
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ messages, system })
   });
   const data = await resp.json();
-  if (!resp.ok) throw new Error(data.error?.message || 'API-fel');
+  if (!resp.ok) throw new Error(data.error || 'API-fel');
   return data.content[0]?.text || '';
 }
 
@@ -837,14 +759,11 @@ async function sendChat() {
   scrollChat();
   const bubbleText = bubble.querySelector('.msg-bubble');
 
-  const key = getApiKey();
-  if (!key) { bubbleText.innerHTML = 'Ange din API-nyckel högst upp på sidan.'; chatTyping = false; if (sendBtn) sendBtn.disabled = false; return; }
-
   try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    const resp = await fetch('/api/chat', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
-      body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 1000, system: CHAT_SYSTEM, messages: chatHistory, stream: true })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: chatHistory, system: CHAT_SYSTEM })
     });
     if (!resp.ok) { const e = await resp.json(); throw new Error(e.error?.message || 'API-fel'); }
     const reader = resp.body.getReader();
@@ -891,8 +810,6 @@ document.addEventListener('DOMContentLoaded', () => {
     inp.addEventListener('input', () => { inp.style.height = '48px'; inp.style.height = Math.min(inp.scrollHeight, 120) + 'px'; });
     inp.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); } });
   }
-  const apiInp = document.getElementById('api-key-input');
-  if (apiInp) { apiInp.addEventListener('keydown', e => { if (e.key === 'Enter') saveApiKey(); }); }
 });
 </script>
 </body>
